@@ -1,4 +1,6 @@
-//= require bootstrap_and_overrides
+//= require bootstrap/css/bootstrap
+//= require bootstrap/css/bootstrap-responsive
+//= require css/flat-ui
 @import "mixins";
 @import "photoport";
 @import "photoport_cms";
@@ -15,9 +17,8 @@
     h1 {
       position: relative;
       display: inline-block;
-      font-size: 44px;
-      font-weight: normal;
-      text-transform: lowercase;
+      font-size: 50px;
+      font-weight: 400;
     }
   }
 }

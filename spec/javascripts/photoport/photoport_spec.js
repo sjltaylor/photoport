@@ -19,10 +19,6 @@ describe('photoport', function () {
       expect(container.querySelector('.photoport .photoport-content')).not.toBeNull();
     });
 
-    it('renders a shadow element', function () {
-      expect(container.querySelector('.photoport .photoport-shadow')).not.toBeNull();
-    });
-
     it('renders handles', function () {
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left')).not.toBeNull();
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right')).not.toBeNull();
@@ -81,6 +77,10 @@ describe('photoport', function () {
 
       expect(s0.el.style.width).toBe('400px');
       expect(s0.el.style.height).toBe('200px');
+    });
+    it('adds the photoport-shadow class to the root element', function () {
+      photoport.add(s0);
+      expect($(s0.el).hasClass('photoport-shadow')).toBe(true);
     });
   });
 });

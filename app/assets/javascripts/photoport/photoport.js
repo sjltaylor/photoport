@@ -16,14 +16,12 @@ Photoport = (function () {
     var dom = {
       root        : div('photoport'),
       content     : div('photoport-content'),
-      shadow      : div('photoport-shadow'),
       leftHandle  : div('photoport-handle photoport-handle-left'),
       rightHandle : div('photoport-handle photoport-handle-right')
     };
 
     dom.root.appendChild(dom.leftHandle);
     dom.root.appendChild(dom.content);
-    dom.root.appendChild(dom.shadow);
     dom.root.appendChild(dom.rightHandle);
 
     return dom;
@@ -38,25 +36,28 @@ Photoport = (function () {
   }
 
   Photoport.prototype = {
-    __sizeToFit__: function (item) {
+    __subsume__: function (item) {
       var bounds = this.dom.content.getBoundingClientRect();
 
       item.el.style.width  = bounds.width  + 'px';
       item.el.style.height = bounds.height + 'px';
+      if (!item.el.classList.contains('photoport-shadow')) {
+        item.el.classList.add('photoport-shadow');
+      }
     },
     add: function (item) {
-      this.__sizeToFit__(item);
+      this.__subsume__(item);
       this.sequence().push(item);
       return this;
     },
     start: function () {
-      // mindlessly appends child nodes
+      // mindlessly appends child nodes...
       console.warn('needs work', this);
       var sequence = this.sequence();
       this.dom.content.appendChild(sequence[0].el);
 
       for (var i = 0; i < sequence.length; i++) {
-        this.__sizeToFit__(sequence[i]);
+        this.__subsume__(sequence[i]);
       }
     },
     sequence: function () {
