@@ -1,0 +1,9 @@
+<%= content_for :head  do %>
+  <%= stylesheet_link_tag    "landing", :media => "all" %>
+  <%= javascript_include_tag "landing" %>
+  <script type='text/javascript'>
+    AWS_S3_UPLOAD_PANEL_CONFIG = <%= aws_s3_upload_json %>;
+  </script>
+<% end %>
+<div id='main'>
+</div>

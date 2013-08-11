@@ -1,0 +1,16 @@
+.photoport-cms-upload-panel {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #FFEECC;
+
+  .prompt {
+    position: absolute;
+    top: 88px;
+    left: 105px;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+}
