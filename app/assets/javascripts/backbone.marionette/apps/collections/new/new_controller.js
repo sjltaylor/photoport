@@ -1,8 +1,8 @@
-PhotoportCMS.module('CollectionsApp.Create', function (Create, PhotoportCMS, Backbone, Marionette, $, _) {
+PhotoportCMS.module('CollectionsApp.New', function (New, PhotoportCMS, Backbone, Marionette, $, _) {
 
-  Create.Controller = {
+  New.Controller = {
     show: function () {
-      var layout = new Create.Layout();
+      var layout = new New.Layout();
       PhotoportCMS.mainRegion.show(layout);
 
       var uploadPanel = PhotoportCMS.UploadPanel.Controller.makeView();

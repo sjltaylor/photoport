@@ -4,6 +4,11 @@
   <script type='text/javascript'>
     AWS_S3_UPLOAD_PANEL_CONFIG = <%= aws_s3_upload_json %>;
   </script>
+  <script type='text/javascript'>
+    PHOTOPORT_CMS.endpoints = {
+      addPhoto: "<%= collections_url %>"
+    };
+  </script>
 <% end %>
 <div id='main'>
 </div>

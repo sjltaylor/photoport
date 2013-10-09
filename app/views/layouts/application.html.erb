@@ -3,6 +3,11 @@
 <head>
   <title>Photoport</title>
   <%= csrf_meta_tags %>
+  <%= javascript_tag do %>
+    PHOTOPORT_CMS = {
+      userId: "<%= user_id %>"
+    }
+  <% end %>
   <%= yield :head %>
 </head>
 <body>

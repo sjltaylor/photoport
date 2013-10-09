@@ -3,6 +3,10 @@ require 'ostruct'
 
 module ApplicationHelper
 
+  def user_id
+    user_signed_in? ? current_user.id : session.id
+  end
+
   AWS_S3_ACCESS_SECRET = 'vi4pgymqfmRoEIhUupSMfL+182SFuuC6QIGWHVZV'.encode('UTF-8').freeze
 
   def aws_s3_authentication

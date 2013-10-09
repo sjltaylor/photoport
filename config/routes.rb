@@ -2,9 +2,17 @@ Photoport::Application.routes.draw do
 
   devise_for :users
 
-  root :to => 'pages#landing'
+  root :to => 'collections#new'
 
   mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
+
+  resources :collections, only: [:new, :create] do
+    resource :photos, only: [:create]
+  end
+
+  # resources :collections, only: [] do
+  #
+  # end
 
   # get  'samples/:sample_name' => 'samples#show'
 

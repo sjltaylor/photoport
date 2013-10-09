@@ -2,13 +2,13 @@ PhotoportCMS.module('CollectionsApp', function(CollectionsApp, PhotoportCMS, Bac
 
   CollectionsApp.Router = Marionette.AppRouter.extend({
     appRoutes: {
-      "": "create"
+      "": "new"
     }
   });
 
   var api = {
-    'create': function(){
-      CollectionsApp.Create.Controller.show();
+    'new': function(){
+      CollectionsApp.New.Controller.show();
     }
   };
 
