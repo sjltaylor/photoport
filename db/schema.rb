@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -13,11 +14,14 @@
 ActiveRecord::Schema.define(version: 20130929165503) do
 
   create_table "collections", force: true do |t|
+    t.integer  "creator_id"
     t.string   "session_id"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "collections", ["session_id"], name: "index_collections_on_session_id", using: :btree
 
   create_table "photos", force: true do |t|
     t.integer  "collection_id"
