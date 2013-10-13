@@ -12,6 +12,7 @@ gem 'ejs'
 gem 'sprockets', '>= 2.0.0'
 gem 'less-rails'
 gem 'sass'
+gem 'resolve', git: 'https://github.com/sjltaylor/resolve'
 
 group :test do
   gem 'selenium-webdriver'

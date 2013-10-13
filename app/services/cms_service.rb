@@ -1,11 +1,6 @@
 class CmsService
 
-  attr_accessor :collection_presenter, :photo_presenter
-
-  def initialize(opts={})
-    self.collection_presenter = opts[:collection_presenter] || CollectionPresenter.new
-    self.photo_presenter      = opts[:photo_presenter]
-  end
+  depends_on :collection_presenter, :photo_presenter
 
   def create_collection session_id, user, file_key_of_first_photo
     collection = if user.nil?

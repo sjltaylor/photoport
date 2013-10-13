@@ -5,7 +5,7 @@ describe CmsService do
     collection_presenter = double(:collection_presenter)
     photo_presenter      = double(:photo_presenter)
 
-    described_class.new(
+    described_class.resolve(
       collection_presenter: collection_presenter,
       photo_presenter: photo_presenter)
   end

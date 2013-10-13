@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/sjltaylor/resolve
+  revision: 1b5de9de49d6611429f53df163df57397543a3d4
+  specs:
+    resolve (0.0.2)
+      activesupport
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -39,13 +46,13 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     columnize (0.3.6)
     commonjs (0.2.7)
-    debugger (1.6.1)
+    debugger (1.6.2)
       columnize (>= 0.3.1)
       debugger-linecache (~> 1.2.0)
       debugger-ruby_core_source (~> 1.2.3)
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.3)
-    devise (3.1.0)
+    devise (3.1.1)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
       railties (>= 3.2.6, < 5)
@@ -75,7 +82,7 @@ GEM
     mime-types (1.25)
     mini_portile (0.5.1)
     minitest (4.7.5)
-    multi_json (1.8.0)
+    multi_json (1.8.1)
     mysql (2.9.1)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
@@ -112,7 +119,7 @@ GEM
       rspec-expectations (~> 2.14.0)
       rspec-mocks (~> 2.14.0)
     rubyzip (0.9.9)
-    sass (3.2.10)
+    sass (3.2.12)
     selenium-webdriver (2.35.1)
       childprocess (>= 0.2.5)
       multi_json (~> 1.0)
@@ -143,7 +150,7 @@ GEM
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    tzinfo (0.3.37)
+    tzinfo (0.3.38)
     unicorn (4.6.3)
       kgio (~> 2.6)
       rack
@@ -166,6 +173,7 @@ DEPENDENCIES
   less-rails
   mysql
   rails (~> 4.0.0)
+  resolve!
   rspec-rails
   sass
   selenium-webdriver

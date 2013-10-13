@@ -8,8 +8,4 @@ class CollectionsController < ApplicationController
     payload = cms.create_collection(session.id, current_user, params["file_key"])
     render json: payload
   end
-protected
-  def cms
-    @cms ||= CmsService.new
-  end
 end
