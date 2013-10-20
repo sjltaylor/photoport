@@ -16,3 +16,6 @@
 
 # Ignore Mac OSX artifacts
 .DS_Store
+
+# Ignore database config
+config/database.yml
