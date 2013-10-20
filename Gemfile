@@ -14,6 +14,13 @@ gem 'less-rails'
 gem 'sass'
 gem 'resolve', git: 'https://github.com/sjltaylor/resolve'
 
+gem 'rack-cache', :require => 'rack/cache'
+gem 'fog'
+gem 'dragonfly', '~> 0.9.15'
+gem 'aasm'
+
+gem 'blobject'
+
 group :test do
   gem 'selenium-webdriver'
   gem 'capybara', require: false
