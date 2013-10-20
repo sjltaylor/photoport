@@ -7,7 +7,7 @@ Photoport::Application.routes.draw do
   mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
 
   resources :collections, only: [:new, :create] do
-    resource :photos, only: [:create]
+    resources :photos, only: [:create, :show]
   end
 
   # resources :collections, only: [] do
@@ -69,7 +69,5 @@ Photoport::Application.routes.draw do
 
   # See how all your routes lay out with "rake routes"
 
-  # This is a legacy wild controller route that's not recommended for RESTful applications.
-  # Note: This route will make all actions in every controller accessible via GET requests.
-  # match ':controller(/:action(/:id))(.:format)'
+  get '*missing_route' => 'application#render_404'
 end
