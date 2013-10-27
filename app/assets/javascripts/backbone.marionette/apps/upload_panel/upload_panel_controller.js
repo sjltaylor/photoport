@@ -1,47 +1,50 @@
 PhotoportCMS.module('UploadPanel', function (UploadPanel, PhotoportCMS, Backbone, Marionette, $, _) {
 
-  function S3Upload () {
+  var uploadFilesToS3 = function (collection, files) {
 
-  }
-
-  var uploadFilesToS3 = function (files) {
-
-    var config     = AWS_S3_UPLOAD_PANEL_CONFIG;
+    var config     = PHOTOPORT_CMS.uploadPanelConfig;
     var uploadData = config["upload_form_data"];
 
     function onDone(data, statusText, jqXHR){
       console.warn("DONE!", arguments);
       var uploadedFileKey = jqXHR.photoportCmsMetadata.uploadedFileKey;
 
-      PhotoportCMS.server.addPhoto({ 'file_key': uploadedFileKey }).done(function () {
+      PhotoportCMS.server.addPhoto(collection, uploadedFileKey).success(function (data) {
         console.warn("CALLED SERVER WITH KEY: ", uploadedFileKey, arguments);
+        console.warn("SERVER RESPONSE:", data);
       }).fail(function () {
         console.warn("FAILED CALL TO SERVER", arguments);
       });
     }
 
-    function onFail(data, statusText, jqXHR){
+    function onFail(data, statusText, jqXHR) {
       console.warn("FAILED!", arguments);
     }
 
     var deferreds = [];
 
-    function addUploadDataToFormData (formData, key) {
-      formData.append(key, uploadData[key]);
-    }
-
     for (var i = 0; i < files.length; i++) {
       var file = files[i];
 
       var sanitizedFilename = file.name.replace(/[^\w]*/g, '');
-      var fileKey = [window.PHOTOPORT_CMS.userId, sanitizedFilename, file.lastModifiedDate.valueOf(), (new Date().valueOf())].join('-');
+      var fileExtension     = ''.concat(/(?:\.([^.]+))?$/.exec(file.name)[1]).toLowerCase();
+
+      var fileKey = [
+        sanitizedFilename,
+        file.lastModifiedDate.valueOf(),
+        new Date().valueOf(),
+        fileExtension
+      ].join('.');
 
       var formData = new FormData();
 
-      Object.keys(uploadData).forEach(addUploadDataToFormData.bind(this, formData));
-
-      formData.append("Content-Type", file.type);
-      formData.append("file", file);
+      formData.append('key',            uploadData['key'].replace('{fileKey}', fileKey));
+      formData.append('acl',            uploadData['acl']);
+      formData.append('AWSAccessKeyId', uploadData['AWSAccessKeyId']);
+      formData.append('signature',      uploadData['signature']);
+      formData.append('policy',         uploadData['policy']);
+      formData.append("Content-Type",   file.type);
+      formData.append("file",           file);
 
       deferred = jQuery.ajax({
         url: config.url,
@@ -60,10 +63,10 @@ PhotoportCMS.module('UploadPanel', function (UploadPanel, PhotoportCMS, Backbone
   };
 
   UploadPanel.Controller = {
-    makeView: function () {
+    makeView: function (collection) {
       var uploadPanel = new UploadPanel.View();
       uploadPanel.on("files:selected", function (files) {
-        uploadFilesToS3(files);
+        uploadFilesToS3(collection, files);
       });
       return uploadPanel;
     }

@@ -5,7 +5,7 @@
   <%= csrf_meta_tags %>
   <%= javascript_tag do %>
     PHOTOPORT_CMS = {
-      userId: "<%= user_id %>"
+      user: <%= photoport_cms_user.to_json.html_safe %>
     }
   <% end %>
   <%= yield :head %>

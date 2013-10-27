@@ -31,14 +31,16 @@ describe ApplicationController do
     end
 
     context 'when the user is not registered' do
+      let(:user_service) { double(:user_service) }
       let(:new_user) { double(:new_user, id: '1657') }
 
       describe 'first visit' do
-        before(:each) { User.stub(:create).with(no_args).and_return(new_user) }
+        before(:each) {controller.stub(:users).and_return(user_service) }
+        before(:each) { user_service.stub(:create_user).with(no_args).and_return(new_user) }
 
         it 'creates and returns a user' do
           stored_user.should be new_user
-          User.should have_received(:create).with(no_args)
+          user_service.should have_received(:create_user).with(no_args)
         end
         it 'stores the strangers_user_id in the session' do
           stored_user

@@ -2,12 +2,8 @@
   <%= stylesheet_link_tag    "landing", :media => "all" %>
   <%= javascript_include_tag "landing" %>
   <script type='text/javascript'>
-    AWS_S3_UPLOAD_PANEL_CONFIG = <%= aws_s3_upload_json %>;
-  </script>
-  <script type='text/javascript'>
-    PHOTOPORT_CMS.endpoints = {
-      addPhoto: "<%= collections_url %>"
-    };
+    PHOTOPORT_CMS.uploadPanelConfig = <%= aws_s3_upload_panel.config.to_json.html_safe %>;
+    PHOTOPORT_CMS.collection        = <%= collection.to_json.html_safe %>;
   </script>
 <% end %>
 <div id='main'>

@@ -7,13 +7,12 @@
   }
 
   PhotoportCMS.server = {
-    addPhoto: function (parameters) {
-      var addPhotoEndpoint = PHOTOPORT_CMS.endpoints.addPhoto;
+    addPhoto: function (collection, fileKey) {
       return $.ajax({
         type: "POST",
-        url: addPhotoEndpoint,
+        url: collection.get('add'),
         headers: headers(),
-        data: parameters
+        data: { file_key: fileKey }
       });
     }
   };
