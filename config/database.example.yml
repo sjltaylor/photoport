@@ -1,0 +1,17 @@
+development:
+  adapter: mysql
+  host: localhost
+  encoding: utf8
+  database: photoport_development
+  username: root
+  pool: 5
+  timeout: 5000
+
+test:
+  adapter: mysql
+  host: localhost
+  encoding: utf8
+  database: photoport_test
+  username: root
+  pool: 5
+  timeout: 5000

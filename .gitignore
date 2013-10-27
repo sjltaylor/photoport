@@ -19,3 +19,6 @@
 
 # Ignore database config
 config/database.yml
+
+# Don't put S3 configuration in the repo
+config/aws.yml

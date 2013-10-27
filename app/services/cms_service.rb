@@ -1,20 +1,11 @@
 class CmsService
+  depends_on :permissions_service
 
-  depends_on :collection_presenter, :photo_presenter
+  def add_photo(context)
+    file_key   = context[:file_key]
+    collection = context[:collection]
 
-  def create_collection session_id, user, file_key_of_first_photo
-    collection = if user.nil?
-      Collection.create(session_id: session_id)
-    else
-      user.collections.create
-    end
-
-    add_photo(collection, file_key_of_first_photo) unless file_key_of_first_photo.nil?
-
-    return collection_presenter.full(collection)
-  end
-
-  def add_photo collection, file_key
-    photo_presenter.full(collection.photos.create(file_key: file_key))
+    permissions_service.raise_unless_allowed(:add_photo, context)
+    collection.photos.create(photo_uid: file_key).tap{|photo| photo.save!}
   end
 end
