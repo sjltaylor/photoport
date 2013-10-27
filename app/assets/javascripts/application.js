@@ -13,7 +13,7 @@
 
 // from the flat-ui directory
 // ------------------------------------------
-//= require js/jquery-1.8.3.min
+//= require js/jquery-2.0.3.min
 //= require js/bootstrap.min
 //= require js/bootstrap-switch
 //= require js/bootstrap-select
@@ -22,7 +22,6 @@
 //= require js/html5shiv
 //= require js/jquery-ui-1.10.3.custom.min
 //= require js/jquery.placeholder
-//= require js/jquery.stacktable
 //= require js/jquery.tagsinput
 //= require js/jquery.ui.touch-punch.min
 // ------------------------------------------
