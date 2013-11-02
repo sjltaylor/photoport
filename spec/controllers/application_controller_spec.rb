@@ -35,7 +35,7 @@ describe ApplicationController do
       let(:new_user) { double(:new_user, id: '1657') }
 
       describe 'first visit' do
-        before(:each) {controller.stub(:users).and_return(user_service) }
+        before(:each) { controller.stub(:user_service).and_return(user_service) }
         before(:each) { user_service.stub(:create_user).with(no_args).and_return(new_user) }
 
         it 'creates and returns a user' do

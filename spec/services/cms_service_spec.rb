@@ -14,12 +14,18 @@ describe CmsService do
       cms_service.add_photo(context)
     end
 
+    before(:each) { new_photo_record.stub(:save!) }
+
     before(:each) do
       return_value
     end
 
     it 'returns the photo' do
       return_value.should be new_photo_record
+    end
+
+    it 'saves the photo' do
+      new_photo_record.should have_received(:save!)
     end
 
     it 'adds the photo to the collection' do
