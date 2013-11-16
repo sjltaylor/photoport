@@ -19,9 +19,11 @@
           fileExtension
         ].join('.');
 
+        fileKey = uploadData['key'].replace('{fileKey}', fileKey);
+
         var formData = new FormData();
 
-        formData.append('key',            uploadData['key'].replace('{fileKey}', fileKey));
+        formData.append('key',            fileKey);
         formData.append('acl',            uploadData['acl']);
         formData.append('AWSAccessKeyId', uploadData['AWSAccessKeyId']);
         formData.append('signature',      uploadData['signature']);

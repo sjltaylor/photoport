@@ -2,7 +2,21 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
 
   PhotoportContainer.Controller = {
     makeView: function (opts) {
-      return new PhotoportContainer.View({uploadPanel: opts.uploadPanel});
+      var collection = opts.collection;
+
+      var photoportContainer = new PhotoportContainer.View({
+        uploadPanel: opts.uploadPanel
+      });
+
+      collection.photos.each(function (photo) {
+        photoportContainer.addPhoto(photo);
+      });
+
+      collection.photos.on('add', function (photo) {
+        photoportContainer.addPhoto(photo);
+      });
+
+      return photoportContainer;
     }
   };
 });

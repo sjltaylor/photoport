@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.0.0'
+gem 'rails', '~> 4.0.1'
 gem 'mysql'
 gem 'devise'
 # Bundle edge Rails instead:
@@ -16,6 +16,7 @@ gem 'resolve', git: 'https://github.com/sjltaylor/resolve'
 
 gem 'rack-cache', :require => 'rack/cache'
 gem 'fog'
+gem 'unf'
 gem 'dragonfly', '~> 0.9.15'
 gem 'aasm'
 

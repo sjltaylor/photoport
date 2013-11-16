@@ -7,14 +7,15 @@ describe PhotoPresenter do
 
   describe '#full' do
     let(:photo_file_url) { 'url/to/photo' }
-    before(:each) { url_helper.stub(:collection_photo_url).with(photo.collection, photo, format: :json).and_return(photo_file_url) }
+    before(:each) { url_helper.stub(:collection_photo_url).with(photo.collection, photo, format: :jpg).and_return(photo_file_url) }
 
     let(:full) { photo_presenter.full(photo) }
 
     it 'includes a url of the image file' do
       full[:download].should be photo_file_url
-      url_helper.should have_received(:collection_photo_url).with(photo.collection, photo, format: :json)
+      url_helper.should have_received(:collection_photo_url).with(photo.collection, photo, format: :jpg)
     end
+
     it 'includes the photo id' do
       full[:id].should be photo.id
     end

@@ -8,7 +8,7 @@ class BrowsingService
   #   * `user`
   #   * `photo` (required)
   def download_photo(context)
-    permissions_service.raise_unless_allowed(:download_photo, context)
-    dragonfly_photos_app.fetch(context[:photo].photo_uid).thumb('700x').jpg.file.path
+    permissions_service.raise_unless_allowed(:download_photo, context);
+    dragonfly_photos_app.fetch(context[:photo].photo_uid).thumb('600x').jpg.file.path;
   end
 end

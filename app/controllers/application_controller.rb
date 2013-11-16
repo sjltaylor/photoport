@@ -31,7 +31,7 @@ class ApplicationController < ActionController::Base
   end
 
   def browsing_service
-    @browsing_service ||= BrowsingService.resolve(dragonfly_photos: Dragonfly[:photoport_cms])
+    @browsing_service ||= BrowsingService.resolve(dragonfly_photos_app: Dragonfly[:photoport_cms])
   end
 
   def user_service

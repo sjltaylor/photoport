@@ -9,11 +9,8 @@ PhotoportCMS.module('CollectionsApp.New', function (New, PhotoportCMS, Backbone,
       var uploadPanel = PhotoportCMS.UploadPanel.Controller.makeView({collection: collection});
 
       var photoportContainerView = new PhotoportCMS.PhotoportContainer.Controller.makeView({
-        uploadPanel: uploadPanel
-      });
-
-      collection.photos.on('add', function () {
-        console.warn('PHOTO ADDED', arguments);
+        uploadPanel: uploadPanel,
+        collection: collection
       });
 
       layout.contentRegion.show(photoportContainerView);

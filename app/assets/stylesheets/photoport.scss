@@ -1,21 +1,24 @@
 .photoport {
 
-  $width: 700px;
-  $height: 400px;
+  $width: 600px;
+  $height: 375px;
   $edgeWidth: 10px;
   $handleWidth: 50px;
 
   position: relative;
-  width: $width;
-  height: $height;
-  border: solid 1px rgba(255, 255, 255, 0.1);
-  border-radius: 30px;
-  padding: $edgeWidth;
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.2);
   top: 0;
   left: 0;
+  width: $width + $edgeWidth + $edgeWidth;
+  height: $height + $edgeWidth + $edgeWidth;
+  margin: 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  /*border: solid 1px rgba(255, 255, 255, 0.1);
+  padding: $edgeWidth;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.2);*/
 
   .photoport-handle {
+    display: none;
     position: absolute;
     top: 0;
     width: $handleWidth;
@@ -30,16 +33,23 @@
     right: 0;
   }
 
-  .photoport-content {
-    position: absolute;
+  .photoport-port {
+    position: relative;
     top: $edgeWidth;
-    left: $edgeWidth + $handleWidth;
-    width: $width - (2 * $handleWidth);
+    left: $edgeWidth;
+    width: $width;
     height: $height;
+    outline: solid 1px rgba(0,0,0,0.1);
 
-    .photoport-shadow {
+    .content {
+      height: $height;
+    }
+
+
+    /*.photoport-shadow {
       box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
       border-radius: 3px;
-    }
+      border: dashed 1px red;
+    }*/
   }
 }
