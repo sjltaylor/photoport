@@ -3,6 +3,7 @@ Photoport::Application.routes.draw do
   devise_for :users
 
   root :to => 'collections#new'
+  get 'status' => 'status#index'
 
   mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
 

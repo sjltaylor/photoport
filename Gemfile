@@ -23,8 +23,6 @@ gem 'aasm'
 gem 'blobject'
 
 group :test do
-  gem 'selenium-webdriver'
-  gem 'capybara', require: false
   gem 'shoulda'
 end
 
