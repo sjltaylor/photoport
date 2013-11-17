@@ -42,8 +42,8 @@ describe('photoport', function () {
       expect(photoport.sequence).toEqual([]);
     });
 
-    it('sets the position to -1', function () {
-      expect(photoport.position).toEqual(-1);
+    it('initializes the position to null', function () {
+      expect(photoport.position).toBe(null);
     });
 
     describe("options", function () {
@@ -111,61 +111,59 @@ describe('photoport', function () {
 
       beforeEach(function () {
         rtn = {};
-        spyOn(photoport, 'next').andReturn(rtn);
+        spyOn(photoport, 'seek').andReturn(rtn);
       });
 
-      it('returns the result of next()', function () {
+      it('returns the result of seek(0)', function () {
         expect(photoport.start()).toBe(rtn);
-        expect(photoport.next).toHaveBeenCalled();
-      });
-    });
-    describe('when the photoport has been started', function () {
-      it('does not call next()', function () {
-        photoport.start();
-        spyOn(photoport, 'next');
-        photoport.start();
-        expect(photoport.next).not.toHaveBeenCalled();
-      });
-      it('returns the photoport', function () {
-        expect(photoport.start()).toBe(photoport);
-      });
-      it('calls fit with the current element', function () {
-        spyOn(photoport, 'fit');
-        photoport.start();
-        expect(photoport.fit).toHaveBeenCalledWith(photoport.current);
+        expect(photoport.seek).toHaveBeenCalledWith(0);
       });
     });
   });
   describe('next()', function () {
+    var rtn;
+    beforeEach(function () {
+      addSomeElementsToPhotoport();
+      photoport.start();
+      rtn = {};
+      spyOn(photoport, 'seek').andReturn(rtn);
+    })
+    it('calls seek() with the current position + 1', function () {
+      photoport.next();
+      expect(photoport.seek).toHaveBeenCalledWith(1);
+    });
+    it('returns the result from seek', function () {
+      expect(photoport.next()).toBe(rtn);
+    })
+  });
+  describe('seek(position)', function () {
     describe('when photoport has content', function () {
       beforeEach(function () {
         addSomeElementsToPhotoport();
         photoport.start();
       });
 
-      it('calls fit with the next element', function () {
+      it('calls fit with the element to be displayed', function () {
         spyOn(photoport, 'fit');
-        photoport.next();
-        expect(photoport.fit).toHaveBeenCalledWith(els[1]);
+        photoport.seek(3);
+        expect(photoport.fit).toHaveBeenCalledWith(els[3]);
       });
-      it('increments the position', function () {
+      it('sets the position', function () {
         expect(photoport.position).toBe(0);
-        photoport.next();
-        expect(photoport.position).toBe(1);
+        photoport.seek(2);
+        expect(photoport.position).toBe(2);
       });
       it('returns the photoport', function () {
-        expect(photoport.next()).toBe(photoport);
+        expect(photoport.seek(2)).toBe(photoport);
       });
       it('is circular', function () {
-        photoport.next();
-        expect(photoport.position).toBe(1);
-        for (var i = 0; i < photoport.sequence.length; i++) {
-          photoport.next();
-        }
-        expect(photoport.position).toBe(1);
+        expect(photoport.position).toBe(0);
+        photoport.seek(photoport.sequence.length + 3);
+        expect(photoport.position).toBe(3);
       });
-      it('sets the current content to the next element', function () {
-        expect(photoport.dom.content.children[0]).toBe(els[0]);
+      it('sets the current content to the element in the sequence at the specified position', function () {
+        photoport.seek(2);
+        expect(photoport.dom.content.children[0]).toBe(els[2]);
       });
     });
     describe('when no content has been added', function () {

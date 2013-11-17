@@ -35,7 +35,7 @@ Photoport = (function () {
     this.dom = build();
     this.container.appendChild(this.dom.root);
     this.sequence = [];
-    this.position = -1;
+    this.position = null;
 
     this.dom.rightHandle.addEventListener('click', function (e) {
       e.preventDefault();
@@ -82,29 +82,34 @@ Photoport = (function () {
       return this;
     },
     start: function () {
-      if (this.position === -1) {
-        return this.next();
-      }
-      this.fit(this.current);
-      return this;
+      return this.seek(0);
     },
     __incrementPosition__: function () {
       this.position++;
       this.position = this.position % this.sequence.length;
     },
     next: function () {
+      return this.seek(this.position + 1);
+    },
+    seek: function (position) {
       if (this.sequence.length === 0) {
         throw new Error('Nothing added to Photoport');
       }
-      this.__incrementPosition__();
+      //this.__incrementPosition__();
 
       var content = this.dom.content;
 
       while (content.hasChildNodes()) {
         content.removeChild(content.lastChild);
       }
-      this.current = this.sequence[this.position];
+
+      position = position % this.sequence.length;
+
+      this.position = position;
+      this.current = this.sequence[position];
+
       this.fit(this.current);
+
       content.appendChild(this.current);
       return this;
     },
