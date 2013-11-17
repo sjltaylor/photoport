@@ -1,28 +1,27 @@
 .photoport {
 
-  $width: 600px;
-  $height: 375px;
-  $edgeWidth: 10px;
-  $handleWidth: 50px;
+  $baseWidth: 600px;
+  $baseHeight: 375px;
+  $topEdgeWidth: 10px;
+  $handleWidth: 30px;
 
   position: relative;
   top: 0;
   left: 0;
-  width: $width + $edgeWidth + $edgeWidth;
-  height: $height + $edgeWidth + $edgeWidth;
+  width: $baseWidth + (2 * $handleWidth);
+  height: $baseHeight + (2 * $topEdgeWidth);
   margin: 0 auto;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   /*border: solid 1px rgba(255, 255, 255, 0.1);
-  padding: $edgeWidth;
-  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1), 0 0 10px rgba(0, 0, 0, 0.2);*/
+  padding: $edgeWidth;*/
+  box-shadow: inset 0 0 100px rgba(100,100,100,0.1), 0 0 10px rgba(100,100,100,0.3);
+  border: solid 1px rgba(255, 255, 255, 0.1);
 
   .photoport-handle {
-    display: none;
     position: absolute;
-    top: 0;
+    top: $topEdgeWidth;
     width: $handleWidth;
-    height: $height;
+    height: $baseHeight;
   }
 
   .photoport-handle-left {
@@ -35,17 +34,18 @@
 
   .photoport-port {
     position: relative;
-    top: $edgeWidth;
-    left: $edgeWidth;
-    width: $width;
-    height: $height;
-    outline: solid 1px rgba(0,0,0,0.1);
+    top: $topEdgeWidth - 1;
+    left: $handleWidth - 1;
+    width: $baseWidth;
+    height: $baseHeight;
+    border: solid 1px rgba(255, 255, 255, 0.1);
 
     .content {
-      height: $height;
+      height: $baseHeight;
 
-      .photo {
+      .photoport-element {
         box-shadow: 0 0 5px rgba(0,0,0,0.3) inset;
+        user-select: none;
       }
     }
 

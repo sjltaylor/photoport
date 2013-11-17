@@ -21,10 +21,10 @@ Photoport = (function () {
       rightHandle : div('photoport-handle photoport-handle-right')
     };
 
-    //dom.root.appendChild(dom.leftHandle);
+    dom.root.appendChild(dom.leftHandle);
     dom.root.appendChild(dom.port);
+    dom.root.appendChild(dom.rightHandle);
     dom.port.appendChild(dom.content);
-    //dom.root.appendChild(dom.rightHandle);
 
     return dom;
   }
@@ -36,6 +36,11 @@ Photoport = (function () {
     this.container.appendChild(this.dom.root);
     this.sequence = [];
     this.position = -1;
+
+    this.dom.rightHandle.addEventListener('click', function (e) {
+      e.preventDefault();
+      this.next();
+    }.bind(this));
   }
 
   Photoport.prototype = {
@@ -44,10 +49,10 @@ Photoport = (function () {
 
       el.style.width  = bounds.width  + 'px';
       el.style.height = bounds.height + 'px';
-      //console.warn(bounds);
-      /*if (!el.classList.contains('photoport-shadow')) {
-        el.classList.add('photoport-shadow');
-      }*/
+
+      if (!el.classList.contains('photoport-element')) {
+        el.classList.add('photoport-element');
+      }
     },
     append: function (imgUrlOrHTMLElement) {
       return this.insert(imgUrlOrHTMLElement);
@@ -103,9 +108,6 @@ Photoport = (function () {
       content.appendChild(this.current);
       return this;
     },
-    // sequence: function () {
-    //   return this.__sequence__;
-    // },
     teardown: function () {
       // remove all of the dom
       // remove all event handlers

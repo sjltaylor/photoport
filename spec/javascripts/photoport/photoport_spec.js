@@ -9,7 +9,7 @@ describe('photoport', function () {
   });
 
   function createElement(idSuffix) {
-    idSuffix = idSuffix === undefined ? new Date().valueOf() : idSuffix;
+    idSuffix = idSuffix === undefined ? ('_' + new Date().valueOf()) : idSuffix;
     return $('<div>').attr({id: 'el' + idSuffix})[0];
   }
 
@@ -33,7 +33,7 @@ describe('photoport', function () {
       expect(container.querySelector('.photoport .content')).not.toBeNull();
     });
 
-    xit('renders handles', function () {
+    it('renders handles', function () {
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left')).not.toBeNull();
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right')).not.toBeNull();
     });
@@ -84,6 +84,21 @@ describe('photoport', function () {
 
       expect(el.style.width).toBe('400px');
       expect(el.style.height).toBe('200px');
+    });
+
+    it('adds the photoport-element class to the element', function () {
+      var el = createElement();
+      expect(el.classList.contains('photoport-element')).toBe(false);
+      photoport.fit(el);
+      expect(el.classList.contains('photoport-element')).toBe(true);
+    });
+
+    it('doesnt add the photoport-element class to the element if it already has the class', function () {
+      var el = createElement();
+      el.className = 'photoport-element';
+      expect(el.className).toBe('photoport-element');
+      photoport.fit(el);
+      expect(el.className).toBe('photoport-element');
     });
   });
   describe('start()', function () {
@@ -233,5 +248,16 @@ describe('photoport', function () {
         expect(photoport.sequence[l]).toBe(el);
       });
     })
+  });
+  describe('navigation', function () {
+    describe('clicking', function () {
+      describe('right', function () {
+        it('calls next', function () {
+          spyOn(photoport, 'next');
+          photoport.dom.rightHandle.dispatchEvent(new Event('click'));
+          expect(photoport.next).toHaveBeenCalled();
+        });
+      })
+    });
   });
 });
