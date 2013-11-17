@@ -7,18 +7,19 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       this.photoport = new Photoport({
         container: this.el
       });
+      window.P = this.photoport;
     },
     onRender: function () {
       var uploadPanel = this.options.uploadPanel;
       uploadPanel.render();
-      this.photoport.append(uploadPanel.el);
+      this.photoport.prepend(uploadPanel.el);
     },
     onShow: function () {
       this.photoport.start();
     },
     addPhoto: function (photo) {
       this.photoport.append(photo.get('download'));
-      this.photoport.next();
+      this.photoport.seek('last');
     }
   });
 });

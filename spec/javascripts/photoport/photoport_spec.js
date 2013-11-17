@@ -134,23 +134,38 @@ describe('photoport', function () {
     });
     it('returns the result from seek', function () {
       expect(photoport.next()).toBe(rtn);
-    })
+    });
+    describe('when at the end', function () {
+      it('returns to the start', function () {
+        photoport.seek('last');
+        photoport.next();
+        expect(photoport.position).toBe(0);
+      });
+    });
   });
   describe('previous()', function () {
-    var rtn;
+    var rtn = {};
     beforeEach(function () {
       addSomeElementsToPhotoport();
       photoport.start();
-      rtn = {};
-      spyOn(photoport, 'seek').andReturn(rtn);
     })
-    it('calls seek() with the current position - 1', function () {
+    it('calls seek() with the previous position', function () {
+      photoport.seek(3);
+      spyOn(photoport, 'seek').andReturn(rtn);
       photoport.previous();
-      expect(photoport.seek).toHaveBeenCalledWith(-1);
+      expect(photoport.seek).toHaveBeenCalledWith(2);
     });
     it('returns the result from seek', function () {
+      spyOn(photoport, 'seek').andReturn(rtn);
       expect(photoport.previous()).toBe(rtn);
-    })
+    });
+    describe('when at the first position', function () {
+      it('loops to the end', function () {
+        photoport.seek('first');
+        photoport.previous();
+        expect(photoport.position).toBe(photoport.sequence.length - 1);
+      });
+    });
   });
   describe('seek(position)', function () {
     describe('when photoport has content', function () {
@@ -176,18 +191,41 @@ describe('photoport', function () {
         photoport.seek(2);
         expect(photoport.dom.content.children[0]).toBe(els[2]);
       });
-      describe('circularity', function () {
-        it('is modulos around the length of the sequence', function () {
+      describe('bounds handling', function () {
+        it('is seeks up to the length of the sequence', function () {
           expect(photoport.position).toBe(0);
-          photoport.seek(photoport.sequence.length + 3);
-          expect(photoport.position).toBe(3);
+          photoport.seek(photoport.sequence.length);
+          expect(photoport.position).toBe(photoport.sequence.length - 1);
+          photoport.seek(photoport.sequence.length + 5);
+          expect(photoport.position).toBe(photoport.sequence.length - 1);
         });
-        it('is offsets negative positions from the length of the sequence', function () {
-          photoport.seek(2);
-          photoport.seek(-((photoport.sequence.length * 2) + 2));
-          expect(photoport.position).toBe(3);
+        describe('negative seek positions', function () {
+          it('offset from the length', function () {
+            photoport.seek(0);
+            photoport.seek(-2);
+            expect(photoport.position).toBe(3);
+          });
+          it('offset to a minimum of zero', function () {
+            photoport.seek(2);
+            photoport.seek(-photoport.sequence.length * 10);
+            expect(photoport.position).toBe(0);
+          });
         });
       });
+      describe('named positions', function () {
+        describe('last', function () {
+          it('calls seek with the index of the last element', function () {
+            photoport.seek('last');
+            expect(photoport.position).toBe(photoport.sequence.length - 1);
+          });
+        });
+        describe('first', function () {
+          it('calls seek with the index of the first element', function () {
+            photoport.seek('first');
+            expect(photoport.position).toBe(0);
+          });
+        });
+      })
     });
     describe('when no content has been added', function () {
       it('throws an exception', function () {

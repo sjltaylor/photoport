@@ -29,14 +29,13 @@ Photoport = (function () {
     return dom;
   }
 
-  function positionInSequence(position, sequence) {
-    position = position % sequence.length;
 
-    if (position < 0) {
-      position = sequence.length + position;
-    }
+  function circularIncr(p, length) {
+    return (p + 1) % length;
+  }
 
-    return position;
+  function circularDecr(p, length) {
+    return ((p - length) % length) + length -1;
   }
 
   function Photoport (options) {
@@ -80,19 +79,25 @@ Photoport = (function () {
         position = this.sequence.length;
       }
 
-      var e = imgUrlOrHTMLElement;
+      position = Math.min(position, this.sequence.length);
 
-      if ((typeof e) === 'string') {
-        e = div('photo');
-        e.style.backgroundImage = "url(" + imgUrlOrHTMLElement + ")";
-        e.style.backgroundRepeat = "no-repeat";
+      if (position < 0) {
+        position = Math.max(position + this.sequence.length, 0)
       }
-
-      this.sequence.splice(position, 0, e);
 
       if (position <= this.position) {
-        this.position = positionInSequence(this.position + 1, this.sequence);
+        this.position++;
       }
+
+      var el = imgUrlOrHTMLElement;
+
+      if ((typeof el) === 'string') {
+        el = div('photo');
+        el.style.backgroundImage = "url(" + imgUrlOrHTMLElement + ")";
+        el.style.backgroundRepeat = "no-repeat";
+      }
+
+      this.sequence.splice(position, 0, el);
 
       return this;
     },
@@ -100,27 +105,42 @@ Photoport = (function () {
       return this.seek(0);
     },
     previous: function () {
-      return this.seek(this.position - 1);
+      return this.seek(circularDecr(this.position, this.sequence.length));
     },
     next: function () {
-      return this.seek(this.position + 1);
+      return this.seek(circularIncr(this.position, this.sequence.length));
     },
     seek: function (position) {
       if (this.sequence.length === 0) {
         throw new Error('Nothing added to Photoport');
       }
 
+      switch(position) {
+        case 'last':
+          position = this.sequence.length - 1;
+          break;
+        case 'first':
+          position = 0;
+          break;
+      }
+
+      if (position >= this.sequence.length) {
+        position = this.sequence.length - 1;
+      } else if (position < 0) {
+        position = Math.max(0, this.sequence.length + position);
+      }
+
+      this.position = position;
+
+      this.current = this.sequence[this.position];
+
+      this.fit(this.current);
+
       var content = this.dom.content;
 
       while (content.hasChildNodes()) {
         content.removeChild(content.lastChild);
       }
-
-      this.position = positionInSequence(position, this.sequence);
-
-      this.current = this.sequence[this.position];
-
-      this.fit(this.current);
 
       content.appendChild(this.current);
       return this;
