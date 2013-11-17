@@ -11,7 +11,7 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
     onRender: function () {
       var uploadPanel = this.options.uploadPanel;
       uploadPanel.render();
-      this.photoport.append(uploadPanel.el);
+      //this.photoport.append(uploadPanel.el);
     },
     onShow: function () {
       this.photoport.start();

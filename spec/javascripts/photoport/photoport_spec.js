@@ -94,6 +94,7 @@ describe('photoport', function () {
         spyOn(photoport, 'next').andReturn(rtn);
       });
 
+
       it('returns the result of next()', function () {
         expect(photoport.start()).toBe(rtn);
         expect(photoport.next).toHaveBeenCalled();
@@ -108,6 +109,11 @@ describe('photoport', function () {
       });
       it('returns the photoport', function () {
         expect(photoport.start()).toBe(photoport);
+      });
+      it('calls fit with the current element', function () {
+        spyOn(photoport, 'fit');
+        photoport.start();
+        expect(photoport.fit).toHaveBeenCalledWith(photoport.current);
       });
     });
   });
@@ -177,6 +183,7 @@ describe('photoport', function () {
         var el = photoport.sequence[0];
         expect(el instanceof HTMLDivElement).toBeTruthy();
         expect(el.style.backgroundImage).toEqual('url(http://localhost/)');
+        expect(el.classList.contains('photo')).toBeTruthy();
       });
     })
     describe('when the element is inserted before the current position', function () {

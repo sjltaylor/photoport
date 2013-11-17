@@ -63,7 +63,7 @@ Photoport = (function () {
       var e = imgUrlOrHTMLElement;
 
       if ((typeof e) === 'string') {
-        e = div();
+        e = div('photo');
         e.style.backgroundImage = "url(" + imgUrlOrHTMLElement + ")";
         e.style.backgroundRepeat = "no-repeat";
       }
@@ -80,6 +80,7 @@ Photoport = (function () {
       if (this.position === -1) {
         return this.next();
       }
+      this.fit(this.current);
       return this;
     },
     __incrementPosition__: function () {
@@ -97,9 +98,9 @@ Photoport = (function () {
       while (content.hasChildNodes()) {
         content.removeChild(content.lastChild);
       }
-      var current = this.sequence[this.position];
-      this.fit(current);
-      content.appendChild(current);
+      this.current = this.sequence[this.position];
+      this.fit(this.current);
+      content.appendChild(this.current);
       return this;
     },
     // sequence: function () {
