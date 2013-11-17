@@ -8,10 +8,15 @@ describe('photoport', function () {
     photoport = new Photoport({container:container});
   });
 
+  function createElement(idSuffix) {
+    idSuffix = idSuffix === undefined ? new Date().valueOf() : idSuffix;
+    return $('<div>').attr({id: 'el' + idSuffix})[0];
+  }
+
   function addSomeElementsToPhotoport() {
     els = [];
     [0,1,2,3,4].forEach(function (i) {
-      var el = $('<div>').attr({id: 'e' + i})[0];
+      var el = createElement(i);
       els[i] = el;
       photoport.insert(el, i);
     });
@@ -58,7 +63,7 @@ describe('photoport', function () {
     var el;
 
     beforeEach(function () {
-      el = $('<div>').attr({id: 'el'})[0];
+      el = createElement();
     });
 
     it('sets the dimensions of the element to those of the photoport viewing viewport', function () {
@@ -93,7 +98,6 @@ describe('photoport', function () {
         rtn = {};
         spyOn(photoport, 'next').andReturn(rtn);
       });
-
 
       it('returns the result of next()', function () {
         expect(photoport.start()).toBe(rtn);
@@ -165,12 +169,12 @@ describe('photoport', function () {
     });
 
     it('defaults the position to the end of the sequence', function () {
-      var elN = $('<div>').attr({id: 'e1'})[0];
+      var elN = createElement();
       photoport.insert(elN);
       expect(photoport.sequence[photoport.sequence.length-1]).toBe(elN);
     });
     it('inserts the HTMLElement into the seqeuence at the requested position', function () {
-      var el = $('<div>').attr({id: 'el_inserted'})[0];
+      var el = createElement('_inserted');
       photoport.insert(el, 3);
       expect(photoport.sequence[3]).toBe(el);
     });
@@ -182,7 +186,8 @@ describe('photoport', function () {
         photoport.prepend('http://localhost');
         var el = photoport.sequence[0];
         expect(el instanceof HTMLDivElement).toBeTruthy();
-        expect(el.style.backgroundImage).toEqual('url(http://localhost/)');
+        var urlRegex = /url\("?http:\/\/localhost\/?"?\)/
+        expect(el.style.backgroundImage).toMatch(urlRegex);
         expect(el.classList.contains('photo')).toBeTruthy();
       });
     })
@@ -201,5 +206,32 @@ describe('photoport', function () {
         expect(photoport.position).toBe(1);
       });
     });
+    describe('when a negative position is passed', function () {
+      it('inserts the element at length - pos', function () {
+        var el = createElement();
+        var c = photoport.sequence.length;
+        var i = -3;
+        var expectedPosition = c + i;
+        expect(expectedPosition).toBeGreaterThan(0);
+        photoport.insert(el, i);
+        expect(photoport.sequence[expectedPosition]).toBe(el);
+      });
+      describe('when the length - position is negative', function () {
+        it('inserts the element at zero', function () {
+          var el = createElement();
+          var i = -10000000;
+          photoport.insert(el, i);
+          expect(photoport.sequence[0]).toBe(el);
+        })
+      })
+    });
+    describe('when a position greater than the length is passed', function () {
+      it('inserts the element at the end of the seqence', function () {
+        var el = createElement();
+        var l = photoport.sequence.length;
+        photoport.insert(el, l + 5);
+        expect(photoport.sequence[l]).toBe(el);
+      });
+    })
   });
 });
