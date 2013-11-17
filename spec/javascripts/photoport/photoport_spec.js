@@ -136,6 +136,22 @@ describe('photoport', function () {
       expect(photoport.next()).toBe(rtn);
     })
   });
+  describe('previous()', function () {
+    var rtn;
+    beforeEach(function () {
+      addSomeElementsToPhotoport();
+      photoport.start();
+      rtn = {};
+      spyOn(photoport, 'seek').andReturn(rtn);
+    })
+    it('calls seek() with the current position - 1', function () {
+      photoport.previous();
+      expect(photoport.seek).toHaveBeenCalledWith(-1);
+    });
+    it('returns the result from seek', function () {
+      expect(photoport.previous()).toBe(rtn);
+    })
+  });
   describe('seek(position)', function () {
     describe('when photoport has content', function () {
       beforeEach(function () {
@@ -156,14 +172,21 @@ describe('photoport', function () {
       it('returns the photoport', function () {
         expect(photoport.seek(2)).toBe(photoport);
       });
-      it('is circular', function () {
-        expect(photoport.position).toBe(0);
-        photoport.seek(photoport.sequence.length + 3);
-        expect(photoport.position).toBe(3);
-      });
       it('sets the current content to the element in the sequence at the specified position', function () {
         photoport.seek(2);
         expect(photoport.dom.content.children[0]).toBe(els[2]);
+      });
+      describe('circularity', function () {
+        it('is modulos around the length of the sequence', function () {
+          expect(photoport.position).toBe(0);
+          photoport.seek(photoport.sequence.length + 3);
+          expect(photoport.position).toBe(3);
+        });
+        it('is offsets negative positions from the length of the sequence', function () {
+          photoport.seek(2);
+          photoport.seek(-((photoport.sequence.length * 2) + 2));
+          expect(photoport.position).toBe(3);
+        });
       });
     });
     describe('when no content has been added', function () {
@@ -255,7 +278,14 @@ describe('photoport', function () {
           photoport.dom.rightHandle.dispatchEvent(new Event('click'));
           expect(photoport.next).toHaveBeenCalled();
         });
-      })
+      });
+      describe('left', function () {
+        it('calls previous', function () {
+          spyOn(photoport, 'previous');
+          photoport.dom.leftHandle.dispatchEvent(new Event('click'));
+          expect(photoport.previous).toHaveBeenCalled();
+        });
+      });
     });
   });
 });

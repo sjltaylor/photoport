@@ -29,6 +29,16 @@ Photoport = (function () {
     return dom;
   }
 
+  function positionInSequence(position, sequence) {
+    position = position % sequence.length;
+
+    if (position < 0) {
+      position = sequence.length + position;
+    }
+
+    return position;
+  }
+
   function Photoport (options) {
     checkOptions(options);
     this.container = options.container;
@@ -40,6 +50,11 @@ Photoport = (function () {
     this.dom.rightHandle.addEventListener('click', function (e) {
       e.preventDefault();
       this.next();
+    }.bind(this));
+
+    this.dom.leftHandle.addEventListener('click', function (e) {
+      e.preventDefault();
+      this.previous();
     }.bind(this));
   }
 
@@ -76,7 +91,7 @@ Photoport = (function () {
       this.sequence.splice(position, 0, e);
 
       if (position <= this.position) {
-        this.__incrementPosition__();
+        this.position = positionInSequence(this.position + 1, this.sequence);
       }
 
       return this;
@@ -84,9 +99,8 @@ Photoport = (function () {
     start: function () {
       return this.seek(0);
     },
-    __incrementPosition__: function () {
-      this.position++;
-      this.position = this.position % this.sequence.length;
+    previous: function () {
+      return this.seek(this.position - 1);
     },
     next: function () {
       return this.seek(this.position + 1);
@@ -95,7 +109,6 @@ Photoport = (function () {
       if (this.sequence.length === 0) {
         throw new Error('Nothing added to Photoport');
       }
-      //this.__incrementPosition__();
 
       var content = this.dom.content;
 
@@ -103,19 +116,14 @@ Photoport = (function () {
         content.removeChild(content.lastChild);
       }
 
-      position = position % this.sequence.length;
+      this.position = positionInSequence(position, this.sequence);
 
-      this.position = position;
-      this.current = this.sequence[position];
+      this.current = this.sequence[this.position];
 
       this.fit(this.current);
 
       content.appendChild(this.current);
       return this;
-    },
-    teardown: function () {
-      // remove all of the dom
-      // remove all event handlers
     }
   };
 
