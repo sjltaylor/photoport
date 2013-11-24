@@ -4,7 +4,7 @@
     uploadPhotos: function (config, files) {
       var uploadData = config["upload_form_data"];
 
-      var deferreds = [];
+      var promises = [];
 
       for (var i = 0; i < files.length; i++) {
         var file = files[i];
@@ -41,10 +41,10 @@
         });
 
         deferred.photoportCmsMetadata = { fileKey: fileKey };
-        deferreds.push(deferred);
+        promises.push(deferred.promise());
       }
 
-      return deferreds;
+      return promises;
     }
   };
 })();
