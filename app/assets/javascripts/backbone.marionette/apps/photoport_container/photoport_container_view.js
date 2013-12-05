@@ -7,12 +7,14 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       this.photoport = new Photoport({
         container: this.el
       });
-      window.P = this.photoport;
     },
     onRender: function () {
       var uploadPanel = this.options.uploadPanel;
       uploadPanel.render();
       this.photoport.prepend(uploadPanel.el);
+
+      this.$el = this.$el.children();
+      this.setElement(this.$el);
     },
     onShow: function () {
       this.photoport.start();
