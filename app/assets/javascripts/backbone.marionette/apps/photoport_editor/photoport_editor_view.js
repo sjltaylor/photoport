@@ -11,7 +11,7 @@ PhotoportCMS.module('PhotoportEditor', function (PhotoportEditor, PhotoportCMS, 
     initialize: function (opts) {
       this.photoportContainerView = opts.photoportContainerView;
     },
-    onRender: function () {
+    onShow: function () {
       this.photoportContainerRegion.show(this.photoportContainerView);
     }
   });

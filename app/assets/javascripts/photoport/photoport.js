@@ -59,6 +59,8 @@ Photoport = (function () {
 
   Photoport.prototype = {
     fit: function (el) {
+      el = el || this.current;
+
       var bounds = this.dom.content.getBoundingClientRect();
 
       el.style.width  = bounds.width  + 'px';
