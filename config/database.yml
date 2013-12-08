@@ -1,26 +1,26 @@
 development:
-  adapter: mysql
+  adapter: postgresql
   host: localhost
   encoding: utf8
   database: photoport_development
-  username: root
+  username: postgres
   pool: 5
   timeout: 5000
 
 test:
-  adapter: mysql
+  adapter: postgresql
   host: localhost
   encoding: utf8
   database: photoport_test
-  username: root
+  username: postgres
   pool: 5
   timeout: 5000
 
 production:
-  adapter: mysql
+  adapter: postgresql
   host: localhost
   encoding: utf8
   database: photoport_production
-  username: root
+  username: postgres
   pool: 5
   timeout: 5000
