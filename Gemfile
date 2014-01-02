@@ -19,6 +19,7 @@ gem 'fog'
 gem 'unf'
 gem 'dragonfly', '~> 0.9.15'
 gem 'aasm'
+gem 'better_errors'
 
 gem 'blobject'
 

@@ -36,8 +36,12 @@ GEM
     arel (4.0.1)
     atomic (1.1.14)
     bcrypt-ruby (3.1.2)
+    better_errors (1.0.1)
+      coderay (>= 1.0.0)
+      erubis (>= 2.6.6)
     blobject (0.3.7)
     builder (3.1.4)
+    coderay (1.1.0)
     columnize (0.3.6)
     commonjs (0.2.7)
     debugger (1.6.2)
@@ -174,6 +178,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
+  better_errors
   blobject
   debugger
   devise
