@@ -191,6 +191,12 @@ describe('photoport', function () {
         photoport.seek(2);
         expect(photoport.dom.content.children[0]).toBe(els[2]);
       });
+      describe('when called with the same position as the current position', function () {
+        it('returns itself', function () {
+          photoport.seek(2);
+          expect(photoport.seek(2)).toBe(photoport);
+        })
+      })
       describe('bounds handling', function () {
         it('is seeks up to the length of the sequence', function () {
           expect(photoport.position).toBe(0);
@@ -264,7 +270,7 @@ describe('photoport', function () {
         expect(el.style.backgroundImage).toMatch(urlRegex);
         expect(el.classList.contains('photo')).toBeTruthy();
       });
-    })
+    });
     describe('when the element is inserted before the current position', function () {
       it('incremements the position', function () {
         photoport.next();
@@ -306,7 +312,33 @@ describe('photoport', function () {
         photoport.insert(el, l + 5);
         expect(photoport.sequence[l]).toBe(el);
       });
-    })
+    });
+    describe('position of the inserted dom node', function () {
+      describe('when inserting after the current position', function () {
+        it('is the same position among siblings as in sequence', function () {
+          var newEl = createElement();
+          photoport.seek(0);
+          photoport.insert(newEl, 1);
+          expect(photoport.dom.content.children[1]).to.be(newEl);
+        });
+      });
+      describe('when inserting at the current position', function () {
+        it('is the same position among siblings as in sequence', function () {
+          var newEl = createElement();
+          photoport.seek(2);
+          photoport.insert(newEl, 2);
+          expect(photoport.dom.content.children[2]).to.be(newEl);
+        });
+      });
+      describe('when inserting before the current position', function () {
+        it('is the same position among siblings as in sequence', function () {
+          var newEl = createElement();
+          photoport.seek(4);
+          photoport.insert(newEl, 1);
+          expect(photoport.dom.content.children[1]).to.be(newEl);
+        });
+      });
+    });
   });
   describe('navigation', function () {
     describe('clicking', function () {
