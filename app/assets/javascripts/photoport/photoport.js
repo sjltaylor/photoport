@@ -57,8 +57,8 @@ Photoport = (function () {
   }
 
   Photoport.prototype = {
-    fit: function (el) {
-      el = el || this.current.el;
+    fit: function (content) {
+      el = content.el || this.current.el;
 
       var bounds = this.portRect();
 
@@ -84,7 +84,7 @@ Photoport = (function () {
       var bounds = this.portRect();
       this.dom.content.style.width = (this.sequence.length * bounds.width) + 'px';
       for(var i = this.sequence.length - 1; i >= 0; i--) {
-        this.fit(this.sequence[i].el);
+        this.fit(this.sequence[i]);
       }
     },
     append: function (content) {
@@ -116,13 +116,13 @@ Photoport = (function () {
       }
 
       this.sequence.splice(position, 0, contentDescriptor);
-      this.fit(contentDescriptor.el);
+      this.fit(contentDescriptor);
 
       var existingContent = this.dom.content;
 
       for (var i = 0; i < existingContent.children.length + 1; i++) {
         if (i === position) {
-          existingContent.insertBefore(contentDescriptor.el, existingContent[i+1] || null);
+          existingContent.insertBefore(contentDescriptor.el, existingContent.children[i] || null);
           break;
         }
       }
