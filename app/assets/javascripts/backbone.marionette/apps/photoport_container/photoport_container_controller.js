@@ -1,5 +1,11 @@
 PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, PhotoportCMS, Backbone, Marionette, $, _) {
 
+  function addPhoto(container, photo) {
+    container.add({
+      backgroundImage: photo.get('download')
+    });
+  }
+
   PhotoportContainer.Controller = {
     makeView: function (opts) {
       var collection = opts.collection;
@@ -9,11 +15,11 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       });
 
       collection.photos.each(function (photo) {
-        photoportContainer.addPhoto(photo);
+        addPhoto(photoportContainer, photo);
       });
 
       collection.photos.on('add', function (photo) {
-        photoportContainer.addPhoto(photo);
+        addPhoto(photoportContainer, photo);
       });
 
       return photoportContainer;

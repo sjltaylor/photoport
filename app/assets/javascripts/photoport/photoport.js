@@ -58,7 +58,7 @@ Photoport = (function () {
 
   Photoport.prototype = {
     fit: function (el) {
-      el = el || this.current;
+      el = el || this.current.el;
 
       var bounds = this.portRect();
 
@@ -68,6 +68,10 @@ Photoport = (function () {
       el.style.position = 'relative';
       el.style.top      = 0;
       el.style.left     = 0;
+      el.style.margin   = 0;
+      el.style.border   = 'none';
+      el.style.padding  = 0;
+      el.style.outline  = 0;
 
       if (!el.classList.contains('photoport-element')) {
         el.classList.add('photoport-element');
@@ -80,16 +84,16 @@ Photoport = (function () {
       var bounds = this.portRect();
       this.dom.content.style.width = (this.sequence.length * bounds.width) + 'px';
       for(var i = this.sequence.length - 1; i >= 0; i--) {
-        this.fit(this.sequence[i]);
+        this.fit(this.sequence[i].el);
       }
     },
-    append: function (imgUrlOrHTMLElement) {
-      return this.insert(imgUrlOrHTMLElement);
+    append: function (content) {
+      return this.insert(content);
     },
-    prepend: function (imgUrlOrHTMLElement) {
-      return this.insert(imgUrlOrHTMLElement, 0);
+    prepend: function (content) {
+      return this.insert(content, 0);
     },
-    insert: function (imgUrlOrHTMLElement, position) {
+    insert: function (contentDescriptor, position) {
       if (position === undefined || position === null) {
         position = this.sequence.length;
       }
@@ -104,22 +108,21 @@ Photoport = (function () {
         this.position++;
       }
 
-      var el = imgUrlOrHTMLElement;
+      contentDescriptor.el = contentDescriptor.el || div('photo');
 
-      if ((typeof el) === 'string') {
-        el = div('photo');
-        el.style.backgroundImage = "url(" + imgUrlOrHTMLElement + ")";
-        el.style.backgroundRepeat = "no-repeat";
+      if ((typeof contentDescriptor.backgroundImage) === 'string') {
+        contentDescriptor.el.style.backgroundImage = "url(" + contentDescriptor.backgroundImage + ")";
+        contentDescriptor.el.style.backgroundRepeat = "no-repeat";
       }
 
-      this.sequence.splice(position, 0, el);
-      this.fit(el);
+      this.sequence.splice(position, 0, contentDescriptor);
+      this.fit(contentDescriptor.el);
 
-      var content = this.dom.content;
+      var existingContent = this.dom.content;
 
-      for (var i = 0; i < content.children.length + 1; i++) {
+      for (var i = 0; i < existingContent.children.length + 1; i++) {
         if (i === position) {
-          content.insertBefore(el, content[i+1] || null);
+          existingContent.insertBefore(contentDescriptor.el, existingContent[i+1] || null);
           break;
         }
       }
@@ -160,76 +163,14 @@ Photoport = (function () {
 
       if (this.position === newPosition) return this;
 
-      // if (newPosition > this.position) {
-      //   this.__slideRightTo__(newPosition);
-      // } else {
-      //   this.__slideLeftTo__(newPosition);
-      // }
+      var newLeft = -1 * newPosition * this.portRect().width;
 
-      // collect all elements circularly up the the new position
-      // fit them
-      // append them to the .content node
-      // animate it scrolling
-      // when moved, remove all but the current node
+      this.dom.content.style.left = newLeft + 'px';
+      this.position = newPosition;
+      this.current = this.sequence[this.position];
 
-      //return this;
-
-      var portRect = this.portRect();
-      //var currentLeft = this.position * portRect.width;
-      var newLeft = -1 * newPosition * portRect.width;
-
-      var self = this;
-
-      $(this.dom.content).animate({
-        left: newLeft + 'px'
-      }, 'fast', function () {
-        self.position = newPosition;
-        self.current = self.sequence[self.position];
-      });
-
-      //this.fit(this.current);
-
-      //var content = this.dom.content;
-
-      // while (content.hasChildNodes()) {
-      //   //content.removeChild(content.lastChild);
-      // }
-
-      // //content.appendChild(this.current);
       return this;
-    }//,
-    // __slideLeftTo__: function (newPosition) {
-    //   var transitionSequence = [];
-    //   for(var i = newPosition; i < this.position; i++) {
-    //     transitionSequence.push(this.sequence[i]);
-    //   }
-
-    //   var width = this.portRect().width;
-    //   var offset = transitionSequence.length * width;
-
-    //   var content = this.dom.content;
-
-    //   content.style.width = offset;
-    //   content.style.position = 'relative';
-    //   content.style.top = 0;
-    //   content.style.left =  offset;
-
-    //   while (content.hasChildNodes()) {
-    //     content.removeChild(content.lastChild);
-    //   }
-
-    //   transitionSequence.forEach(function (transitionElement) {
-    //     content.appendChild
-    //   })
-
-    //   content.style.left = 0;
-    // },
-    // __slideRightTo__: function () {
-    //   var transitionSequence = [];
-    //   for(var i = this.position + 1; i <= newPosition; i++) {
-    //     transitionSequence.push(this.sequence[i]);
-    //   }
-    // }
+    }
   };
 
   return Photoport;

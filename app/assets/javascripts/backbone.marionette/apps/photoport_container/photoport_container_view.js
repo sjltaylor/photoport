@@ -11,7 +11,7 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
     onRender: function () {
       var uploadPanel = this.options.uploadPanel;
       uploadPanel.render();
-      this.photoport.prepend(uploadPanel.el);
+      this.photoport.prepend({ el: uploadPanel.el });
 
       this.$el = this.$el.children();
       this.setElement(this.$el);
@@ -19,8 +19,8 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
     onShow: function () {
       this.photoport.start();
     },
-    addPhoto: function (photo) {
-      this.photoport.append(photo.get('download'));
+    add: function (content) {
+      this.photoport.append(content);
       this.photoport.seek('last');
     }
   });
