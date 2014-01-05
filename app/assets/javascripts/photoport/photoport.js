@@ -91,6 +91,9 @@ Photoport = (function () {
     portRect: function () {
       return this.dom.port.getBoundingClientRect();
     },
+    el: function () {
+      return this.dom.root;
+    },
     __fitContent__: function () {
       var bounds = this.portRect();
       this.dom.content.style.width = (this.sequence.length * bounds.width) + 'px';
@@ -177,8 +180,16 @@ Photoport = (function () {
       var newLeft = -1 * newPosition * this.portRect().width;
 
       this.dom.content.style.left = newLeft + 'px';
+      var previousPosition = this.position;
       this.position = newPosition;
       this.current = this.sequence[this.position];
+
+      this.el().dispatchEvent(new CustomEvent('photoport-navigate', {
+        detail: {
+          previousPosition: previousPosition,
+          newPosition: newPosition
+        }
+      }));
 
       return this;
     }

@@ -14,8 +14,22 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
         uploadPanel: opts.uploadPanel
       });
 
+      // collection.photos.each(function (photo) {
+      //   addPhoto(photoportContainer, photo);
+      // });
+
+      if (collection.photos.length === 0) {
+        for(var i = 0; i < 5; i++) {
+          collection.photos.add({});
+        }
+      }
       collection.photos.each(function (photo) {
-        addPhoto(photoportContainer, photo);
+        var el = $('<div>');
+        el.text(photo.get('id'));
+        el.css('background-color', '#'+(Math.random()*0xFFFFFF<<0).toString(16));
+        photoportContainer.add({
+          el: el[0]
+        });
       });
 
       collection.photos.on('add', function (photo) {

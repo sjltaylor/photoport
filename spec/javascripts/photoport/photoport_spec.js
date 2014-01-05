@@ -194,6 +194,11 @@ describe('photoport', function () {
       });
     });
   });
+  describe('el()', function () {
+    it('returns the root of the photoport dom', function () {
+      expect(photoport.el()).toBe(photoport.dom.root);
+    });
+  });
   describe('seek(position)', function () {
     describe('when photoport has content', function () {
       beforeEach(function () {
@@ -252,6 +257,37 @@ describe('photoport', function () {
             photoport.seek('first');
             expect(photoport.position).toBe(0);
           });
+        });
+      });
+      describe('photoport-navigate event', function () {
+        var args;
+        var listenerFn;
+        var previousPosition;
+        var newPosition;
+
+        beforeEach(function () {
+          args = 'not-called';
+
+          listenerFn = function (e) {
+            args = e;
+          };
+
+          addSomeContentToPhotoport();
+          photoport.start();
+          photoport.seek(1);
+          previousPosition = photoport.position;
+          photoport.el().addEventListener('photoport-navigate', listenerFn);
+          photoport.seek(4);
+        });
+
+        it('is emitted on the root element', function () {
+          expect(args).not.toBe('not-called');
+        });
+        it('includes the previousPosition', function () {
+          expect(args.detail.previousPosition).toBe(1);
+        });
+        it('includes the newPosition', function () {
+          expect(args.detail.newPosition).toBe(4);
         });
       });
     });
