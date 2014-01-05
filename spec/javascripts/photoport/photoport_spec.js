@@ -1,24 +1,26 @@
 //= require photoport/photoport
 
 describe('photoport', function () {
-  var container, photoport, els;
+  var container, photoport, testContent;
 
   beforeEach(function () {
     container = document.createElement('div');
     photoport = new Photoport({container:container});
   });
 
-  function createElement(idSuffix) {
+  function createContent(idSuffix) {
     idSuffix = idSuffix === undefined ? ('_' + new Date().valueOf()) : idSuffix;
-    return $('<div>').attr({id: 'el' + idSuffix})[0];
+    return {
+      el: $('<div>').attr({id: 'el' + idSuffix})[0]
+    };
   }
 
-  function addSomeElementsToPhotoport() {
-    els = [];
+  function addSomeContentToPhotoport() {
+    testContent = [];
     [0,1,2,3,4].forEach(function (i) {
-      var el = createElement(i);
-      els[i] = el;
-      photoport.insert(el, i);
+      var content = createContent(i);
+      testContent[i] = content;
+      photoport.insert(content, i);
     });
   }
 
@@ -59,42 +61,55 @@ describe('photoport', function () {
       });
     });
   });
+  describe('portRect()', function () {
+    it('returns the bounding client rectangle of the element representing the viewport for the content', function () {
+      var portDomFake = {
+        getBoundingClientRect: jasmine.createSpy('getBoundingClientRect').andReturn({
+          width: 400,
+          height: 200
+        })
+      };
+
+      photoport.dom.port = portDomFake;
+
+      var portRect = photoport.portRect();
+
+      expect(portDomFake.getBoundingClientRect).toHaveBeenCalled();
+
+      expect(portRect.width).toBe(400);
+      expect(portRect.height).toBe(200);
+    });
+  });
   describe('fit()', function () {
-    var el;
+    var testContent;
 
     beforeEach(function () {
-      el = createElement();
+      testContent = createContent();
     });
 
     it('sets the dimensions of the element to those of the photoport viewing viewport', function () {
-      var contentContainerFake = {
-        getBoundingClientRect: jasmine.createSpy('getBoundingClientRect')
-      };
-
-      photoport.dom.content = contentContainerFake;
-
-      contentContainerFake.getBoundingClientRect.andReturn({
+      spyOn(photoport, 'portRect').andReturn({
         width: 400,
         height: 200
       });
 
-      photoport.fit(el);
+      photoport.fit(testContent);
 
-      expect(contentContainerFake.getBoundingClientRect).toHaveBeenCalled();
+      expect(photoport.portRect).toHaveBeenCalled();
 
-      expect(el.style.width).toBe('400px');
-      expect(el.style.height).toBe('200px');
+      expect(testContent.el.style.width).toBe('400px');
+      expect(testContent.el.style.height).toBe('200px');
     });
 
     it('adds the photoport-element class to the element', function () {
-      var el = createElement();
-      expect(el.classList.contains('photoport-element')).toBe(false);
-      photoport.fit(el);
-      expect(el.classList.contains('photoport-element')).toBe(true);
+      var testContent = createContent();
+      expect(testContent.el.classList.contains('photoport-element')).toBe(false);
+      photoport.fit(testContent);
+      expect(testContent.el.classList.contains('photoport-element')).toBe(true);
     });
 
     it('doesnt add the photoport-element class to the element if it already has the class', function () {
-      var el = createElement();
+      var el = createContent();
       el.className = 'photoport-element';
       expect(el.className).toBe('photoport-element');
       photoport.fit(el);
@@ -102,32 +117,44 @@ describe('photoport', function () {
     });
   });
   describe('start()', function () {
+    var rtn;
+
     beforeEach(function () {
-      addSomeElementsToPhotoport();
+      rtn = {};
+      spyOn(photoport, 'seek').andReturn(rtn);
+      addSomeContentToPhotoport();
     });
 
-    describe('when the photoport has not been started', function () {
-      var rtn;
+    it('returns the result of seek(0)', function () {
+      expect(photoport.start()).toBe(rtn);
+      expect(photoport.seek).toHaveBeenCalledWith(0);
+    });
 
-      beforeEach(function () {
-        rtn = {};
-        spyOn(photoport, 'seek').andReturn(rtn);
+    it('calls fit() for all content', function () {
+      spyOn(photoport, 'fit');
+      photoport.start();
+      photoport.sequence.forEach(function (e) {
+        expect(photoport.fit).toHaveBeenCalledWith(e);
       });
-
-      it('returns the result of seek(0)', function () {
-        expect(photoport.start()).toBe(rtn);
-        expect(photoport.seek).toHaveBeenCalledWith(0);
+    });
+    it('resizes the content area', function () {
+      spyOn(photoport, 'portRect').andReturn({
+        width: 123
       });
+      photoport.start();
+      var expectedWidth = photoport.sequence.length * 123;
+      expect(photoport.portRect).toHaveBeenCalled();
+      expect(photoport.dom.content.style.width).toBe(expectedWidth + 'px');
     });
   });
   describe('next()', function () {
     var rtn;
     beforeEach(function () {
-      addSomeElementsToPhotoport();
+      addSomeContentToPhotoport();
       photoport.start();
       rtn = {};
       spyOn(photoport, 'seek').andReturn(rtn);
-    })
+    });
     it('calls seek() with the current position + 1', function () {
       photoport.next();
       expect(photoport.seek).toHaveBeenCalledWith(1);
@@ -146,9 +173,9 @@ describe('photoport', function () {
   describe('previous()', function () {
     var rtn = {};
     beforeEach(function () {
-      addSomeElementsToPhotoport();
+      addSomeContentToPhotoport();
       photoport.start();
-    })
+    });
     it('calls seek() with the previous position', function () {
       photoport.seek(3);
       spyOn(photoport, 'seek').andReturn(rtn);
@@ -170,15 +197,10 @@ describe('photoport', function () {
   describe('seek(position)', function () {
     describe('when photoport has content', function () {
       beforeEach(function () {
-        addSomeElementsToPhotoport();
+        addSomeContentToPhotoport();
         photoport.start();
       });
 
-      it('calls fit with the element to be displayed', function () {
-        spyOn(photoport, 'fit');
-        photoport.seek(3);
-        expect(photoport.fit).toHaveBeenCalledWith(els[3]);
-      });
       it('sets the position', function () {
         expect(photoport.position).toBe(0);
         photoport.seek(2);
@@ -189,14 +211,14 @@ describe('photoport', function () {
       });
       it('sets the current content to the element in the sequence at the specified position', function () {
         photoport.seek(2);
-        expect(photoport.dom.content.children[0]).toBe(els[2]);
+        expect(photoport.dom.content.children[2]).toBe(testContent[2].el);
       });
       describe('when called with the same position as the current position', function () {
         it('returns itself', function () {
           photoport.seek(2);
           expect(photoport.seek(2)).toBe(photoport);
-        })
-      })
+        });
+      });
       describe('bounds handling', function () {
         it('is seeks up to the length of the sequence', function () {
           expect(photoport.position).toBe(0);
@@ -231,7 +253,7 @@ describe('photoport', function () {
             expect(photoport.position).toBe(0);
           });
         });
-      })
+      });
     });
     describe('when no content has been added', function () {
       it('throws an exception', function () {
@@ -244,51 +266,61 @@ describe('photoport', function () {
   });
   describe('insert(el, position)', function () {
     beforeEach(function () {
-      addSomeElementsToPhotoport();
+      addSomeContentToPhotoport();
       photoport.start();
     });
 
     it('defaults the position to the end of the sequence', function () {
-      var elN = createElement();
-      photoport.insert(elN);
-      expect(photoport.sequence[photoport.sequence.length-1]).toBe(elN);
+      var contentN = createContent();
+      photoport.insert(contentN);
+      expect(photoport.sequence[photoport.sequence.length-1]).toBe(contentN);
     });
-    it('inserts the HTMLElement into the seqeuence at the requested position', function () {
-      var el = createElement('_inserted');
-      photoport.insert(el, 3);
-      expect(photoport.sequence[3]).toBe(el);
+    it('inserts the content into the seqeuence at the requested position', function () {
+      var content = createContent('_inserted');
+      photoport.insert(content, 3);
+      expect(photoport.sequence[3]).toBe(content);
     });
     it('returns the photoport', function () {
-      expect(photoport.insert(els[0])).toBe(photoport);
+      expect(photoport.insert(testContent[0])).toBe(photoport);
     });
-    describe('when passed an image url', function () {
-      it('creates an div in which to display the image', function () {
-        photoport.prepend('http://localhost');
-        var el = photoport.sequence[0];
+    it('calls fit with the element to be displayed', function () {
+      spyOn(photoport, 'fit');
+      photoport.insert(testContent[3]);
+      expect(photoport.fit).toHaveBeenCalledWith(testContent[3]);
+    });
+    describe('when passed an object with no el', function () {
+      it('creates a div to display', function () {
+        photoport.prepend({});
+        var el = photoport.sequence[0].el;
         expect(el instanceof HTMLDivElement).toBeTruthy();
-        var urlRegex = /url\("?http:\/\/localhost\/?"?\)/
+      });
+    });
+    describe('when passed an object with a backgroundImage attribute', function () {
+      it('it uses the backgroundImage value for the display elements style', function () {
+        photoport.prepend({backgroundImage: 'http://localhost'});
+        var el = photoport.sequence[0].el;
+        var urlRegex = /url\("?http:\/\/localhost\/?"?\)/;
         expect(el.style.backgroundImage).toMatch(urlRegex);
-        expect(el.classList.contains('photo')).toBeTruthy();
       });
     });
     describe('when the element is inserted before the current position', function () {
       it('incremements the position', function () {
         photoport.next();
         expect(photoport.position).toBe(1);
-        photoport.insert(els[0], 0);
+        photoport.insert(testContent[0], 0);
         expect(photoport.position).toBe(2);
       });
     });
     describe('when the element is inserted at the current position', function () {
       it('incremements the position', function () {
         expect(photoport.position).toBe(0);
-        photoport.insert(els[0], 0);
+        photoport.insert(testContent[0], 0);
         expect(photoport.position).toBe(1);
       });
     });
     describe('when a negative position is passed', function () {
       it('inserts the element at length - pos', function () {
-        var el = createElement();
+        var el = createContent();
         var c = photoport.sequence.length;
         var i = -3;
         var expectedPosition = c + i;
@@ -298,16 +330,16 @@ describe('photoport', function () {
       });
       describe('when the length - position is negative', function () {
         it('inserts the element at zero', function () {
-          var el = createElement();
+          var el = createContent();
           var i = -10000000;
           photoport.insert(el, i);
           expect(photoport.sequence[0]).toBe(el);
-        })
-      })
+        });
+      });
     });
     describe('when a position greater than the length is passed', function () {
       it('inserts the element at the end of the seqence', function () {
-        var el = createElement();
+        var el = createContent();
         var l = photoport.sequence.length;
         photoport.insert(el, l + 5);
         expect(photoport.sequence[l]).toBe(el);
@@ -316,26 +348,26 @@ describe('photoport', function () {
     describe('position of the inserted dom node', function () {
       describe('when inserting after the current position', function () {
         it('is the same position among siblings as in sequence', function () {
-          var newEl = createElement();
+          var newContent = createContent();
           photoport.seek(0);
-          photoport.insert(newEl, 1);
-          expect(photoport.dom.content.children[1]).to.be(newEl);
+          photoport.insert(newContent, 1);
+          expect(photoport.dom.content.children[1]).toBe(newContent.el);
         });
       });
       describe('when inserting at the current position', function () {
         it('is the same position among siblings as in sequence', function () {
-          var newEl = createElement();
+          var newContent = createContent();
           photoport.seek(2);
-          photoport.insert(newEl, 2);
-          expect(photoport.dom.content.children[2]).to.be(newEl);
+          photoport.insert(newContent, 2);
+          expect(photoport.dom.content.children[2]).toBe(newContent.el);
         });
       });
       describe('when inserting before the current position', function () {
         it('is the same position among siblings as in sequence', function () {
-          var newEl = createElement();
+          var newContent = createContent();
           photoport.seek(4);
-          photoport.insert(newEl, 1);
-          expect(photoport.dom.content.children[1]).to.be(newEl);
+          photoport.insert(newContent, 1);
+          expect(photoport.dom.content.children[1]).toBe(newContent.el);
         });
       });
     });
