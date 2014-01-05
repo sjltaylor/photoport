@@ -12,19 +12,30 @@ Photoport = (function () {
     return e;
   }
 
+  function span (className) {
+    var e = document.createElement('SPAN');
+    e.className = className || '';
+    return e;
+  }
+
   function build () {
     var dom = {
       root        : div('photoport'),
       port        : div('photoport-port'),
       content     : div('content'),
       leftHandle  : div('photoport-handle photoport-handle-left'),
-      rightHandle : div('photoport-handle photoport-handle-right')
+      rightHandle : div('photoport-handle photoport-handle-right'),
+      leftGlyph   : span('fui-arrow-left photoport-handle-glyph'),
+      rightGlyph  : span('fui-arrow-right photoport-handle-glyph')
     };
 
     dom.root.appendChild(dom.leftHandle);
     dom.root.appendChild(dom.port);
     dom.root.appendChild(dom.rightHandle);
     dom.port.appendChild(dom.content);
+
+    dom.leftHandle.appendChild(dom.leftGlyph);
+    dom.rightHandle.appendChild(dom.rightGlyph);
 
     return dom;
   }

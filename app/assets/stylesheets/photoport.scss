@@ -23,10 +23,19 @@
     top: $topEdgeWidth;
     width: $handleWidth;
     height: $baseHeight;
+    display: table;
+
+    .photoport-handle-glyph {
+      width: $handleWidth;
+      text-align: center;
+      vertical-align: middle;
+      display: table-cell;
+    }
   }
 
   .photoport-handle-left {
     left: 0;
+    background-image: url();
   }
 
   .photoport-handle-right {
