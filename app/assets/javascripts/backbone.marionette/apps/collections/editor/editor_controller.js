@@ -7,9 +7,9 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
 
       var collection = new PhotoportCMS.Collection(PHOTOPORT_CMS.collection);
 
-      var photoportEditorView  = new PhotoportCMS.PhotoportEditor.Controller.makeView({
+      var photoportEditorView = new PhotoportCMS.PhotoportEditor.Controller.makeView({
         collection: collection
-      })
+      });
 
       layout.contentRegion.show(photoportEditorView);
     }
