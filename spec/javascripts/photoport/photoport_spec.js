@@ -134,6 +134,28 @@ describe('photoport', function () {
       expect(el.className).toBe('photoport-element');
     });
   });
+  describe('fitContent()', function () {
+    beforeEach(function () {
+      addSomeContentToPhotoport();
+      photoport.start();
+    });
+    it('calls fit() for all content', function () {
+      spyOn(photoport, 'fit');
+      photoport.start();
+      photoport.sequence.forEach(function (e) {
+        expect(photoport.fit).toHaveBeenCalledWith(e);
+      });
+    });
+    it('resizes the content area', function () {
+      spyOn(photoport, 'portRect').andReturn({
+        width: 123
+      });
+      photoport.start();
+      var expectedWidth = photoport.sequence.length * 123;
+      expect(photoport.portRect).toHaveBeenCalled();
+      expect(photoport.dom.content.style.width).toBe(expectedWidth + 'px');
+    });
+  });
   describe('start()', function () {
     var rtn;
 
@@ -161,21 +183,10 @@ describe('photoport', function () {
       expect(photoport.seek).toHaveBeenCalledWith(2);
     });
 
-    it('calls fit() for all content', function () {
-      spyOn(photoport, 'fit');
+    it('calls fitContent()', function () {
+      spyOn(photoport, 'fitContent');
       photoport.start();
-      photoport.sequence.forEach(function (e) {
-        expect(photoport.fit).toHaveBeenCalledWith(e);
-      });
-    });
-    it('resizes the content area', function () {
-      spyOn(photoport, 'portRect').andReturn({
-        width: 123
-      });
-      photoport.start();
-      var expectedWidth = photoport.sequence.length * 123;
-      expect(photoport.portRect).toHaveBeenCalled();
-      expect(photoport.dom.content.style.width).toBe(expectedWidth + 'px');
+      expect(photoport.fitContent).toHaveBeenCalled();
     });
   });
   describe('next()', function () {
@@ -465,6 +476,121 @@ describe('photoport', function () {
           photoport.seek(4);
           photoport.insert(newContent, 1);
           expect(photoport.dom.content.children[1]).toBe(newContent.el);
+        });
+      });
+    });
+  });
+  describe('remove(content)', function () {
+    var content;
+    var eventListener;
+    var eventListenerCalled;
+    var eventArgs;
+
+    beforeEach(function () {
+      addSomeContentToPhotoport();
+      photoport.start();
+      eventListenerCalled = false;
+      eventArgs = null;
+      eventListener = function (e) {
+        eventArgs = e;
+        eventListenerCalled = true;
+      };
+      photoport.el().addEventListener('photoport-content-remove', eventListener);
+    });
+
+    describe('when the content is not in the sequence', function () {
+      beforeEach(function () {
+        content = createContent();
+      });
+      it('returns the photoport', function () {
+        expect(photoport.remove(content)).toBe(photoport);
+      });
+      it('does not emit a photoport-content-remove', function () {
+        photoport.remove(content);
+        expect(eventListenerCalled).toBe(false);
+      });
+    });
+    describe('when there is content in the sequence', function () {
+      beforeEach(function () {
+        content = testContent[2];
+      });
+      it('returns the photoport', function () {
+        expect(photoport.remove(content)).toBe(photoport);
+      });
+      it('is removed from the sequence', function () {
+        photoport.remove(content);
+        expect(photoport.sequence.indexOf(content)).toBe(-1);
+      });
+      it('is removed from the dom', function () {
+        var isInDom = false;
+        for(var i = 0; i < photoport.dom.content.children.length; i++) {
+          if (photoport.dom.content.children[i] == content) {
+            isInDom = true;
+            break;
+          }
+        }
+        expect(isInDom).toBe(false);
+      });
+      it('emits a photoport-content-remove event', function () {
+        photoport.remove(content);
+        expect(eventListenerCalled).toBe(true);
+      });
+      it('calls fitContent()', function () {
+        spyOn(photoport, 'fitContent');
+        photoport.remove(content);
+        expect(photoport.fitContent).toHaveBeenCalled();
+      });
+      it('calls updateHandles()', function () {
+        spyOn(photoport, 'updateHandles');
+        photoport.remove(content);
+        expect(photoport.updateHandles).toHaveBeenCalled();
+      });
+      describe('when the content is before the current position', function () {
+        beforeEach(function () {
+          content = testContent[1];
+          photoport.seek(2);
+        });
+        it('updates the current position to one less', function () {
+          photoport.remove(content);
+          expect(photoport.position).toBe(1);
+        });
+      });
+      describe('when the content is after the current position', function () {
+        beforeEach(function () {
+          content = testContent[2];
+          photoport.seek(1);
+        });
+        it('does not change the current position', function () {
+          expect(photoport.position).toBe(1);
+        });
+      });
+      describe('when the content is in the current position', function () {
+        beforeEach(function () {
+          content = testContent[2];
+          photoport.seek(2);
+        });
+        it('seeks to the position one less than the current', function () {
+          spyOn(photoport, 'seek');
+          photoport.remove(content);
+          expect(photoport.seek).toHaveBeenCalledWith(1);
+        });
+        describe('when the content is the last in the sequence', function () {
+          beforeEach(function () {
+            resetPhotoport();
+            addSomeContentToPhotoport(1);
+            content = testContent[0];
+            photoport.start();
+            photoport.seek(0);
+          });
+          it('sets the position to null', function () {
+            photoport.remove(content);
+            expect(photoport.position).toBeNull();
+          });
+          it('does not call seek', function () {
+            spyOn(photoport, 'seek');
+            photoport.remove(content);
+            expect(photoport.seek).not.toHaveBeenCalled();
+          });
         });
       });
     });
