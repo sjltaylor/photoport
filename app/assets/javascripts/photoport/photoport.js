@@ -22,7 +22,8 @@ Photoport = (function () {
     var dom = {
       root        : div('photoport'),
       port        : div('photoport-port'),
-      content     : div('content'),
+      content     : div('photoport-content'),
+      interlude   : div('photoport-interlude'),
       leftHandle  : div('photoport-handle photoport-handle-left'),
       rightHandle : div('photoport-handle photoport-handle-right'),
       leftHandleGlyph   : span('fui-triangle-left-large photoport-handle-glyph'),
@@ -33,10 +34,12 @@ Photoport = (function () {
     dom.root.appendChild(dom.port);
     dom.root.appendChild(dom.rightHandle);
     dom.port.appendChild(dom.content);
+    dom.port.appendChild(dom.interlude);
 
     dom.leftHandle.appendChild(dom.leftHandleGlyph);
     dom.rightHandle.appendChild(dom.rightHandleGlyph);
 
+    dom.interlude.style.display = 'none';
     return dom;
   }
 
@@ -75,18 +78,8 @@ Photoport = (function () {
 
       el.style.width    = bounds.width  + 'px';
       el.style.height   = bounds.height + 'px';
-      el.style.display  = 'inline-block';
-      el.style.position = 'relative';
-      el.style.top      = 0;
-      el.style.left     = 0;
-      el.style.margin   = 0;
-      el.style.border   = 'none';
-      el.style.padding  = 0;
-      el.style.outline  = 0;
 
-      if (!el.classList.contains('photoport-element')) {
-        el.classList.add('photoport-element');
-      }
+      return this;
     },
     portRect: function () {
       return this.dom.port.getBoundingClientRect();
@@ -101,6 +94,35 @@ Photoport = (function () {
         this.fit(this.sequence[i]);
       }
     },
+    subsume: function (contentDescriptor) {
+      contentDescriptor.el = contentDescriptor.el || div('photo');
+
+      var style = contentDescriptor.el.style;
+
+      style.display  = 'inline-block';
+      style.position = 'relative';
+      style.top      = 0;
+      style.left     = 0;
+      style.margin   = 0;
+      style.border   = 'none';
+      style.padding  = 0;
+      style.outline  = 0;
+
+      if (!contentDescriptor.el.classList.contains('photoport-element')) {
+        contentDescriptor.el.classList.add('photoport-element');
+      }
+
+      if ((typeof contentDescriptor.backgroundImage) === 'string') {
+        if (!contentDescriptor.el.classList.contains('photoport-photo')) {
+          contentDescriptor.el.classList.add('photoport-photo');
+        }
+
+        contentDescriptor.el.style.backgroundImage = "url(" + contentDescriptor.backgroundImage + ")";
+        contentDescriptor.el.style.backgroundRepeat = "no-repeat";
+      }
+
+      return this;
+    },
     updateHandles: function () {
       var count    = this.sequence.length;
       var position = this.position;
@@ -114,11 +136,11 @@ Photoport = (function () {
         dom.rightHandle.style.display = 'none';
       }
     },
-    append: function (content) {
-      return this.insert(content);
+    append: function (contentDescriptor) {
+      return this.insert(contentDescriptor);
     },
-    prepend: function (content) {
-      return this.insert(content, 0);
+    prepend: function (contentDescriptor) {
+      return this.insert(contentDescriptor, 0);
     },
     insert: function (contentDescriptor, position) {
       if (position === undefined || position === null) {
@@ -135,12 +157,7 @@ Photoport = (function () {
         this.position++;
       }
 
-      contentDescriptor.el = contentDescriptor.el || div('photo');
-
-      if ((typeof contentDescriptor.backgroundImage) === 'string') {
-        contentDescriptor.el.style.backgroundImage = "url(" + contentDescriptor.backgroundImage + ")";
-        contentDescriptor.el.style.backgroundRepeat = "no-repeat";
-      }
+      this.subsume(contentDescriptor);
 
       this.sequence.splice(position, 0, contentDescriptor);
       this.fit(contentDescriptor);
@@ -234,6 +251,27 @@ Photoport = (function () {
         }
       }));
 
+      return this;
+    },
+    interlude: function (contentDescriptor) {
+      var dom = this.dom;
+      while(dom.interlude.hasChildNodes()) {
+        dom.interlude.removeChild(dom.interlude.firstChild);
+      }
+      this.subsume(contentDescriptor);
+      this.fit(contentDescriptor);
+      dom.content.style.display = 'none';
+      dom.interlude.style.display = '';
+      dom.interlude.appendChild(contentDescriptor.el);
+      return this;
+    },
+    resume: function () {
+      var dom = this.dom;
+      while(dom.interlude.hasChildNodes()) {
+        dom.interlude.removeChild(dom.interlude.firstChild);
+      }
+      dom.interlude.style.display = 'none';
+      dom.content.style.display = '';
       return this;
     }
   };

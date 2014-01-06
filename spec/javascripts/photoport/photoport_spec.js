@@ -41,7 +41,7 @@ describe('photoport', function () {
     });
 
     it('renders a content element', function () {
-      expect(container.querySelector('.photoport .content')).not.toBeNull();
+      expect(container.querySelector('.photoport .photoport-content')).not.toBeNull();
     });
 
     it('renders a port element', function () {
@@ -64,6 +64,11 @@ describe('photoport', function () {
 
     it('initializes the position to null', function () {
       expect(photoport.position).toBe(null);
+    });
+
+    it('renders an interlude element, initially not displayed', function () {
+      expect(container.querySelector('.photoport .photoport-interlude')).not.toBeNull();
+      expect(photoport.dom.interlude.style.display).toBe('none');
     });
 
     describe("options", function () {
@@ -98,7 +103,7 @@ describe('photoport', function () {
       expect(portRect.height).toBe(200);
     });
   });
-  describe('fit()', function () {
+  describe('fit(content)', function () {
     var testContent;
 
     beforeEach(function () {
@@ -119,19 +124,45 @@ describe('photoport', function () {
       expect(testContent.el.style.height).toBe('200px');
     });
 
-    it('adds the photoport-element class to the element', function () {
-      var testContent = createContent();
-      expect(testContent.el.classList.contains('photoport-element')).toBe(false);
-      photoport.fit(testContent);
-      expect(testContent.el.classList.contains('photoport-element')).toBe(true);
+    it('returns the photoport', function () {
+      expect(photoport.fit(createContent())).toBe(photoport);
     });
-
-    it('doesnt add the photoport-element class to the element if it already has the class', function () {
-      var el = createContent();
-      el.className = 'photoport-element';
-      expect(el.className).toBe('photoport-element');
-      photoport.fit(el);
-      expect(el.className).toBe('photoport-element');
+  });
+  describe('subsume()', function () {
+    it('returns the photoport', function () {
+      expect(photoport.subsume(createContent())).toBe(photoport);
+    });
+    it('adds the photoport-element class to the element', function () {
+      var contentDescriptor = createContent();
+      expect(contentDescriptor.el.classList.contains('photoport-element')).toBe(false);
+      photoport.subsume(contentDescriptor);
+      expect(contentDescriptor.el.classList.contains('photoport-element')).toBe(true);
+    });
+    describe('when passed a contentDescriptor with no el', function () {
+      it('creates a div to display', function () {
+        var contentDescriptor = {};
+        photoport.subsume(contentDescriptor);
+        expect(contentDescriptor.el instanceof HTMLDivElement).toBeTruthy();
+      });
+    });
+    describe('when passed a contentDescriptor with a backgroundImage attribute', function () {
+      var contentDescriptor;
+      beforeEach(function () {
+        contentDescriptor = {
+          backgroundImage: 'http://localhost'
+        };
+        photoport.subsume(contentDescriptor);
+      });
+      it('it uses the backgroundImage value for the display elements style', function () {
+        var urlRegex = /url\("?http:\/\/localhost\/?"?\)/;
+        expect(contentDescriptor.el.style.backgroundImage).toMatch(urlRegex);
+      });
+      it('it sets the background repeat to no-repeat', function () {
+        expect(contentDescriptor.el.style.backgroundRepeat).toBe('no-repeat');
+      });
+      it('adds the photoport-photo class to the element', function () {
+        expect(contentDescriptor.el.classList.contains('photoport-photo')).toBeTruthy();
+      });
     });
   });
   describe('fitContent()', function () {
@@ -367,25 +398,15 @@ describe('photoport', function () {
     it('returns the photoport', function () {
       expect(photoport.insert(testContent[0])).toBe(photoport);
     });
-    it('calls fit with the element to be displayed', function () {
+    it('calls fit() with the element to be displayed', function () {
       spyOn(photoport, 'fit');
       photoport.insert(testContent[3]);
       expect(photoport.fit).toHaveBeenCalledWith(testContent[3]);
     });
-    describe('when passed an object with no el', function () {
-      it('creates a div to display', function () {
-        photoport.prepend({});
-        var el = photoport.sequence[0].el;
-        expect(el instanceof HTMLDivElement).toBeTruthy();
-      });
-    });
-    describe('when passed an object with a backgroundImage attribute', function () {
-      it('it uses the backgroundImage value for the display elements style', function () {
-        photoport.prepend({backgroundImage: 'http://localhost'});
-        var el = photoport.sequence[0].el;
-        var urlRegex = /url\("?http:\/\/localhost\/?"?\)/;
-        expect(el.style.backgroundImage).toMatch(urlRegex);
-      });
+    it('calls subsume() with the contentDescriptor', function () {
+      spyOn(photoport, 'subsume');
+      photoport.insert(testContent[3]);
+      expect(photoport.subsume).toHaveBeenCalledWith(testContent[3]);
     });
     describe('when the element is inserted before the current position', function () {
       describe('when the photoport has been started', function () {
@@ -648,6 +669,61 @@ describe('photoport', function () {
           expect(photoport.previous).toHaveBeenCalled();
         });
       });
+    });
+  });
+  describe('interlude(content)', function () {
+    var content;
+    beforeEach(function () {
+      content = createContent();
+    });
+    it('fits the content', function () {
+      spyOn(photoport, 'fit');
+      photoport.interlude(content);
+      expect(photoport.fit).toHaveBeenCalledWith(content);
+    });
+    it('hides the normal content', function () {
+      photoport.interlude(content);
+      expect(photoport.dom.content.style.display).toBe('none');
+    });
+    it('shows the interlude', function () {
+      photoport.interlude(content);
+      expect(photoport.dom.interlude.style.display).toBe('');
+    });
+    it('adds the interlude content to the dom', function () {
+      photoport.interlude(content);
+      expect(photoport.dom.interlude.children.length).toBe(1);
+      expect(photoport.dom.interlude.children[0]).toBe(content.el);
+    });
+    it('removes any existing interlude', function () {
+      photoport.interlude(createContent());
+      photoport.interlude(createContent());
+      photoport.interlude(createContent());
+      photoport.interlude(content);
+      expect(photoport.dom.interlude.children.length).toBe(1);
+      expect(photoport.dom.interlude.children[0]).toBe(content.el);
+    });
+    it('returns the photoport', function () {
+      expect(photoport.interlude(content)).toBe(photoport);
+    });
+  });
+  describe('resume()', function () {
+    beforeEach(function () {
+      photoport.interlude(createContent());
+    });
+    it('makes normal content visible', function () {
+      photoport.resume();
+      expect(photoport.dom.content.style.display).toBe('');
+    });
+    it('hides the interlude', function () {
+      photoport.resume();
+      expect(photoport.dom.interlude.style.display).toBe('none');
+    });
+    it('removes the interlude content from the dom', function () {
+      photoport.resume();
+      expect(photoport.dom.interlude.children.length).toBe(0);
+    });
+    it('returns the photoport', function () {
+      expect(photoport.resume()).toBe(photoport);
     });
   });
 });
