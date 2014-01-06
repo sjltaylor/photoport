@@ -4,9 +4,13 @@ describe('photoport', function () {
   var container, photoport, testContent;
 
   beforeEach(function () {
+    resetPhotoport();
+  });
+
+  function resetPhotoport () {
     container = document.createElement('div');
     photoport = new Photoport({container:container});
-  });
+  }
 
   function createContent(idSuffix) {
     idSuffix = idSuffix === undefined ? ('_' + new Date().valueOf()) : idSuffix;
@@ -15,13 +19,18 @@ describe('photoport', function () {
     };
   }
 
-  function addSomeContentToPhotoport() {
+  function addSomeContentToPhotoport(n) {
+    if (n === undefined) {
+      n = 5;
+    }
+
     testContent = [];
-    [0,1,2,3,4].forEach(function (i) {
+
+    for(var i = 0; i < n; i++) {
       var content = createContent(i);
       testContent[i] = content;
       photoport.insert(content, i);
-    });
+    }
   }
 
   describe('constructor', function () {
@@ -35,9 +44,18 @@ describe('photoport', function () {
       expect(container.querySelector('.photoport .content')).not.toBeNull();
     });
 
+    it('renders a port element', function () {
+      expect(container.querySelector('.photoport .photoport-port')).not.toBeNull();
+    });
+
     it('renders handles', function () {
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left')).not.toBeNull();
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right')).not.toBeNull();
+    });
+
+    it('renders handle glyphs', function () {
+      expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left .photoport-handle-glyph')).not.toBeNull();
+      expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right .photoport-handle-glyph')).not.toBeNull();
     });
 
     it('initialize an initial empty sequence', function () {
@@ -125,9 +143,22 @@ describe('photoport', function () {
       addSomeContentToPhotoport();
     });
 
-    it('returns the result of seek(0)', function () {
+    describe('when the position has not been set', function () {
+      it('returns the result of seek(0)', function () {
+        expect(photoport.start()).toBe(rtn);
+        expect(photoport.seek).toHaveBeenCalledWith(0);
+      });
+      it('does not set this.position', // because that is the responsibility of seek()
+                                       function () {
+        photoport.start();
+        expect(photoport.position).toBeNull();
+      });
+    });
+
+    it('returns the result of seek(this.position)', function () {
+      photoport.position = 2;
       expect(photoport.start()).toBe(rtn);
-      expect(photoport.seek).toHaveBeenCalledWith(0);
+      expect(photoport.seek).toHaveBeenCalledWith(2);
     });
 
     it('calls fit() for all content', function () {
@@ -156,6 +187,7 @@ describe('photoport', function () {
       spyOn(photoport, 'seek').andReturn(rtn);
     });
     it('calls seek() with the current position + 1', function () {
+      photoport.seek(0);
       photoport.next();
       expect(photoport.seek).toHaveBeenCalledWith(1);
     });
@@ -290,6 +322,11 @@ describe('photoport', function () {
           expect(args.detail.newPosition).toBe(4);
         });
       });
+      it('updates the handles', function () {
+        spyOn(photoport, 'updateHandles');
+        photoport.seek(4);
+        expect(photoport.updateHandles).toHaveBeenCalled();
+      });
     });
     describe('when no content has been added', function () {
       it('throws an exception', function () {
@@ -340,18 +377,42 @@ describe('photoport', function () {
       });
     });
     describe('when the element is inserted before the current position', function () {
-      it('incremements the position', function () {
-        photoport.next();
-        expect(photoport.position).toBe(1);
-        photoport.insert(testContent[0], 0);
-        expect(photoport.position).toBe(2);
+      describe('when the photoport has been started', function () {
+        it('incremements the position', function () {
+          photoport.next();
+          expect(photoport.position).toBe(1);
+          photoport.insert(testContent[0], 0);
+          expect(photoport.position).toBe(2);
+        });
+      });
+      describe('when the photoport has not been started', function () {
+        beforeEach(function () {
+          resetPhotoport();
+        });
+        it('does not incremement the position', function () {
+          expect(photoport.position).toBe(null);
+          photoport.insert(testContent[0], 0);
+          expect(photoport.position).toBe(null);
+        });
       });
     });
     describe('when the element is inserted at the current position', function () {
-      it('incremements the position', function () {
-        expect(photoport.position).toBe(0);
-        photoport.insert(testContent[0], 0);
-        expect(photoport.position).toBe(1);
+      describe('when the photoport has been started', function () {
+        it('incremements the position', function () {
+          expect(photoport.position).toBe(0);
+          photoport.insert(testContent[0], 0);
+          expect(photoport.position).toBe(1);
+        });
+      });
+      describe('when the photoport has not been started', function () {
+        beforeEach(function () {
+          resetPhotoport();
+        });
+        it('does not incremement the position', function () {
+          expect(photoport.position).toBe(null);
+          photoport.insert(testContent[0], 0);
+          expect(photoport.position).toBe(null);
+        });
       });
     });
     describe('when a negative position is passed', function () {
@@ -404,6 +465,43 @@ describe('photoport', function () {
           photoport.seek(4);
           photoport.insert(newContent, 1);
           expect(photoport.dom.content.children[1]).toBe(newContent.el);
+        });
+      });
+    });
+  });
+  describe('updateHandles()', function () {
+    describe('when there is one element', function () {
+      beforeEach(function () {
+        addSomeContentToPhotoport(1);
+        photoport.start();
+      });
+      it('displays no handles', function () {
+        expect(photoport.dom.leftHandle.style.display).toBe('none');
+        expect(photoport.dom.rightHandle.style.display).toBe('none');
+      });
+    });
+    describe('when there are zero elements', function () {
+      it('displays no handles', function () {
+        photoport.updateHandles();
+        expect(photoport.dom.leftHandle.style.display).toBe('none');
+        expect(photoport.dom.rightHandle.style.display).toBe('none');
+      });
+    });
+    describe('when there are two or more elements', function () {
+      beforeEach(function () {
+        addSomeContentToPhotoport(3);
+        photoport.start();
+      });
+      describe('left handle', function () {
+        it('is a left arrow', function () {
+          expect(photoport.dom.leftHandle.style.display).toBe('table');
+          expect(photoport.dom.leftHandleGlyph.classList.contains('fui-triangle-left-large')).toBeTruthy();
+        });
+      });
+      describe('right handle', function () {
+        it('is a right arrow', function () {
+          expect(photoport.dom.rightHandle.style.display).toBe('table');
+          expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
         });
       });
     });

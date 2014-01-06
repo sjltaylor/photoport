@@ -22,12 +22,17 @@
     width: $handleWidth;
     height: $baseHeight;
     display: table;
+    user-select: none;
+    -webkit-user-select: none;
 
     .photoport-handle-glyph {
       width: $handleWidth;
       text-align: center;
       vertical-align: middle;
       display: table-cell;
+      color: rgba(100,100,100,0.15);
+      user-select: none;
+      -webkit-user-select: none;
     }
   }
 
@@ -54,8 +59,9 @@
       position: absolute;
       top: 0;
       left: 0;
-      transition: left 180ms;
-      transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      transition-property: left;
+      transition-duration: 180ms;
+      transition-timing-function: linear;
 
       .photoport-element {
         box-shadow: 0 0 5px rgba(0,0,0,0.3) inset;

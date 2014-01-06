@@ -25,8 +25,8 @@ Photoport = (function () {
       content     : div('content'),
       leftHandle  : div('photoport-handle photoport-handle-left'),
       rightHandle : div('photoport-handle photoport-handle-right'),
-      leftGlyph   : span('fui-arrow-left photoport-handle-glyph'),
-      rightGlyph  : span('fui-arrow-right photoport-handle-glyph')
+      leftHandleGlyph   : span('fui-triangle-left-large photoport-handle-glyph'),
+      rightHandleGlyph  : span('fui-triangle-right-large photoport-handle-glyph')
     };
 
     dom.root.appendChild(dom.leftHandle);
@@ -34,8 +34,8 @@ Photoport = (function () {
     dom.root.appendChild(dom.rightHandle);
     dom.port.appendChild(dom.content);
 
-    dom.leftHandle.appendChild(dom.leftGlyph);
-    dom.rightHandle.appendChild(dom.rightGlyph);
+    dom.leftHandle.appendChild(dom.leftHandleGlyph);
+    dom.rightHandle.appendChild(dom.rightHandleGlyph);
 
     return dom;
   }
@@ -45,7 +45,7 @@ Photoport = (function () {
   }
 
   function circularDecr(p, length) {
-    return ((p - length) % length) + length -1;
+    return ((p - length) % length) + length - 1;
   }
 
   function Photoport (options) {
@@ -101,6 +101,19 @@ Photoport = (function () {
         this.fit(this.sequence[i]);
       }
     },
+    updateHandles: function () {
+      var count    = this.sequence.length;
+      var position = this.position;
+      var dom      = this.dom;
+
+      if (count >= 2) {
+        dom.leftHandle.style.display = 'table';
+        dom.rightHandle.style.display = 'table';
+      } else {
+        dom.leftHandle.style.display = 'none';
+        dom.rightHandle.style.display = 'none';
+      }
+    },
     append: function (content) {
       return this.insert(content);
     },
@@ -118,7 +131,7 @@ Photoport = (function () {
         position = Math.max(position + this.sequence.length, 0);
       }
 
-      if (position <= this.position) {
+      if (this.position !== null && position <= this.position) {
         this.position++;
       }
 
@@ -147,7 +160,12 @@ Photoport = (function () {
     },
     start: function () {
       this.__fitContent__();
-      return this.seek(0);
+
+      if (this.position === null) {
+        return this.seek(0);
+      }
+
+      return this.seek(this.position);
     },
     previous: function () {
       return this.seek(circularDecr(this.position, this.sequence.length));
@@ -175,14 +193,14 @@ Photoport = (function () {
         newPosition = Math.max(0, this.sequence.length + newPosition);
       }
 
-      if (this.position === newPosition) return this;
-
       var newLeft = -1 * newPosition * this.portRect().width;
 
       this.dom.content.style.left = newLeft + 'px';
       var previousPosition = this.position;
       this.position = newPosition;
       this.current = this.sequence[this.position];
+
+      this.updateHandles();
 
       this.el().dispatchEvent(new CustomEvent('photoport-navigate', {
         detail: {
