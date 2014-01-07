@@ -58,6 +58,8 @@ Photoport = (function () {
     this.container.appendChild(this.dom.root);
     this.sequence = [];
     this.position = null;
+    this.state = 'normal';
+    this.interludeContent = null;
 
     this.dom.rightHandle.addEventListener('click', function (e) {
       e.preventDefault();
@@ -92,6 +94,9 @@ Photoport = (function () {
       this.dom.content.style.width = (this.sequence.length * bounds.width) + 'px';
       for(var i = this.sequence.length - 1; i >= 0; i--) {
         this.fit(this.sequence[i]);
+      }
+      if (this.interludeContent) {
+        this.fit(this.interludeContent);
       }
     },
     subsume: function (contentDescriptor) {
@@ -128,12 +133,12 @@ Photoport = (function () {
       var position = this.position;
       var dom      = this.dom;
 
-      if (count >= 2) {
-        dom.leftHandle.style.display = 'table';
-        dom.rightHandle.style.display = 'table';
-      } else {
+      if (count < 2 || this.state === 'interlude') {
         dom.leftHandle.style.display = 'none';
         dom.rightHandle.style.display = 'none';
+      } else {
+        dom.leftHandle.style.display = 'table';
+        dom.rightHandle.style.display = 'table';
       }
     },
     append: function (contentDescriptor) {
@@ -255,14 +260,19 @@ Photoport = (function () {
     },
     interlude: function (contentDescriptor) {
       var dom = this.dom;
+      this.subsume(contentDescriptor);
+
       while(dom.interlude.hasChildNodes()) {
         dom.interlude.removeChild(dom.interlude.firstChild);
       }
-      this.subsume(contentDescriptor);
-      this.fit(contentDescriptor);
+
       dom.content.style.display = 'none';
       dom.interlude.style.display = '';
       dom.interlude.appendChild(contentDescriptor.el);
+      this.fit(contentDescriptor);
+      this.state = 'interlude';
+      this.interludeContent = contentDescriptor;
+      this.updateHandles();
       return this;
     },
     resume: function () {
@@ -272,6 +282,9 @@ Photoport = (function () {
       }
       dom.interlude.style.display = 'none';
       dom.content.style.display = '';
+      this.state = 'normal';
+      this.interludeContent = null;
+      this.updateHandles();
       return this;
     }
   };

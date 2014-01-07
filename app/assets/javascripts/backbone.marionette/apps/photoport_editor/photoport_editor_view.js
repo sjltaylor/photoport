@@ -6,7 +6,7 @@ PhotoportCMS.module('PhotoportEditor', function (PhotoportEditor, PhotoportCMS, 
     template: 'photoport_editor/view',
     className: 'photoport-editor',
     regions: {
-      photoportContainerRegion: ".photoport-container"
+      photoportContainerRegion: ".photoport-container-region"
     },
     initialize: function (opts) {
       this.photoportContainerView = opts.photoportContainerView;

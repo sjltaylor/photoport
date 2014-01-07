@@ -4,17 +4,13 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
   PhotoportContainer.View = Marionette.ItemView.extend({
     className: 'photoport-container',
     initialize: function () {
+      this.uploadPanel = this.options.uploadPanel;
       this.photoport = new Photoport({
         container: this.el
       });
     },
     onRender: function () {
-      var uploadPanel = this.options.uploadPanel;
-      uploadPanel.render();
-      this.photoport.prepend({ el: uploadPanel.el });
-
-      this.$el = this.$el.children();
-      this.setElement(this.$el);
+      this.uploadPanel.render();
     },
     onShow: function () {
       this.photoport.start();
@@ -22,6 +18,14 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
     add: function (content) {
       this.photoport.append(content);
       this.photoport.seek('last');
+    },
+    showUploadPanel: function () {
+      this.photoport.interlude({
+        el: this.uploadPanel.el
+      });
+    },
+    resume: function () {
+      this.photoport.resume();
     }
   });
 });

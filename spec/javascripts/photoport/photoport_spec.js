@@ -53,6 +53,14 @@ describe('photoport', function () {
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right')).not.toBeNull();
     });
 
+    it('sets the initial state to "normal"', function () {
+      expect(photoport.state).toBe('normal');
+    });
+
+    it('sets the interludeContent to null', function () {
+      expect(photoport.interludeContent).toBeNull();
+    });
+
     it('renders handle glyphs', function () {
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left .photoport-handle-glyph')).not.toBeNull();
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right .photoport-handle-glyph')).not.toBeNull();
@@ -170,7 +178,7 @@ describe('photoport', function () {
       addSomeContentToPhotoport();
       photoport.start();
     });
-    it('calls fit() for all content', function () {
+    it('calls fit() for all content in the sequence', function () {
       spyOn(photoport, 'fit');
       photoport.start();
       photoport.sequence.forEach(function (e) {
@@ -185,6 +193,13 @@ describe('photoport', function () {
       var expectedWidth = photoport.sequence.length * 123;
       expect(photoport.portRect).toHaveBeenCalled();
       expect(photoport.dom.content.style.width).toBe(expectedWidth + 'px');
+    });
+    it('resizes the interlude content', function () {
+      var interlude = createContent();
+      spyOn(photoport, 'fit');
+      photoport.interlude(interlude);
+      photoport.start();
+      expect(photoport.fit).toHaveBeenCalledWith(interlude);
     });
   });
   describe('start()', function () {
@@ -652,6 +667,17 @@ describe('photoport', function () {
         });
       });
     });
+    describe('during an interlude', function () {
+      beforeEach(function () {
+        addSomeContentToPhotoport();
+        photoport.start();
+        photoport.interlude(createContent());
+      });
+      it('displays no handles', function () {
+        expect(photoport.dom.leftHandle.style.display).toBe('none');
+        expect(photoport.dom.rightHandle.style.display).toBe('none');
+      });
+    });
   });
   describe('navigation', function () {
     describe('clicking', function () {
@@ -705,6 +731,19 @@ describe('photoport', function () {
     it('returns the photoport', function () {
       expect(photoport.interlude(content)).toBe(photoport);
     });
+    it('sets the state to "interlude"', function () {
+      photoport.interlude(content);
+      expect(photoport.state).toBe("interlude");
+    });
+    it('updates the handles', function () {
+      spyOn(photoport, 'updateHandles');
+      photoport.interlude(content);
+      expect(photoport.updateHandles).toHaveBeenCalled();
+    });
+    it('sets the interludeContent', function () {
+      photoport.interlude(content);
+      expect(photoport.interludeContent).toBe(content);
+    });
   });
   describe('resume()', function () {
     beforeEach(function () {
@@ -724,6 +763,19 @@ describe('photoport', function () {
     });
     it('returns the photoport', function () {
       expect(photoport.resume()).toBe(photoport);
+    });
+    it('sets the state to "normal"', function () {
+      photoport.resume();
+      expect(photoport.state).toBe("normal");
+    });
+    it('updates the handles', function () {
+      spyOn(photoport, 'updateHandles');
+      photoport.resume();
+      expect(photoport.updateHandles).toHaveBeenCalled();
+    });
+    it('clears the interludeContent', function () {
+      photoport.resume();
+      expect(photoport.interludeContent).toBeNull();
     });
   });
 });
