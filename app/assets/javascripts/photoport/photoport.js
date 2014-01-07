@@ -178,6 +178,37 @@ Photoport = (function () {
 
       this.fitContent();
 
+      var photoport = this;
+      contentDescriptor.mousedownHandler = function () {
+
+        var timeout = setTimeout(function () {
+
+          contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
+
+          photoport.el().dispatchEvent(new CustomEvent('photoport-content-hold', {
+            detail: {
+              content: contentDescriptor
+            }
+          }));
+        }, 350);
+
+        var mouseupHandler = function () {
+
+          contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
+          clearTimeout(timeout);
+
+          photoport.el().dispatchEvent(new CustomEvent('photoport-content-action', {
+            detail: {
+              content: contentDescriptor
+            }
+          }));
+        };
+
+        contentDescriptor.el.addEventListener('mouseup', mouseupHandler);
+      };
+
+      contentDescriptor.el.addEventListener('mousedown', contentDescriptor.mousedownHandler);
+
       this.el().dispatchEvent(new CustomEvent('photoport-content-insert', {
         detail: {
           content: contentDescriptor,
@@ -205,6 +236,8 @@ Photoport = (function () {
       this.dom.content.removeChild(content.el);
       this.updateHandles();
       this.fitContent();
+
+      content.el.removeEventListener('mousedown', content.mousedownHandler);
 
       this.el().dispatchEvent(new CustomEvent('photoport-content-remove', {
         detail: {

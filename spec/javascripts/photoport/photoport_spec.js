@@ -423,6 +423,148 @@ describe('photoport', function () {
       photoport.insert(testContent[3]);
       expect(photoport.subsume).toHaveBeenCalledWith(testContent[3]);
     });
+    describe('listening to mousedown events', function () {
+      var contentDescriptor,
+          actionListener,
+          actionListenerArgs,
+          holdListener,
+          holdListenerArgs;
+
+      beforeEach(function () {
+        contentDescriptor = createContent();
+
+        actionListener = jasmine.createSpy().andCallFake(function (e) {
+          actionListenerArgs = e;
+        });
+        actionArgs = null;
+        photoport.el().addEventListener('photoport-content-action', actionListener);
+
+        holdListener = jasmine.createSpy().andCallFake(function (e) {
+          holdListenerArgs = e;
+        });
+        holdArgs = null;
+        photoport.el().addEventListener('photoport-content-hold', holdListener);
+      });
+
+      function dispatch(name) {
+        contentDescriptor.el.dispatchEvent(new MouseEvent(name));
+      }
+
+      function simulatesActionEvent () {
+        runs(function () {
+          dispatch('mousedown');
+          dispatch('mouseup');
+        });
+        waitsFor(function () {
+          return actionListener.wasCalled;
+        }, 'action listener to be called', 2);
+      }
+
+      function simulatesHoldEvent () {
+        runs(function () {
+          dispatch('mousedown');
+          setTimeout(function () {
+            dispatch('mouseup');
+          }, 351);
+        });
+        waitsFor(function () {
+          return holdListener.wasCalled;
+        }, 'hold event to be emitted', 400);
+      }
+
+      it('adds a mousedownHandler to the element', function () {
+        spyOn(contentDescriptor.el, 'addEventListener');
+        photoport.insert(contentDescriptor);
+        expect(contentDescriptor.mousedownHandler).not.toBeNull();
+        expect(contentDescriptor.el.addEventListener).toHaveBeenCalledWith('mousedown', contentDescriptor.mousedownHandler);
+      });
+      it('fires a photoport-content-action event with the content if a mouseup event is received within 350ms', function () {
+        runs(function () {
+          photoport.insert(contentDescriptor);
+        });
+
+        simulatesActionEvent();
+
+        runs(function () {
+          expect(actionListener).toHaveBeenCalled();
+          expect(actionListenerArgs.detail.content).toBe(contentDescriptor);
+        });
+      });
+      it('fires a photoport-content-hold event if the mouse is down for >= 350ms', function () {
+        runs(function () {
+          photoport.insert(contentDescriptor);
+        });
+
+        simulatesHoldEvent();
+
+        runs(function () {
+          expect(holdListenerArgs.detail.content).toBe(contentDescriptor);
+        });
+      });
+      describe('multiple events', function () {
+        beforeEach(function () {
+          photoport.insert(contentDescriptor);
+        });
+
+        it('does not emit an action event if the hold event has been emitted', function () {
+          var initialActionCallListenerCallCount = actionListener.callCount;
+
+          simulatesHoldEvent();
+
+          runs(function () {
+            expect(actionListener.callCount).toBe(initialActionCallListenerCallCount);
+          });
+        });
+        it('does not emit a hold event if an action event has been emitted', function () {
+          simulatesActionEvent();
+
+          var holdEventWouldHaveFired = false;
+
+          setTimeout(function () {
+            holdEventWouldHaveFired = true;
+          }, 375);
+
+          waitsFor(function () {
+            return holdEventWouldHaveFired;
+          }, 'hold event would have fired set to true', 400);
+
+          runs(function () {
+            expect(holdListener).not.toHaveBeenCalled();
+          });
+        });
+        it('does not emit too many hold events', function () {
+          runs(function () {
+            dispatch('mousedown');
+          });
+          waitsFor(function () {
+            return holdListener.callCount == 1;
+          });
+          runs(function () {
+            dispatch('mousedown');
+          });
+          waitsFor(function () {
+            return holdListener.callCount == 2;
+          });
+          runs(function () {
+            dispatch('mousedown');
+          });
+          waitsFor(function () {
+            return holdListener.callCount == 3;
+          });
+          runs(function () {
+            expect(holdListener.callCount).toBe(3);
+          });
+        });
+        it('does not emit too many action events', function () {
+          simulatesActionEvent();
+          simulatesActionEvent();
+          simulatesActionEvent();
+          runs(function () {
+            expect(actionListener.callCount).toBe(3);
+          });
+        });
+      });
+    });
     describe('photoport-content-insert event', function () {
       var content;
       var eventListener;
@@ -574,7 +716,7 @@ describe('photoport', function () {
         expect(eventListenerCalled).toBe(false);
       });
     });
-    describe('when there is content in the sequence', function () {
+    describe('when the content is in the sequence', function () {
       beforeEach(function () {
         content = testContent[2];
       });
@@ -594,6 +736,11 @@ describe('photoport', function () {
           }
         }
         expect(isInDom).toBe(false);
+      });
+      it('removes the mousedown event listener', function () {
+        spyOn(content.el, 'removeEventListener');
+        photoport.remove(content);
+        expect(content.el.removeEventListener).toHaveBeenCalledWith('mousedown', content.mousedownHandler);
       });
       describe('photoport-content-remote event', function () {
         it('emits a photoport-content-remove event', function () {
