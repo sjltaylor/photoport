@@ -423,6 +423,34 @@ describe('photoport', function () {
       photoport.insert(testContent[3]);
       expect(photoport.subsume).toHaveBeenCalledWith(testContent[3]);
     });
+    describe('photoport-content-insert event', function () {
+      var content;
+      var eventListener;
+      var eventListenerCalled;
+      var eventArgs;
+
+      beforeEach(function () {
+        content = createContent();
+        eventListenerCalled = false;
+        eventArgs = null;
+        eventListener = function (e) {
+          eventArgs = e;
+          eventListenerCalled = true;
+        };
+        photoport.el().addEventListener('photoport-content-insert', eventListener);
+        photoport.insert(content, 1);
+      });
+
+      it('emits a photoport-content-insert event', function () {
+        expect(eventListenerCalled).toBeTruthy();
+      });
+      it('includes the content that was inserted in the event args', function () {
+        expect(eventArgs.detail.content).toBe(content);
+      });
+      it('includes the position in which the content was inserted in the event args', function () {
+        expect(eventArgs.detail.position).toBe(1);
+      });
+    });
     describe('when the element is inserted before the current position', function () {
       describe('when the photoport has been started', function () {
         it('incremements the position', function () {
@@ -567,9 +595,15 @@ describe('photoport', function () {
         }
         expect(isInDom).toBe(false);
       });
-      it('emits a photoport-content-remove event', function () {
-        photoport.remove(content);
-        expect(eventListenerCalled).toBe(true);
+      describe('photoport-content-remote event', function () {
+        it('emits a photoport-content-remove event', function () {
+          photoport.remove(content);
+          expect(eventListenerCalled).toBe(true);
+        });
+        it('includes the content that was removed in the event args', function () {
+          photoport.remove(content);
+          expect(eventArgs.detail.content).toBe(content);
+        });
       });
       it('calls fitContent()', function () {
         spyOn(photoport, 'fitContent');

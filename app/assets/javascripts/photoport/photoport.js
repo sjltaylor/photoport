@@ -178,6 +178,13 @@ Photoport = (function () {
 
       this.fitContent();
 
+      this.el().dispatchEvent(new CustomEvent('photoport-content-insert', {
+        detail: {
+          content: contentDescriptor,
+          position: position
+        }
+      }));
+
       return this;
     },
     remove: function (content) {
@@ -198,9 +205,10 @@ Photoport = (function () {
       this.dom.content.removeChild(content.el);
       this.updateHandles();
       this.fitContent();
+
       this.el().dispatchEvent(new CustomEvent('photoport-content-remove', {
         detail: {
-          removedContent: content
+          content: content
         }
       }));
       return this;
@@ -277,9 +285,11 @@ Photoport = (function () {
     },
     resume: function () {
       var dom = this.dom;
+
       while(dom.interlude.hasChildNodes()) {
         dom.interlude.removeChild(dom.interlude.firstChild);
       }
+
       dom.interlude.style.display = 'none';
       dom.content.style.display = '';
       this.state = 'normal';
