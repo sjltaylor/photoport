@@ -198,7 +198,11 @@ Photoport = (function () {
       this.dom.content.removeChild(content.el);
       this.updateHandles();
       this.fitContent();
-
+      this.el().dispatchEvent(new CustomEvent('photoport-content-remove', {
+        detail: {
+          removedContent: content
+        }
+      }));
       return this;
     },
     start: function () {

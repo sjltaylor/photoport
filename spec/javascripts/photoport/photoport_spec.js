@@ -541,6 +541,10 @@ describe('photoport', function () {
       it('returns the photoport', function () {
         expect(photoport.remove(content)).toBe(photoport);
       });
+      it('does not emit a photoport-content-remove', function () {
+        photoport.remove(content);
+        expect(eventListenerCalled).toBe(false);
+      });
     });
     describe('when there is content in the sequence', function () {
       beforeEach(function () {
@@ -562,6 +566,10 @@ describe('photoport', function () {
           }
         }
         expect(isInDom).toBe(false);
+      });
+      it('emits a photoport-content-remove event', function () {
+        photoport.remove(content);
+        expect(eventListenerCalled).toBe(true);
       });
       it('calls fitContent()', function () {
         spyOn(photoport, 'fitContent');
