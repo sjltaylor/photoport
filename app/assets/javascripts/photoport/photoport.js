@@ -186,6 +186,7 @@ Photoport = (function () {
           contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
 
           photoport.el().dispatchEvent(new CustomEvent('photoport-content-hold', {
+            bubbles: true,
             detail: {
               content: contentDescriptor
             }
@@ -198,6 +199,7 @@ Photoport = (function () {
           clearTimeout(timeout);
 
           photoport.el().dispatchEvent(new CustomEvent('photoport-content-action', {
+            bubbles: true,
             detail: {
               content: contentDescriptor
             }
@@ -210,6 +212,7 @@ Photoport = (function () {
       contentDescriptor.el.addEventListener('mousedown', contentDescriptor.mousedownHandler);
 
       this.el().dispatchEvent(new CustomEvent('photoport-content-insert', {
+        bubbles: true,
         detail: {
           content: contentDescriptor,
           position: position
@@ -240,6 +243,7 @@ Photoport = (function () {
       content.el.removeEventListener('mousedown', content.mousedownHandler);
 
       this.el().dispatchEvent(new CustomEvent('photoport-content-remove', {
+        bubbles: true,
         detail: {
           content: content
         }
@@ -291,6 +295,7 @@ Photoport = (function () {
       this.updateHandles();
 
       this.el().dispatchEvent(new CustomEvent('photoport-navigate', {
+        bubbles: true,
         detail: {
           previousPosition: previousPosition,
           newPosition: newPosition

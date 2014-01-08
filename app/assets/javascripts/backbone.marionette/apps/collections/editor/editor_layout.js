@@ -4,7 +4,7 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
 
   Editor.Layout = Marionette.Layout.extend({
     template: "collections/editor",
-    className: 'collection-editor-view',
+    className: 'collection-editor-layout',
     regions: {
       contentRegion: "#page_body"
     }

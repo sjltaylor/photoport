@@ -378,6 +378,9 @@ describe('photoport', function () {
         it('includes the newPosition', function () {
           expect(args.detail.newPosition).toBe(4);
         });
+        it('bubbles', function () {
+          expect(args.bubbles).toBe(true);
+        });
       });
       it('updates the handles', function () {
         spyOn(photoport, 'updateHandles');
@@ -423,7 +426,7 @@ describe('photoport', function () {
       photoport.insert(testContent[3]);
       expect(photoport.subsume).toHaveBeenCalledWith(testContent[3]);
     });
-    describe('listening to mousedown events', function () {
+    describe('interpreting mouse events', function () {
       var contentDescriptor,
           actionListener,
           actionListenerArgs,
@@ -488,6 +491,7 @@ describe('photoport', function () {
         runs(function () {
           expect(actionListener).toHaveBeenCalled();
           expect(actionListenerArgs.detail.content).toBe(contentDescriptor);
+          expect(actionListenerArgs.bubbles).toBe(true);
         });
       });
       it('fires a photoport-content-hold event if the mouse is down for >= 350ms', function () {
@@ -499,6 +503,7 @@ describe('photoport', function () {
 
         runs(function () {
           expect(holdListenerArgs.detail.content).toBe(contentDescriptor);
+          expect(holdListenerArgs.bubbles).toBe(true);
         });
       });
       describe('multiple events', function () {
@@ -588,6 +593,9 @@ describe('photoport', function () {
       });
       it('includes the content that was inserted in the event args', function () {
         expect(eventArgs.detail.content).toBe(content);
+      });
+      it('bubbles', function () {
+        expect(eventArgs.bubbles).toBe(true);
       });
       it('includes the position in which the content was inserted in the event args', function () {
         expect(eventArgs.detail.position).toBe(1);
@@ -742,7 +750,7 @@ describe('photoport', function () {
         photoport.remove(content);
         expect(content.el.removeEventListener).toHaveBeenCalledWith('mousedown', content.mousedownHandler);
       });
-      describe('photoport-content-remote event', function () {
+      describe('photoport-content-remove event', function () {
         it('emits a photoport-content-remove event', function () {
           photoport.remove(content);
           expect(eventListenerCalled).toBe(true);
@@ -750,6 +758,10 @@ describe('photoport', function () {
         it('includes the content that was removed in the event args', function () {
           photoport.remove(content);
           expect(eventArgs.detail.content).toBe(content);
+        });
+        it('bubbles', function () {
+          photoport.remove(content);
+          expect(eventArgs.bubbles).toBe(true);
         });
       });
       it('calls fitContent()', function () {
