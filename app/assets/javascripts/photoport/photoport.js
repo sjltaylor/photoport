@@ -312,8 +312,10 @@ Photoport = (function () {
         dom.interlude.removeChild(dom.interlude.firstChild);
       }
 
-      dom.content.style.display = 'none';
       dom.interlude.style.display = '';
+      dom.interlude.style.position = 'absolute';
+      dom.interlude.style.top = 0;
+      dom.interlude.style.left = 0;
       dom.interlude.appendChild(contentDescriptor.el);
       this.fit(contentDescriptor);
       this.state = 'interlude';
@@ -329,7 +331,6 @@ Photoport = (function () {
       }
 
       dom.interlude.style.display = 'none';
-      dom.content.style.display = '';
       this.state = 'normal';
       this.interludeContent = null;
       this.updateHandles();

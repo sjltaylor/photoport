@@ -900,13 +900,12 @@ describe('photoport', function () {
       photoport.interlude(content);
       expect(photoport.fit).toHaveBeenCalledWith(content);
     });
-    it('hides the normal content', function () {
-      photoport.interlude(content);
-      expect(photoport.dom.content.style.display).toBe('none');
-    });
-    it('shows the interlude', function () {
+    it('shows the interlude over top the content', function () {
       photoport.interlude(content);
       expect(photoport.dom.interlude.style.display).toBe('');
+      expect(photoport.dom.interlude.style.position).toBe('absolute');
+      expect(photoport.dom.interlude.style.top).toBe('0px');
+      expect(photoport.dom.interlude.style.left).toBe('0px');
     });
     it('adds the interlude content to the dom', function () {
       photoport.interlude(content);
@@ -941,10 +940,6 @@ describe('photoport', function () {
   describe('resume()', function () {
     beforeEach(function () {
       photoport.interlude(createContent());
-    });
-    it('makes normal content visible', function () {
-      photoport.resume();
-      expect(photoport.dom.content.style.display).toBe('');
     });
     it('hides the interlude', function () {
       photoport.resume();
