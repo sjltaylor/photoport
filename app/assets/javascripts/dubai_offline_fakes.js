@@ -1,4 +1,4 @@
-console.warn("Dubai offline fakes are active, see require statements in landing.js");
+console.warn("Dubai offline fakes are in effect. See require statements in landing.js");
 
 PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Backbone, Marionette, $, _) {
 

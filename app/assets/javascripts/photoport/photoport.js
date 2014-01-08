@@ -112,6 +112,7 @@ Photoport = (function () {
       style.border   = 'none';
       style.padding  = 0;
       style.outline  = 0;
+      style.cursor   = 'normal';
 
       if (!contentDescriptor.el.classList.contains('photoport-element')) {
         contentDescriptor.el.classList.add('photoport-element');
