@@ -64,4 +64,28 @@ describe('PhotoportContainer.View', function () {
       expect(photoportContainerView.photoport.resume).toHaveBeenCalled();
     });
   });
+  describe('remove()', function () {
+    it('removes the content from the photoport', function () {
+      var fake = {};
+      spyOn(photoportContainerView.photoport, 'remove');
+      photoportContainerView.remove(fake);
+      expect(photoportContainerView.photoport.remove).toHaveBeenCalledWith(fake);
+    });
+  });
+  describe('add()', function () {
+    var fake;
+    beforeEach(function () {
+      fake = {};
+    });
+    it('inserts the content into the photoport in the penultimate position', function () {
+      spyOn(photoportContainerView.photoport, 'insert');
+      photoportContainerView.add(fake);
+      expect(photoportContainerView.photoport.insert).toHaveBeenCalledWith(fake, 0);
+    });
+    it('seeks to the penultimate item', function () {
+      spyOn(photoportContainerView.photoport, 'seek');
+      photoportContainerView.add(fake);
+      expect(photoportContainerView.photoport.seek).toHaveBeenCalledWith(0);
+    });
+  });
 });

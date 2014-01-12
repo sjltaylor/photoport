@@ -20,8 +20,9 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       this.photoport.start();
     },
     add: function (content) {
-      this.photoport.append(content);
-      this.photoport.seek(this.photoport.count() - 1);
+      var penultimatePosition = this.photoport.count() - 1;
+      this.photoport.insert(content, penultimatePosition);
+      this.photoport.seek(penultimatePosition);
     },
     remove: function (content) {
       this.photoport.remove(content);
