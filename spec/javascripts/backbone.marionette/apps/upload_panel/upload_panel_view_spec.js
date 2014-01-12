@@ -1,5 +1,4 @@
-//= require application
-//= require photoport_cms
+//= require ../../../support/env
 //= require backbone.marionette/apps/upload_panel/upload_panel_view
 
 describe("PhotportCMS.UploadPanel.View", function () {

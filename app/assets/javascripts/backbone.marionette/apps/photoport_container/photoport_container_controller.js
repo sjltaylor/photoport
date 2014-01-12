@@ -3,20 +3,19 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
   PhotoportContainer.Controller = {
     populate: function(view, collection) {
       collection.photos.each(function (photo) {
-        view.add(this.map(photo));
+        view.add(this.contentDescriptorFor(photo));
       }.bind(this));
     },
-    map: function (photo) {
-      var contentDescriptor = {
-        backgroundImage: photo.get('download'),
-        photo: photo
-      };
+    contentDescriptorFor: function (photo) {
+      if (photo.contentDescriptor === undefined) {
+        var contentDescriptor = {
+          backgroundImage: photo.get('download'),
+          photo: photo
+        };
 
-      photo.contentDescriptor = contentDescriptor;
+        photo.contentDescriptor = contentDescriptor;
+      }
 
-      return contentDescriptor;
-    },
-    unmap: function (photo) {
       return photo.contentDescriptor;
     },
     makeView: function (opts) {
@@ -29,11 +28,11 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       this.populate(view, collection);
 
       collection.photos.on('add', function (photo) {
-        view.add(this.map(photo));
+        view.add(this.contentDescriptorFor(photo));
       }, this);
 
       collection.photos.on('remove', function (photo) {
-        view.remove(this.unmap(photo));
+        view.remove(this.contentDescriptorFor(photo));
       }, this);
 
       view.on('edit', function (content) {

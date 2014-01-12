@@ -20,12 +20,12 @@ Photoport = (function () {
 
   function build () {
     var dom = {
-      root        : div('photoport'),
-      port        : div('photoport-port'),
-      content     : div('photoport-content'),
-      interlude   : div('photoport-interlude'),
-      leftHandle  : div('photoport-handle photoport-handle-left'),
-      rightHandle : div('photoport-handle photoport-handle-right'),
+      root              : div('photoport'),
+      port              : div('photoport-port'),
+      content           : div('photoport-content'),
+      interlude         : div('photoport-interlude'),
+      leftHandle        : div('photoport-handle photoport-handle-left'),
+      rightHandle       : div('photoport-handle photoport-handle-right'),
       leftHandleGlyph   : span('fui-triangle-left-large photoport-handle-glyph'),
       rightHandleGlyph  : span('fui-triangle-right-large photoport-handle-glyph')
     };
