@@ -22,6 +22,7 @@ Photoport = (function () {
     var dom = {
       root              : div('photoport'),
       port              : div('photoport-port'),
+      shadow            : div('photoport-shadow'),
       content           : div('photoport-content'),
       interlude         : div('photoport-interlude'),
       leftHandle        : div('photoport-handle photoport-handle-left'),
@@ -33,6 +34,7 @@ Photoport = (function () {
 
     dom.root.appendChild(dom.leftHandle);
     dom.root.appendChild(dom.port);
+    dom.root.appendChild(dom.shadow);
     dom.root.appendChild(dom.rightHandle);
     dom.port.appendChild(dom.content);
     dom.port.appendChild(dom.interlude);

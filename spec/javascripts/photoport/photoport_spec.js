@@ -52,6 +52,10 @@ describe('photoport', function () {
       expect(container.querySelector('.photoport style.photoport-bounce-keyframes')).not.toBeNull();
     });
 
+    it('renders a shadow element', function () {
+      expect(container.querySelector('.photoport .photoport-port .photoport-shadow')).not.toBeNull();
+    });
+
     it('renders handles', function () {
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left')).not.toBeNull();
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right')).not.toBeNull();

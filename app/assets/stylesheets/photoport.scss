@@ -39,11 +39,19 @@
 
   .photoport-handle-left {
     left: 0;
-    background-image: url();
   }
 
   .photoport-handle-right {
     right: 0;
+  }
+
+  .photoport-shadow {
+    box-shadow: 0 0 5px rgba(0,0,0,0.3) inset;
+    position: absolute;
+    top: $topEdgeWidth - 1;
+    left: $handleWidth - 1;
+    width: $baseWidth;
+    height: $baseHeight;
   }
 
   .photoport-port {
@@ -66,7 +74,6 @@
     }
 
     .photoport-element {
-      box-shadow: 0 0 5px rgba(0,0,0,0.3) inset;
       user-select: none;
       -webkit-user-select: none;
       vertical-align: top;
