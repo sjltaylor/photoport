@@ -129,19 +129,15 @@ Photoport = (function () {
 
       return this;
     },
-    updateHandles: function () {
-      var count     = this.sequence.length;
-      var position  = this.position;
+    showHandles: function () {
       var dom       = this.dom;
-      var start     = this.position === 0;
-      var end       = this.position === (count - 1);
-      var interlude = this.state === 'interlude';
-
-      var leftHandleDisplay  = (count >= 2) && !start && !interlude ? 'table' : 'none';
-      var rightHandleDisplay = (count >= 2) && !end   && !interlude ? 'table' : 'none';
-
-      dom.leftHandle.style.display  = leftHandleDisplay;
-      dom.rightHandle.style.display = rightHandleDisplay;
+      dom.leftHandle.style.display  = 'table';
+      dom.rightHandle.style.display = 'table';
+    },
+    hideHandles: function () {
+      var dom       = this.dom;
+      dom.leftHandle.style.display  = 'none';
+      dom.rightHandle.style.display = 'none';
     },
     append: function (contentDescriptor) {
       return this.insert(contentDescriptor);
@@ -240,7 +236,6 @@ Photoport = (function () {
 
       this.sequence.splice(index, 1);
       this.dom.content.removeChild(content.el);
-      this.updateHandles();
       this.fitContent();
 
       content.el.removeEventListener('mousedown', content.mousedownHandler);
@@ -295,8 +290,6 @@ Photoport = (function () {
       this.position = newPosition;
       this.current = this.sequence[this.position];
 
-      this.updateHandles();
-
       this.el().dispatchEvent(new CustomEvent('photoport-navigate', {
         bubbles: true,
         detail: {
@@ -323,7 +316,7 @@ Photoport = (function () {
       this.fit(contentDescriptor);
       this.state = 'interlude';
       this.interludeContent = contentDescriptor;
-      this.updateHandles();
+      this.hideHandles();
       return this;
     },
     resume: function () {
@@ -336,7 +329,7 @@ Photoport = (function () {
       dom.interlude.style.display = 'none';
       this.state = 'normal';
       this.interludeContent = null;
-      this.updateHandles();
+      this.showHandles();
       return this;
     },
     count: function () {

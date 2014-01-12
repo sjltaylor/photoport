@@ -382,11 +382,6 @@ describe('photoport', function () {
           expect(args.bubbles).toBe(true);
         });
       });
-      it('updates the handles', function () {
-        spyOn(photoport, 'updateHandles');
-        photoport.seek(4);
-        expect(photoport.updateHandles).toHaveBeenCalled();
-      });
     });
     describe('when no content has been added', function () {
       it('throws an exception', function () {
@@ -769,11 +764,6 @@ describe('photoport', function () {
         photoport.remove(content);
         expect(photoport.fitContent).toHaveBeenCalled();
       });
-      it('calls updateHandles()', function () {
-        spyOn(photoport, 'updateHandles');
-        photoport.remove(content);
-        expect(photoport.updateHandles).toHaveBeenCalled();
-      });
       describe('when the content is before the current position', function () {
         beforeEach(function () {
           content = testContent[1];
@@ -824,86 +814,22 @@ describe('photoport', function () {
       });
     });
   });
-  describe('updateHandles()', function () {
-    describe('when there is one element', function () {
-      beforeEach(function () {
-        addSomeContentToPhotoport(1);
-        photoport.start();
-      });
-      it('displays no handles', function () {
-        expect(photoport.dom.leftHandle.style.display).toBe('none');
-        expect(photoport.dom.rightHandle.style.display).toBe('none');
-      });
+  describe('showHandles()', function () {
+    it('makes left and right handles visible', function () {
+      photoport.showHandles();
+      expect(photoport.dom.leftHandle.style.display).toBe('table');
+      expect(photoport.dom.leftHandleGlyph.classList.contains('fui-triangle-left-large')).toBeTruthy();
+      expect(photoport.dom.rightHandle.style.display).toBe('table');
+      expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
     });
-    describe('when there are zero elements', function () {
-      it('displays no handles', function () {
-        photoport.updateHandles();
-        expect(photoport.dom.leftHandle.style.display).toBe('none');
-        expect(photoport.dom.rightHandle.style.display).toBe('none');
-      });
-    });
-    describe('when there are two or more elements', function () {
-      beforeEach(function () {
-        addSomeContentToPhotoport(3);
-        photoport.start().seek(1);
-      });
-      describe('left handle', function () {
-        it('is a left arrow', function () {
-          expect(photoport.dom.leftHandle.style.display).toBe('table');
-          expect(photoport.dom.leftHandleGlyph.classList.contains('fui-triangle-left-large')).toBeTruthy();
-        });
-      });
-      describe('right handle', function () {
-        it('is a right arrow', function () {
-          expect(photoport.dom.rightHandle.style.display).toBe('table');
-          expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
-        });
-      });
-    });
-    describe('in the left-most position', function () {
-      beforeEach(function () {
-        addSomeContentToPhotoport();
-        photoport.start().seek(0);
-      });
-      describe('left handle', function () {
-        it('is not displayed', function () {
-          expect(photoport.dom.leftHandle.style.display).toBe('none');
-        });
-      });
-      describe('right handle', function () {
-        it('is a right arrow', function () {
-          expect(photoport.dom.rightHandle.style.display).toBe('table');
-          expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
-        });
-      });
-    });
-    describe('in the right-most position', function () {
-      beforeEach(function () {
-        addSomeContentToPhotoport();
-        photoport.start().seek('last');
-      });
-      describe('left handle', function () {
-        it('is a left arrow', function () {
-          expect(photoport.dom.leftHandle.style.display).toBe('table');
-          expect(photoport.dom.leftHandleGlyph.classList.contains('fui-triangle-left-large')).toBeTruthy();
-        });
-      });
-      describe('right handle', function () {
-        it('is not displayed', function () {
-          expect(photoport.dom.rightHandle.style.display).toBe('none');
-        });
-      });
-    });
-    describe('during an interlude', function () {
-      beforeEach(function () {
-        addSomeContentToPhotoport();
-        photoport.start();
-        photoport.interlude(createContent());
-      });
-      it('displays no handles', function () {
-        expect(photoport.dom.leftHandle.style.display).toBe('none');
-        expect(photoport.dom.rightHandle.style.display).toBe('none');
-      });
+  });
+  describe('hideHandles()', function () {
+    it('makes left and right handles hidden', function () {
+      photoport.hideHandles();
+      expect(photoport.dom.leftHandle.style.display).toBe('none');
+      expect(photoport.dom.leftHandleGlyph.classList.contains('fui-triangle-left-large')).toBeTruthy();
+      expect(photoport.dom.rightHandle.style.display).toBe('none');
+      expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
     });
   });
   describe('navigation', function () {
@@ -961,10 +887,10 @@ describe('photoport', function () {
       photoport.interlude(content);
       expect(photoport.state).toBe("interlude");
     });
-    it('updates the handles', function () {
-      spyOn(photoport, 'updateHandles');
+    it('hides the handles', function () {
+      spyOn(photoport, 'hideHandles');
       photoport.interlude(content);
-      expect(photoport.updateHandles).toHaveBeenCalled();
+      expect(photoport.hideHandles).toHaveBeenCalled();
     });
     it('sets the interludeContent', function () {
       photoport.interlude(content);
@@ -990,10 +916,10 @@ describe('photoport', function () {
       photoport.resume();
       expect(photoport.state).toBe("normal");
     });
-    it('updates the handles', function () {
-      spyOn(photoport, 'updateHandles');
+    it('shows the handles', function () {
+      spyOn(photoport, 'showHandles');
       photoport.resume();
-      expect(photoport.updateHandles).toHaveBeenCalled();
+      expect(photoport.showHandles).toHaveBeenCalled();
     });
     it('clears the interludeContent', function () {
       photoport.resume();
