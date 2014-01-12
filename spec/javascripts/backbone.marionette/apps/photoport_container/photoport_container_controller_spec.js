@@ -8,7 +8,9 @@ describe('photoport container controller', function () {
     var fakeView, collection, fakeContentDescriptor;
     beforeEach(function () {
       collection = new PhotoportCMS.Collection({photos: []});
-      fakeView = new PhotoportCMS.PhotoportContainer.View({});
+      fakeView = new PhotoportCMS.PhotoportContainer.View({
+        uploadPanel: { photoportContentDescriptor: {}}
+      });
       spyOn(PhotoportCMS.PhotoportContainer, 'View').andReturn(fakeView);
       fakeContentDescriptor = {};
       spyOn(fakeView, 'add');

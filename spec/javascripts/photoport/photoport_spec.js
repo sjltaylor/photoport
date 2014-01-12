@@ -48,6 +48,10 @@ describe('photoport', function () {
       expect(container.querySelector('.photoport .photoport-port')).not.toBeNull();
     });
 
+    it('renders a keyframe style element', function () {
+      expect(container.querySelector('.photoport style.photoport-bounce-keyframes')).not.toBeNull();
+    });
+
     it('renders handles', function () {
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left')).not.toBeNull();
       expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right')).not.toBeNull();
@@ -228,7 +232,6 @@ describe('photoport', function () {
       expect(photoport.start()).toBe(rtn);
       expect(photoport.seek).toHaveBeenCalledWith(2);
     });
-
     it('calls fitContent()', function () {
       spyOn(photoport, 'fitContent');
       photoport.start();
@@ -243,20 +246,13 @@ describe('photoport', function () {
       rtn = {};
       spyOn(photoport, 'seek').andReturn(rtn);
     });
-    it('calls seek() with the current position + 1', function () {
+    it('calls seek() with the next position', function () {
       photoport.seek(0);
       photoport.next();
       expect(photoport.seek).toHaveBeenCalledWith(1);
     });
     it('returns the result from seek', function () {
       expect(photoport.next()).toBe(rtn);
-    });
-    describe('when at the end', function () {
-      it('returns to the start', function () {
-        photoport.seek('last');
-        photoport.next();
-        expect(photoport.position).toBe(0);
-      });
     });
   });
   describe('previous()', function () {
@@ -274,13 +270,6 @@ describe('photoport', function () {
     it('returns the result from seek', function () {
       spyOn(photoport, 'seek').andReturn(rtn);
       expect(photoport.previous()).toBe(rtn);
-    });
-    describe('when at the first position', function () {
-      it('loops to the end', function () {
-        photoport.seek('first');
-        photoport.previous();
-        expect(photoport.position).toBe(photoport.sequence.length - 1);
-      });
     });
   });
   describe('el()', function () {
@@ -307,12 +296,6 @@ describe('photoport', function () {
         photoport.seek(2);
         expect(photoport.dom.content.children[2]).toBe(testContent[2].el);
       });
-      describe('when called with the same position as the current position', function () {
-        it('returns itself', function () {
-          photoport.seek(2);
-          expect(photoport.seek(2)).toBe(photoport);
-        });
-      });
       describe('bounds handling', function () {
         it('is seeks up to the length of the sequence', function () {
           expect(photoport.position).toBe(0);
@@ -322,15 +305,38 @@ describe('photoport', function () {
           expect(photoport.position).toBe(photoport.sequence.length - 1);
         });
         describe('negative seek positions', function () {
-          it('offset from the length', function () {
-            photoport.seek(0);
-            photoport.seek(-2);
-            expect(photoport.position).toBe(3);
-          });
           it('offset to a minimum of zero', function () {
             photoport.seek(2);
             photoport.seek(-photoport.sequence.length * 10);
             expect(photoport.position).toBe(0);
+          });
+        });
+        describe('when seeking previous from the first position', function () {
+          it('remains in the first position', function () {
+            photoport.seek('first');
+            var p = photoport.position;
+            photoport.previous();
+            expect(photoport.position).toBe(p);
+          });
+          it('bounces left', function () {
+            spyOn(photoport, 'bounceLeft');
+            photoport.seek('first');
+            photoport.previous();
+            expect(photoport.bounceLeft).toHaveBeenCalled();
+          });
+        });
+        describe('when seeking next from the last position', function () {
+          it('remains in the last position', function () {
+            photoport.seek('last');
+            var p = photoport.position;
+            photoport.next();
+            expect(photoport.position).toBe(p);
+          });
+          it('bounces right', function () {
+            spyOn(photoport, 'bounceRight');
+            photoport.seek('last');
+            photoport.next();
+            expect(photoport.bounceRight).toHaveBeenCalled();
           });
         });
       });

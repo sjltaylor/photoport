@@ -11,10 +11,10 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       this.photoport = new Photoport({
         container: this.el
       });
+      this.photoport.append(this.uploadPanel.photoportContentDescriptor);
     },
     onRender: function () {
       this.uploadPanel.render();
-      this.photoport.append(this.uploadPanel.photoportContentDescriptor);
     },
     onShow: function () {
       this.photoport.start();

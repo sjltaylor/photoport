@@ -27,7 +27,8 @@ Photoport = (function () {
       leftHandle        : div('photoport-handle photoport-handle-left'),
       rightHandle       : div('photoport-handle photoport-handle-right'),
       leftHandleGlyph   : span('fui-triangle-left-large photoport-handle-glyph'),
-      rightHandleGlyph  : span('fui-triangle-right-large photoport-handle-glyph')
+      rightHandleGlyph  : span('fui-triangle-right-large photoport-handle-glyph'),
+      keyframes         : document.createElement('STYLE')
     };
 
     dom.root.appendChild(dom.leftHandle);
@@ -35,20 +36,34 @@ Photoport = (function () {
     dom.root.appendChild(dom.rightHandle);
     dom.port.appendChild(dom.content);
     dom.port.appendChild(dom.interlude);
+    dom.root.appendChild(dom.keyframes);
 
     dom.leftHandle.appendChild(dom.leftHandleGlyph);
     dom.rightHandle.appendChild(dom.rightHandleGlyph);
 
     dom.interlude.style.display = 'none';
+    dom.keyframes.classList.add('photoport-bounce-keyframes');
     return dom;
   }
 
-  function circularIncr(p, length) {
-    return (p + 1) % length;
+  function decr(p) {
+    return Math.max(p - 1, 0);
   }
 
-  function circularDecr(p, length) {
-    return ((p - length) % length) + length - 1;
+  function createBounceKeyframes(name, start, direction) {
+    var stops = [[0,0], [25,10], [50,50], [75,10], [100,0]];
+
+    var keyframes = '@-webkit-keyframes ' + name + ' {';
+
+    for (var i = 0; i < stops.length; i++) {
+      var percentage = stops[i][0];
+      var left = start + (direction * stops[i][1]);
+      keyframes = keyframes + percentage + '%{ left: ' + left + 'px;}';
+    }
+
+    keyframes = keyframes + '}';
+
+    return keyframes;
   }
 
   function Photoport (options) {
@@ -69,6 +84,10 @@ Photoport = (function () {
     this.dom.leftHandle.addEventListener('click', function (e) {
       e.preventDefault();
       this.previous();
+    }.bind(this));
+
+    this.dom.content.addEventListener('animationend', function () {
+      this.dom.content.style.webkitAnimation = '';
     }.bind(this));
   }
 
@@ -225,12 +244,12 @@ Photoport = (function () {
       if (index === -1) return this;
 
       if (index < this.position) {
-        this.position = circularDecr(this.position, this.sequence.length - 1);
+        this.position = decr(this.position);
       } else if (index === this.position) {
         if (this.sequence.length === 1) {
           this.position = null;
         } else {
-          this.seek(circularDecr(this.position, this.sequence.length - 1));
+          this.seek(decr(this.position));
         }
       }
 
@@ -258,10 +277,10 @@ Photoport = (function () {
       return this.seek(this.position);
     },
     previous: function () {
-      return this.seek(circularDecr(this.position, this.sequence.length));
+      return this.seek(this.position - 1);
     },
     next: function () {
-      return this.seek(circularIncr(this.position, this.sequence.length));
+      return this.seek(this.position + 1);
     },
     seek: function (newPosition) {
       if (this.sequence.length === 0) {
@@ -280,7 +299,18 @@ Photoport = (function () {
       if (newPosition >= this.sequence.length) {
         newPosition = this.sequence.length - 1;
       } else if (newPosition < 0) {
-        newPosition = Math.max(0, this.sequence.length + newPosition);
+        newPosition = 0;
+      }
+
+      if (this.position === newPosition) {
+        switch (this.position) {
+          case 0:
+            this.bounceLeft();
+            break;
+          case this.sequence.length - 1:
+            this.bounceRight();
+            break;
+        }
       }
 
       var newLeft = -1 * newPosition * this.portRect().width;
@@ -289,7 +319,6 @@ Photoport = (function () {
       var previousPosition = this.position;
       this.position = newPosition;
       this.current = this.sequence[this.position];
-
       this.el().dispatchEvent(new CustomEvent('photoport-navigate', {
         bubbles: true,
         detail: {
@@ -334,7 +363,18 @@ Photoport = (function () {
     },
     count: function () {
       return this.sequence.length;
-    }
+    },
+    bounceLeft: function () {
+      var name = 'photoportBounceLeft-' + (new Date().valueOf());
+      this.dom.keyframes.innerHTML = createBounceKeyframes(name, 0, 1);
+      this.dom.content.style.webkitAnimation = name + ' 350ms linear';
+    },
+    bounceRight: function () {
+      var name = 'photoportBounceRight-' + (new Date().valueOf());
+      var start = parseInt(this.dom.content.style.left, 10);
+      this.dom.keyframes.innerHTML = createBounceKeyframes(name, start, -1);
+      this.dom.content.style.webkitAnimation = name + ' 350ms linear';
+    },
   };
 
   return Photoport;
