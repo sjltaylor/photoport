@@ -845,7 +845,7 @@ describe('photoport', function () {
     describe('when there are two or more elements', function () {
       beforeEach(function () {
         addSomeContentToPhotoport(3);
-        photoport.start();
+        photoport.start().seek(1);
       });
       describe('left handle', function () {
         it('is a left arrow', function () {
@@ -857,6 +857,40 @@ describe('photoport', function () {
         it('is a right arrow', function () {
           expect(photoport.dom.rightHandle.style.display).toBe('table');
           expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
+        });
+      });
+    });
+    describe('in the left-most position', function () {
+      beforeEach(function () {
+        addSomeContentToPhotoport();
+        photoport.start().seek(0);
+      });
+      describe('left handle', function () {
+        it('is not displayed', function () {
+          expect(photoport.dom.leftHandle.style.display).toBe('none');
+        });
+      });
+      describe('right handle', function () {
+        it('is a right arrow', function () {
+          expect(photoport.dom.rightHandle.style.display).toBe('table');
+          expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
+        });
+      });
+    });
+    describe('in the right-most position', function () {
+      beforeEach(function () {
+        addSomeContentToPhotoport();
+        photoport.start().seek('last');
+      });
+      describe('left handle', function () {
+        it('is a left arrow', function () {
+          expect(photoport.dom.leftHandle.style.display).toBe('table');
+          expect(photoport.dom.leftHandleGlyph.classList.contains('fui-triangle-left-large')).toBeTruthy();
+        });
+      });
+      describe('right handle', function () {
+        it('is not displayed', function () {
+          expect(photoport.dom.rightHandle.style.display).toBe('none');
         });
       });
     });
@@ -964,6 +998,12 @@ describe('photoport', function () {
     it('clears the interludeContent', function () {
       photoport.resume();
       expect(photoport.interludeContent).toBeNull();
+    });
+  });
+  describe('count()', function () {
+    it('returns the sequence length', function () {
+      addSomeContentToPhotoport(10);
+      expect(photoport.count()).toBe(10);
     });
   });
 });

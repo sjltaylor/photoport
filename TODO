@@ -1,0 +1,43 @@
+Managing Photos
+
+*/ click-hold event
+  */ intercept click event
+    */ on mouseup/touchend emit photoport-content-action
+    */ on mousedown + timeout emit photoport-content-touchhold
+  */ remove click listener when item is removed from photoport
+*/ click-hold a photo to reveal the management options:
+  */ remove this photo
+*/ upload panel and manage panel are an "interlude"
+  */ photoport.interlude(el);
+     */ hides content
+     */ hides navigation buttons
+  */ photoport.resume()
+*/ upload panel shows
+  */ from file
+  */ drag and drop
+*/zz only allow six photos in a collection
+
+
+* cover the functionality with features, retrospectively unit testing on failure
+
+ON INTERNET
+
+* what does javascript with(obj){} do?
+   -> puts the obj into the current context
+
+---------------------------------------------------------------
+
+
+* upgrade flat-ui
+* upgrade bootstrap and rails too
+* check upload functionality hasn't broken
+* animation option
+* timeout length for click hold wait
+* review behaviour when empty, and calling start/seek
+* add touch support for click-hold
+* consider what events photoport should emit
+  * add a before navigate event ?
+* why doesn't marionette support custom events in the view.events { 'my-event .selector': 'handler' } syntax
+* pushState routing of current photo
+* blur effect for edit panel interlude
+* when the cookie identifies a session that cannot be found do not 404, create a new session

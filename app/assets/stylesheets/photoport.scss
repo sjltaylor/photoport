@@ -24,6 +24,7 @@
     display: table;
     user-select: none;
     -webkit-user-select: none;
+    cursor: default;
 
     .photoport-handle-glyph {
       width: $handleWidth;

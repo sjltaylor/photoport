@@ -36,7 +36,7 @@
 }
 
 .photoport-cms-edit-panel-container {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.85);
 
   .edit-panel {
     width: 100%;
@@ -53,9 +53,9 @@
 
     .controls {
       margin: 0 auto;
-      position: relative;
-      top: 20px;
-      left: 0;
+      position: absolute;
+      bottom: 40px;
+      left: 150px;
       text-align: center;
       width: 300px;
 

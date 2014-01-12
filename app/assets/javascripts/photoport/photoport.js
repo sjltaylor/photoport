@@ -112,7 +112,7 @@ Photoport = (function () {
       style.border   = 'none';
       style.padding  = 0;
       style.outline  = 0;
-      style.cursor   = 'normal';
+      style.cursor   = 'default';
 
       if (!contentDescriptor.el.classList.contains('photoport-element')) {
         contentDescriptor.el.classList.add('photoport-element');
@@ -130,17 +130,18 @@ Photoport = (function () {
       return this;
     },
     updateHandles: function () {
-      var count    = this.sequence.length;
-      var position = this.position;
-      var dom      = this.dom;
+      var count     = this.sequence.length;
+      var position  = this.position;
+      var dom       = this.dom;
+      var start     = this.position === 0;
+      var end       = this.position === (count - 1);
+      var interlude = this.state === 'interlude';
 
-      if (count < 2 || this.state === 'interlude') {
-        dom.leftHandle.style.display = 'none';
-        dom.rightHandle.style.display = 'none';
-      } else {
-        dom.leftHandle.style.display = 'table';
-        dom.rightHandle.style.display = 'table';
-      }
+      var leftHandleDisplay  = (count >= 2) && !start && !interlude ? 'table' : 'none';
+      var rightHandleDisplay = (count >= 2) && !end   && !interlude ? 'table' : 'none';
+
+      dom.leftHandle.style.display  = leftHandleDisplay;
+      dom.rightHandle.style.display = rightHandleDisplay;
     },
     append: function (contentDescriptor) {
       return this.insert(contentDescriptor);
@@ -180,10 +181,9 @@ Photoport = (function () {
       this.fitContent();
 
       var photoport = this;
-      contentDescriptor.mousedownHandler = function () {
+      contentDescriptor.mousedownHandler = function (e) {
 
         var timeout = setTimeout(function () {
-
           contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
 
           photoport.el().dispatchEvent(new CustomEvent('photoport-content-hold', {
@@ -194,7 +194,9 @@ Photoport = (function () {
           }));
         }, 350);
 
-        var mouseupHandler = function () {
+        var mouseupHandler = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
 
           contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
           clearTimeout(timeout);
@@ -336,6 +338,9 @@ Photoport = (function () {
       this.interludeContent = null;
       this.updateHandles();
       return this;
+    },
+    count: function () {
+      return this.sequence.length;
     }
   };
 

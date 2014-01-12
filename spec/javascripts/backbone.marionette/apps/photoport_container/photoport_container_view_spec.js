@@ -1,12 +1,17 @@
 //= require ../../../support/env
 //= require backbone.marionette/apps/photoport_container/photoport_container_view
+//= require backbone.marionette/entities/collection
 
 describe('PhotoportContainer.View', function () {
   var photoportContainerView,
       stubUploadPanel;
 
   beforeEach(function () {
-    stubUploadPanel = fakeContentDescriptor();
+    stubUploadPanel = {
+      photoportContentDescriptor: fakeContentDescriptor(),
+      render: function () {}
+    };
+
     photoportContainerView = new PhotoportCMS.PhotoportContainer.View({
       uploadPanel: stubUploadPanel
     });
@@ -31,19 +36,25 @@ describe('PhotoportContainer.View', function () {
       });
     });
   });
-  describe('showUploadPanel()', function () {
-    it('calls photoport.interlude() with the upload panel element', function () {
-      spyOn(photoportContainerView.photoport, 'interlude');
-      photoportContainerView.showUploadPanel();
-      expect(photoportContainerView.photoport.interlude).toHaveBeenCalledWith({el: stubUploadPanel.el});
+  describe('showPanel()', function () {
+    var fakePanel;
+    beforeEach(function () {
+      fakePanel = new (Marionette.ItemView.extend({}))();
+      fakePanel.el = fakeContentDescriptor.el;
+      spyOn(fakePanel, 'once').andCallThrough();
     });
-  });
-  describe('showEditPanel()', function () {
     it('calls photoport.interlude() with the edit panel element', function () {
-      var editPanel = fakeContentDescriptor;
       spyOn(photoportContainerView.photoport, 'interlude');
-      photoportContainerView.showEditPanel(editPanel);
-      expect(photoportContainerView.photoport.interlude).toHaveBeenCalledWith({el: editPanel.el});
+      photoportContainerView.showPanel(fakePanel);
+      expect(photoportContainerView.photoport.interlude).toHaveBeenCalledWith({el: fakePanel.el});
+    });
+    it('calls resume() on the first and only the first time the panel closes', function () {
+      spyOn(photoportContainerView, 'resume');
+      photoportContainerView.showPanel(fakePanel);
+      fakePanel.trigger('close');
+      fakePanel.trigger('close');
+      expect(fakePanel.once).toHaveBeenCalled();
+      expect(photoportContainerView.resume.callCount).toBe(1);
     });
   });
   describe('resume()', function () {

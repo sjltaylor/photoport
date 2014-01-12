@@ -12,6 +12,11 @@ PhotoportCMS.module('UploadPanel', function (UploadPanel, PhotoportCMS, Backbone
       'dragexit  .js-dropzone'    : 'noopHandler',
       'dragover  .js-dropzone'    : 'noopHandler'
     },
+    initialize: function () {
+      this.photoportContentDescriptor = {
+        el: this.el
+      };
+    },
     handleFileInputChange: function (e) {
       e.stopPropagation();
       e.preventDefault();
@@ -19,7 +24,10 @@ PhotoportCMS.module('UploadPanel', function (UploadPanel, PhotoportCMS, Backbone
       this.triggerFilesSelected(e.target.files);
     },
     handleChooseFilesClick: function () {
-      var clickEvent = new MouseEvent('click', false, false); // click, canBubble, !cancellable
+      var clickEvent = new MouseEvent('click', {
+        bubbles: false,
+        cancellable: false
+      });
       this.el.querySelector('.js-file-input').dispatchEvent(clickEvent);
     },
     handleDrop: function (e) {

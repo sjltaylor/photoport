@@ -14,31 +14,30 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
     },
     onRender: function () {
       this.uploadPanel.render();
+      this.photoport.append(this.uploadPanel.photoportContentDescriptor);
     },
     onShow: function () {
       this.photoport.start();
     },
     add: function (content) {
       this.photoport.append(content);
-      this.photoport.seek('last');
+      this.photoport.seek(this.photoport.count() - 1);
+    },
+    remove: function (content) {
+      this.photoport.remove(content);
     },
     onPhotoportContentHold: function (e) {
-      this.showEditPanel(e.originalEvent.detail.content.editPanel);
-    },
-    showUploadPanel: function () {
-      this.photoport.interlude({
-        el: this.uploadPanel.el
-      });
-    },
-    showEditPanel: function (editPanel) {
-      this.photoport.interlude({
-        el: editPanel.el
-      });
-      var closeHandler = function () {
-        // remove this handler (watch out for .bind(this) !!)
-        // this.resume()
+      if (e.originalEvent.detail.content != this.uploadPanel.photoportContentDescriptor) {
+        this.trigger('edit', e.originalEvent.detail.content);
       }
-      //editPanel.on('close', )
+    },
+    showPanel: function (panel) {
+      this.photoport.interlude({
+        el: panel.el
+      });
+      panel.once('close', function () {
+        this.resume();
+      }, this);
     },
     resume: function () {
       this.photoport.resume();
