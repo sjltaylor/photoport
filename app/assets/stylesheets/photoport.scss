@@ -46,6 +46,7 @@
   }
 
   .photoport-shadow {
+    pointer-events: none;
     box-shadow: 0 0 5px rgba(0,0,0,0.3) inset;
     position: absolute;
     top: $topEdgeWidth - 1;
