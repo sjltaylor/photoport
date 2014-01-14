@@ -53,7 +53,7 @@ describe('photoport', function () {
     });
 
     it('renders a shadow element', function () {
-      expect(container.querySelector('.photoport .photoport-port .photoport-shadow')).not.toBeNull();
+      expect(container.querySelector('.photoport .photoport-shadow')).not.toBeNull();
     });
 
     it('renders handles', function () {
@@ -287,7 +287,6 @@ describe('photoport', function () {
         addSomeContentToPhotoport();
         photoport.start();
       });
-
       it('sets the position', function () {
         expect(photoport.position).toBe(0);
         photoport.seek(2);
@@ -316,6 +315,10 @@ describe('photoport', function () {
           });
         });
         describe('when seeking previous from the first position', function () {
+          beforeEach(function () {
+            resetPhotoport();
+            addSomeContentToPhotoport(1);
+          });
           it('remains in the first position', function () {
             photoport.seek('first');
             var p = photoport.position;
@@ -330,6 +333,10 @@ describe('photoport', function () {
           });
         });
         describe('when seeking next from the last position', function () {
+          beforeEach(function () {
+            resetPhotoport();
+            addSomeContentToPhotoport(1);
+          });
           it('remains in the last position', function () {
             photoport.seek('last');
             var p = photoport.position;

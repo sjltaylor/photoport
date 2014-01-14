@@ -298,21 +298,19 @@ Photoport = (function () {
           break;
       }
 
+      var direction = newPosition > this.position ? 'Right' : 'Left';
+      var bounce = false;
+
       if (newPosition >= this.sequence.length) {
+        bounce = true;
         newPosition = this.sequence.length - 1;
       } else if (newPosition < 0) {
+        bounce = true;
         newPosition = 0;
       }
 
-      if (this.position === newPosition) {
-        switch (this.position) {
-          case 0:
-            this.bounceLeft();
-            break;
-          case this.sequence.length - 1:
-            this.bounceRight();
-            break;
-        }
+      if (bounce) {
+        this['bounce'+direction]();
       }
 
       var newLeft = -1 * newPosition * this.portRect().width;
