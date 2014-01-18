@@ -286,6 +286,7 @@ describe('photoport', function () {
       beforeEach(function () {
         addSomeContentToPhotoport();
         photoport.start();
+        expect(photoport.count()).toBe(5);
       });
       it('sets the position', function () {
         expect(photoport.position).toBe(0);
@@ -298,6 +299,17 @@ describe('photoport', function () {
       it('sets the current content to the element in the sequence at the specified position', function () {
         photoport.seek(2);
         expect(photoport.dom.content.children[2]).toBe(testContent[2].el);
+      });
+      it('adds the "current" class to the current element', function () {
+        photoport.seek(2);
+        expect(photoport.sequence[2].el.classList.contains("current")).toBe(true);
+      });
+      it('removes the "current" class from non-current elements', function () {
+        photoport.seek(2);
+        for (var i = photoport.count() - 1; i >= 0; i--) {
+          if (i == 2) continue;
+          expect(photoport.sequence[i].el.classList.contains("current")).toBe(false);
+        }
       });
       describe('bounds handling', function () {
         it('is seeks up to the length of the sequence', function () {

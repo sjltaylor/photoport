@@ -318,7 +318,13 @@ Photoport = (function () {
       this.dom.content.style.left = newLeft + 'px';
       var previousPosition = this.position;
       this.position = newPosition;
+
+      if ('current' in this) {
+        this.current.el.classList.remove('current');
+      }
       this.current = this.sequence[this.position];
+      this.current.el.classList.add('current');
+
       this.el().dispatchEvent(new CustomEvent('photoport-navigate', {
         bubbles: true,
         detail: {
