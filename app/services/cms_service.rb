@@ -8,4 +8,9 @@ class CmsService
     permissions_service.raise_unless_allowed(:add_photo, context)
     collection.photos.create(photo_uid: file_key).tap{|photo| photo.save!}
   end
+
+  def remove_photo(context)
+    permissions_service.raise_unless_allowed(:remove_photo, context)
+    context[:photo].destroy
+  end
 end

@@ -15,6 +15,13 @@ class PermissionsService
     user == collection.creator
   end
 
+  def remove_photo?(context)
+    user  = context[:user]
+    photo = context[:photo]
+
+    user == photo.creator
+  end
+
   def raise_unless_allowed(operation, context)
     raise NotAllowed unless send("#{operation}?", context)
     return context

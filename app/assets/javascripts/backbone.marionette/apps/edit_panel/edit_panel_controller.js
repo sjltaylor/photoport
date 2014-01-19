@@ -8,7 +8,9 @@ PhotoportCMS.module('EditPanel', function (EditPanel, PhotoportCMS, Backbone, Ma
       var view = new EditPanel.View(opts);
 
       view.once('remove-current', function () {
-        collection.photos.remove(photo);
+        PhotoportCMS.host.photos.remove(photo).done(function () {
+          collection.photos.remove(photo);
+        }).fail(console.error);
       });
 
       return view;

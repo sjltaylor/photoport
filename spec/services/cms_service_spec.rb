@@ -36,4 +36,26 @@ describe CmsService do
       cms_service.permissions_service.should have_received(:raise_unless_allowed).with(:add_photo, context)
     end
   end
+  describe '#remove_photo' do
+    let(:photo) { double(:photo) }
+    let(:return_value) { remove_photo }
+    let(:context) { { photo: photo } }
+
+    before(:each) { photo.stub(destroy: photo) }
+    before(:each) { return_value }
+
+    def remove_photo
+      cms_service.remove_photo(context)
+    end
+
+    it 'checks for permissions' do
+      cms_service.permissions_service.should have_received(:raise_unless_allowed).with(:remove_photo, context)
+    end
+    it 'removes the photo' do
+      photo.should have_received(:destroy).with(no_args)
+    end
+    it 'returns the removed photo' do
+      return_value.should eq photo
+    end
+  end
 end

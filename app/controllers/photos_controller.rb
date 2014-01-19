@@ -1,5 +1,5 @@
 class PhotosController < ApplicationController
-  respond_to :json, only: :create
+  respond_to :json, only: [:create, :destroy]
 
   def create
     photo = cms_service.add_photo(
@@ -19,6 +19,15 @@ class PhotosController < ApplicationController
       end
       format.json do
         render json: photo_presenter.full(photo)
+      end
+    end
+  end
+
+  def destroy
+    respond_to do |format|
+      format.json do
+        cms_service.remove_photo(user: stored_user, photo: Photo.find(params[:id]))
+        render json: {}
       end
     end
   end

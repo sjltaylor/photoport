@@ -8,7 +8,7 @@ Photoport::Application.routes.draw do
   mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
 
   resources :collections, only: [:new, :create] do
-    resources :photos, only: [:create, :show]
+    resources :photos, only: [:create, :show, :destroy]
   end
 
   # resources :collections, only: [] do

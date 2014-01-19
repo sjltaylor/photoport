@@ -7,7 +7,7 @@ PhotoportCMS.module('UploadPanel', function (UploadPanel, PhotoportCMS, Backbone
         var fileKey = jqXHR.photoportCmsMetadata.fileKey;
         console.warn("CALLING HOST WITH FILE KEY: ", fileKey);
 
-        PhotoportCMS.host.addPhoto(collection, fileKey).success(function (photo) {
+        PhotoportCMS.host.photos.create(collection, fileKey).success(function (photo) {
           console.warn("SERVER RESPONSE:", photo);
           collection.photos.add(photo);
         }).fail(function () {

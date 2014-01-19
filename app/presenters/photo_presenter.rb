@@ -4,6 +4,7 @@ class PhotoPresenter
   def full(photo)
     {
       id: photo.id,
+      url: url_helper.collection_photo_url(photo.collection, photo, format: :json),
       download: url_helper.collection_photo_url(photo.collection, photo, format: :jpg)
     }
   end

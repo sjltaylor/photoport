@@ -114,4 +114,25 @@ describe PhotosController do
       controller.should have_received(:render).with(json: full_photo_presentation)
     end
   end
+
+  describe '#destroy' do
+    let(:photo) { double(:photo) }
+    let(:id) { 'fake-id' }
+
+    before(:each) { Photo.stub(:find).with(id).and_return(photo) }
+    before(:each) { cms_service.stub(:remove_photo) }
+    before(:each) { controller.stub(:render) }
+    before(:each) { destroy }
+
+    def destroy
+      delete :destroy, format: :json, id: id, collection_id: 'fake-collection-id'
+    end
+
+    it 'calls the cms service to delete the photo' do
+      cms_service.should have_received(:remove_photo).with(user: stored_user, photo: photo)
+    end
+    it 'renders and empty json object' do
+      controller.should have_received(:render).with(json: {})
+    end
+  end
 end

@@ -33,7 +33,6 @@ describe PermissionsService do
   describe '#add_photo?' do
     let(:collection) { double(:collection, creator: creator) }
     let(:user) { double(:user) }
-
     let(:return_value) { add_photo? }
 
     def add_photo?
@@ -48,6 +47,31 @@ describe PermissionsService do
       end
     end
     context 'when the user is not the creator of the collection' do
+      let(:creator) { double(:another_user) }
+
+      it 'returns false' do
+        return_value.should be false
+      end
+    end
+  end
+
+  describe '#remove_photo?' do
+    let(:photo) { double(:photo, creator: creator) }
+    let(:user) { double(:user) }
+    let(:return_value) { remove_photo? }
+
+    def remove_photo?
+      permissions.remove_photo?(user: user, photo: photo)
+    end
+
+    context 'when the user is the creator of the photo' do
+      let(:creator) { user }
+
+      it 'returns true' do
+        return_value.should be true
+      end
+    end
+    context 'when the user is not the creator of the photo' do
       let(:creator) { double(:another_user) }
 
       it 'returns false' do
