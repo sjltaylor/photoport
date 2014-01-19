@@ -53,7 +53,7 @@ Photoport = (function () {
   }
 
   function createBounceKeyframes(name, start, direction) {
-    var stops = [[0,0], [25,10], [50,50], [75,10], [100,0]];
+    var stops = [[0,0], [25,35], [50,50], [75,35], [100,0]];
 
     var keyframes = '@-webkit-keyframes ' + name + ' {';
 
@@ -373,13 +373,13 @@ Photoport = (function () {
     bounceLeft: function () {
       var name = 'photoportBounceLeft-' + (new Date().valueOf());
       this.dom.keyframes.innerHTML = createBounceKeyframes(name, 0, 1);
-      this.dom.content.style.webkitAnimation = name + ' 350ms linear';
+      this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
     bounceRight: function () {
       var name = 'photoportBounceRight-' + (new Date().valueOf());
       var start = parseInt(this.dom.content.style.left, 10);
       this.dom.keyframes.innerHTML = createBounceKeyframes(name, start, -1);
-      this.dom.content.style.webkitAnimation = name + ' 350ms linear';
+      this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
   };
 
