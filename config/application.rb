@@ -51,7 +51,7 @@ module Photoport
     config.assets.enabled = true
 
     # include FlatUI
-    config.assets.paths << Rails.root.join('app', 'assets', 'flat-ui')
+    config.assets.paths << Rails.root.join('vendor', 'assets', 'flat-ui')
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'

@@ -5,25 +5,27 @@
 @import "photoport";
 @import "photoport_cms";
 
-/*body {
-  background-color: #ff5510;
-}*/
-
 #main {
   width: 700px;
   margin: 40px auto;
 
-  #page_heading {
+  #top {
+    width: 550px;
+    margin: 0 auto;
+    text-align: right;
 
-    position: relative;
-    margin: 30px;
+    .save-prompt {
+      font-size: 14px;
+      color: #aaa;
 
-    h1 {
-      position: relative;
-      display: inline-block;
-      font-size: 50px;
-      font-weight: 400;
-      margin: 5px 0;
+      .btn.save {
+        margin: 5px 10px 10px;
+        width: 50px;
+      }
     }
+  }
+
+  #page_body {
+    margin-top: 45px;
   }
 }

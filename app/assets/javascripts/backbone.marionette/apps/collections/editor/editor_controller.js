@@ -3,8 +3,6 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
   Editor.Controller = {
     show: function () {
       var layout = new Editor.Layout();
-      PhotoportCMS.mainRegion.show(layout);
-
       var collection = new PhotoportCMS.Collection(PHOTOPORT_CMS.collection);
 
       var uploadPanel =  PhotoportCMS.UploadPanel.Controller.makeView({
@@ -16,6 +14,12 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
         uploadPanel: uploadPanel
       });
 
+      // listen to identify event
+      // create and show an identify view with the current user
+      // listen to an event on the user model
+      // show the photoport view which should now not have the save prompt
+
+      PhotoportCMS.mainRegion.show(layout);
       layout.contentRegion.show(photoportContainer);
     }
   };
