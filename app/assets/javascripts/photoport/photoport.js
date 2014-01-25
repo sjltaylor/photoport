@@ -45,6 +45,7 @@ Photoport = (function () {
 
     dom.interlude.style.display = 'none';
     dom.keyframes.classList.add('photoport-bounce-keyframes');
+
     return dom;
   }
 
@@ -68,6 +69,10 @@ Photoport = (function () {
     return keyframes;
   }
 
+  function onAnimationEnd () {
+
+  }
+
   function Photoport (options) {
     checkOptions(options);
     this.container = options.container;
@@ -88,8 +93,9 @@ Photoport = (function () {
       this.previous();
     }.bind(this));
 
-    this.dom.content.addEventListener('animationend', function () {
+    this.dom.content.addEventListener('webkitAnimationEnd', function () {
       this.dom.content.style.webkitAnimation = '';
+      this.dom.keyframes.innerHTML = '';
     }.bind(this));
   }
 
