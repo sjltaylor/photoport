@@ -7,15 +7,19 @@
 
 describe('EditorController', function () {
   var controller = PhotoportCMS.CollectionsApp.Editor.Controller;
+  var layoutFake;
 
-  describe('show()', function () {
+  beforeEach(function () {
+    layoutFake = { contentRegion: jasmine.createSpyObj('contentRegion', ['show']) };
+    spyOn(PhotoportCMS.CollectionsApp.Editor, 'Layout').andReturn(layoutFake);
+  });
+
+  describe('run()', function () {
     var layoutFake, collectionFake;
 
     beforeEach(function () {
-      layoutFake     = { contentRegion: jasmine.createSpyObj('contentRegion', ['show']) };
       collectionFake = { photos: new Backbone.Collection([]) };
 
-      spyOn(PhotoportCMS.CollectionsApp.Editor, 'Layout').andReturn(layoutFake);
       spyOn(PhotoportCMS.mainRegion, 'show');
       spyOn(PhotoportCMS, 'Collection').andCallFake(function () {
         return collectionFake;
@@ -23,7 +27,7 @@ describe('EditorController', function () {
     });
 
     it('create and shows an editor layout in the main region of the app', function () {
-      controller.show();
+      controller.run();
       expect(PhotoportCMS.CollectionsApp.Editor.Layout).toHaveBeenCalled();
       expect(PhotoportCMS.mainRegion.show).toHaveBeenCalledWith(layoutFake);
     });
@@ -31,14 +35,14 @@ describe('EditorController', function () {
       layoutFake.contentRegion.show.andCallFake(function (e) {
         expect(e instanceof PhotoportCMS.PhotoportContainer.View).toBe(true);
       });
-      controller.show();
+      controller.run();
       expect(layoutFake.contentRegion.show).toHaveBeenCalled();
     });
     it('creates a photoport container with an upload panel', function () {
       var uploadPanelFake = {};
       spyOn(PhotoportCMS.UploadPanel.Controller, 'makeView').andReturn(uploadPanelFake);
       spyOn(PhotoportCMS.PhotoportContainer.Controller, 'makeView');
-      controller.show();
+      controller.run();
       expect(PhotoportCMS.PhotoportContainer.Controller.makeView).toHaveBeenCalledWith({
         collection: collectionFake,
         uploadPanel: uploadPanelFake

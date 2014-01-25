@@ -1,0 +1,17 @@
+.photoport-container {
+  .save-prompt {
+    width: 550px;
+    margin: 0 auto;
+    text-align: right;
+
+    p {
+      font-size: 14px;
+      color: #aaa;
+
+      .btn.save {
+        margin: 5px 10px 10px;
+        width: 50px;
+      }
+    }
+  }
+}

@@ -1,23 +1,31 @@
 //= require photoport/photoport
+//= require templates/photoport_container
+
 
 PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, PhotoportCMS, Backbone, Marionette, $, _) {
   PhotoportContainer.View = Marionette.ItemView.extend({
+    template: 'photoport_container',
     className: 'photoport-container',
     events: {
-      'photoport-content-hold': 'onPhotoportContentHold'
+      'photoport-content-hold': 'onPhotoportContentHold',
+      'click .js-save': 'onSave'
     },
     initialize: function () {
       this.uploadPanel = this.options.uploadPanel;
       this.photoport = new Photoport({
-        container: this.el
+        container: document.createElement('DIV')
       });
       this.photoport.append(this.uploadPanel.photoportContentDescriptor);
     },
     onRender: function () {
       this.uploadPanel.render();
+      this.$el.append(this.photoport.container);
     },
     onShow: function () {
       this.photoport.start();
+    },
+    onSave: function () {
+      this.trigger('save');
     },
     add: function (content) {
       var penultimatePosition = this.photoport.count() - 1;

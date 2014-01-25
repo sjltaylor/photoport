@@ -26,13 +26,23 @@ describe('PhotoportContainer.View', function () {
     };
   }
 
+  describe('events', function () {
+    describe('when the user clicks save', function () {
+      it('triggers a save event on the view', function () {
+        var spy = jasmine.createSpy('save event handler');
+        photoportContainerView.on('save', spy);
+        photoportContainerView.$('.js-save').click();
+        expect(spy).toHaveBeenCalled();
+      });
+    });
+  });
   describe('constructor', function () {
     it('assigns the uploadPanel option to itself', function () {
       expect(photoportContainerView.uploadPanel).toBe(stubUploadPanel);
     });
     describe('associated photoport', function () {
-      it('is created with the view root el as the container', function () {
-        expect(photoportContainerView.photoport.container).toBe(photoportContainerView.el);
+      it('is created with the a new el as the container', function () {
+        expect(photoportContainerView.photoport.container).toBe(photoportContainerView.el.lastChild);
       });
     });
   });
