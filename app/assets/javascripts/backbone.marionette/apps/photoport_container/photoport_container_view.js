@@ -10,30 +10,51 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       'photoport-content-hold': 'onPhotoportContentHold',
       'click .js-save': 'onSave'
     },
+    ui: {
+      savePrompt: ".save-prompt"
+    },
     initialize: function () {
-      this.uploadPanel = this.options.uploadPanel;
+      _.extend(this, this.options);
+
       this.photoport = new Photoport({
         container: document.createElement('DIV')
       });
       this.photoport.append(this.uploadPanel.photoportContentDescriptor);
+
+      this.collection.photos.each(function (photo) {
+        this.__add__(photo);
+      }, this);
+
+      this.listenTo(this.collection.photos, 'add'   , this.__add__);
+      this.listenTo(this.collection.photos, 'remove', this.__remove__);
+
+      this.once('show', function () {
+        this.photoport.seek(0);
+      }, this);
     },
     onRender: function () {
       this.uploadPanel.render();
       this.$el.append(this.photoport.container);
+      this.update = this.__update__;
     },
     onShow: function () {
       this.photoport.start();
+      this.update();
     },
     onSave: function () {
       this.trigger('save');
     },
-    add: function (content) {
+    __add__: function (photo) {
+      var content = this.contentDescriptorDelegate(photo);
       var penultimatePosition = this.photoport.count() - 1;
       this.photoport.insert(content, penultimatePosition);
       this.photoport.seek(penultimatePosition);
+      this.update();
     },
-    remove: function (content) {
+    __remove__: function (photo) {
+      var content = this.contentDescriptorDelegate(photo);
       this.photoport.remove(content);
+      this.update();
     },
     onPhotoportContentHold: function (e) {
       if (e.originalEvent.detail.content != this.uploadPanel.photoportContentDescriptor) {
@@ -47,6 +68,16 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       panel.once('close', function () {
         this.resume();
       }, this);
+    },
+    update: function () {
+      // noop
+    },
+    __update__: function () {
+      if (this.collection.photos.length) {
+        this.ui.savePrompt.show();
+      } else {
+        this.ui.savePrompt.hide();
+      }
     },
     resume: function () {
       this.photoport.resume();
