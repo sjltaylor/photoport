@@ -1,7 +1,7 @@
 PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Backbone, Marionette, $, _) {
 
   Editor.Controller = {
-    show: function () {
+    run: function () {
       var layout = new Editor.Layout();
       var collection = new PhotoportCMS.Collection(PHOTOPORT_CMS.collection);
 
@@ -9,18 +9,23 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
         collection: collection
       });
 
-      var photoportContainer = PhotoportCMS.PhotoportContainer.Controller.makeView({
+      var photoportContainerView = PhotoportCMS.PhotoportContainer.Controller.makeView({
         collection: collection,
         uploadPanel: uploadPanel
       });
 
-      // listen to identify event
-      // create and show an identify view with the current user
-      // listen to an event on the user model
-      // show the photoport view which should now not have the save prompt
+      var identifyView = PhotoportCMS.Identify.Controller.makeView();
+
+      photoportContainerView.on('save', function () {
+        layout.contentRegion.show(identifyView);
+      });
+
+      identifyView.on('cancel-save', function () {
+        layout.contentRegion.show(photoportContainerView);
+      });
 
       PhotoportCMS.mainRegion.show(layout);
-      layout.contentRegion.show(photoportContainer);
+      layout.contentRegion.show(photoportContainerView);
     }
   };
 });

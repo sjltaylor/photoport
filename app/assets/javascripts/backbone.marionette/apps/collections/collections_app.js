@@ -8,7 +8,7 @@ PhotoportCMS.module('CollectionsApp', function(CollectionsApp, PhotoportCMS, Bac
 
   var api = {
     'editor': function(){
-      CollectionsApp.Editor.Controller.show();
+      CollectionsApp.Editor.Controller.run();
     }
   };
 
