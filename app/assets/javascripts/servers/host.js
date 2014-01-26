@@ -25,6 +25,17 @@
           dataType: 'json'
         });
       }
+    },
+    users: {
+      identify: function (user, credentials) {
+        return $.ajax({
+          type: "POST",
+          url: user.get('identify'),
+          headers: headers(),
+          data: credentials,
+          dataType: 'json'
+        });
+      }
     }
   };
 })();

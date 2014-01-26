@@ -5,16 +5,32 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
     template: 'identify',
     className: 'identify-view',
     events: {
-      'click .js-cancel': 'onCancelSave'
+      'click .js-cancel': 'onCancelSave',
+      'submit form': 'onSave'
     },
     ui: {
-      emailField: 'form input[name="email"]'
+      emailField: 'form input[name="email"]',
+      passwordField: 'form input[name="password"]'
     },
     onCancelSave: function () {
-      this.trigger('cancel-save');
+      this.trigger('close-save');
     },
     onShow: function () {
       this.ui.emailField.focus();
+    },
+    onSave: function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      this.trigger('save', {
+        emailAddress: this.ui.emailField.val(),
+        password: this.ui.passwordField.val()
+      });
+    },
+    dismiss: function () {
+      this.trigger('close-save');
+    },
+    showError: function (errorMessage) {
+      alert(errorMessage);
     }
   });
 });
