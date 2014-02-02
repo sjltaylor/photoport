@@ -2,4 +2,8 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  identify:
+    login: "Hello again"
+    new: "Welcome"
+    password_mismatch: "Wrong password"
+    weak_password: "Password must be at least eight characters"
