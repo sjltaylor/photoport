@@ -58,4 +58,40 @@ describe CmsService do
       return_value.should eq photo
     end
   end
+  describe '#show_default_data' do
+    let(:identity) { double(:identity) }
+    let(:context) { { identity: identity } }
+
+    def show_default_data
+      cms_service.show_default_data(identity: identity)
+    end
+
+    before(:each) do
+      identity.stub(:collections => collections)
+    end
+
+    context 'when the identity has collections' do
+      let(:collections) { ['first', 'second'] }
+      it 'returns the first' do
+        show_default_data.should be collections[0]
+      end
+    end
+    context 'when the identity has no collections' do
+      let(:collections) { double(:collections, :empty? => true) }
+      let(:new_collection) { double(:new_collection) }
+
+      before(:each) do
+        collections.stub(:first => new_collection)
+        identity.collections.stub(:create => new_collection)
+      end
+
+      it 'creates a collection' do
+        show_default_data
+        collections.should have_received(:create)
+      end
+      it 'returns the newly created collection' do
+        show_default_data.should be new_collection
+      end
+    end
+  end
 end
