@@ -25,15 +25,51 @@ describe PasswordSec do
       '1sixty!CHS' * 16
     ]
 
+    def secure_password?(candidate)
+      described_class.secure_password?(candidate)
+    end
+
     rejectable_examples.each do |candidate|
       it "rejects an insufficiently strong password: '#{candidate}'" do
-        PasswordSec.strong_password?(candidate).should be false
+        secure_password?(candidate).should be false
       end
     end
 
     acceptable_examples.each do |candidate|
       it "accepts a sufficiently strong password: '#{candidate}'" do
-        PasswordSec.strong_password?(candidate).should be true
+        secure_password?(candidate).should be true
+      end
+    end
+  end
+  describe '#barely_secure_password?(password)' do
+    # passwords must be at least 8 characters
+    rejectable_examples = [
+      'passwor',
+      '1234567'
+    ]
+
+    acceptable_examples = [
+      'password',
+      '12345678',
+      '8charsINCL@@@',
+      'M1nimal!',
+      'ej467%HJEK2193@£.Pl',
+      '1sixty!CHS' * 16
+    ]
+
+    def barely_secure_password?(candidate)
+      described_class.barely_secure_password?(candidate)
+    end
+
+    rejectable_examples.each do |candidate|
+      it "rejects an insufficiently strong password: '#{candidate}'" do
+        barely_secure_password?(candidate).should be false
+      end
+    end
+
+    acceptable_examples.each do |candidate|
+      it "accepts a sufficiently strong password: '#{candidate}'" do
+        barely_secure_password?(candidate).should be true
       end
     end
   end
