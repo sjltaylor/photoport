@@ -1,7 +1,5 @@
 Photoport::Application.routes.draw do
 
-  devise_for :users
-
   root :to => 'collections#new'
   get 'status' => 'status#index'
 
@@ -10,6 +8,8 @@ Photoport::Application.routes.draw do
   resources :collections, only: [:new, :create] do
     resources :photos, only: [:create, :show, :destroy]
   end
+
+  post 'users/identify' => 'users#identify'
 
   # resources :collections, only: [] do
   #

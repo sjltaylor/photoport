@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 4.0.2'
 gem 'pg'
-gem 'devise'
+
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
@@ -20,7 +20,7 @@ gem 'unf'
 gem 'dragonfly', '~> 0.9.15'
 gem 'aasm'
 gem 'better_errors'
-
+gem 'bcrypt-ruby'
 gem 'blobject'
 
 group :test do
