@@ -1,14 +1,14 @@
-class User < ActiveRecord::Base
+class Identity < ActiveRecord::Base
   include AASM
 
   has_many :collections, foreign_key: :creator_id
 
   aasm(column: :status) do
-    state :stranger, initial: true
-    state :registered
+    state :anonymous, initial: true
+    state :identified
 
-    event :register do
-      transitions from: :stranger, to: :registered
+    event :identify do
+      transitions from: :anonymous, to: :identified
     end
   end
 
@@ -18,6 +18,6 @@ class User < ActiveRecord::Base
   end
 
   def self.find_by_email_address(email_address)
-    User.where("lower(email_address) = lower(?)", email_address).first
+    where("lower(email_address) = lower(?)", email_address).first
   end
 end
