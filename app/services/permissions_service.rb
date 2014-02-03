@@ -2,24 +2,24 @@ class PermissionsService
   class NotAllowed < StandardError; end
 
   def download_photo?(context)
-    user  = context[:user]
-    photo = context[:photo]
+    identity = context[:identity]
+    photo    = context[:photo]
 
-    user == photo.collection.creator
+    identity == photo.collection.creator
   end
 
   def add_photo?(context)
-    user       = context[:user]
+    identity   = context[:identity]
     collection = context[:collection]
 
-    user == collection.creator
+    identity == collection.creator
   end
 
   def remove_photo?(context)
-    user  = context[:user]
-    photo = context[:photo]
+    identity = context[:identity]
+    photo    = context[:photo]
 
-    user == photo.creator
+    identity == photo.creator
   end
 
   def raise_unless_allowed(operation, context)

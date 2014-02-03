@@ -6,23 +6,23 @@ describe PermissionsService do
   describe '#download_photo?' do
     let(:collection) { double(:collection, creator: creator) }
     let(:photo) { double(:photo, collection: collection) }
-    let(:user) { double(:user) }
+    let(:identity) { double(:identity) }
 
     let(:return_value) { download_photo? }
 
     def download_photo?
-      permissions.download_photo?(user: user, photo: photo)
+      permissions.download_photo?(identity: identity, photo: photo)
     end
 
-    context 'when the user is the creator of the collection to which the photo belongs' do
-      let(:creator) { user }
+    context 'when the identity is the creator of the collection to which the photo belongs' do
+      let(:creator) { identity }
 
       it 'returns true' do
         return_value.should be true
       end
     end
-    context 'when the user is not creator of the collection to which the photo belongs' do
-      let(:creator) { double(:another_user) }
+    context 'when the identity is not creator of the collection to which the photo belongs' do
+      let(:creator) { double(:another_identity) }
 
       it 'returns false' do
         return_value.should be false
@@ -32,22 +32,22 @@ describe PermissionsService do
 
   describe '#add_photo?' do
     let(:collection) { double(:collection, creator: creator) }
-    let(:user) { double(:user) }
+    let(:identity) { double(:identity) }
     let(:return_value) { add_photo? }
 
     def add_photo?
-      permissions.add_photo?(user: user, collection: collection)
+      permissions.add_photo?(identity: identity, collection: collection)
     end
 
-    context 'when the user is the creator of the collection' do
-      let(:creator) { user }
+    context 'when the identity is the creator of the collection' do
+      let(:creator) { identity }
 
       it 'returns true' do
         return_value.should be true
       end
     end
-    context 'when the user is not the creator of the collection' do
-      let(:creator) { double(:another_user) }
+    context 'when the identity is not the creator of the collection' do
+      let(:creator) { double(:another_identity) }
 
       it 'returns false' do
         return_value.should be false
@@ -57,22 +57,22 @@ describe PermissionsService do
 
   describe '#remove_photo?' do
     let(:photo) { double(:photo, creator: creator) }
-    let(:user) { double(:user) }
+    let(:identity) { double(:identity) }
     let(:return_value) { remove_photo? }
 
     def remove_photo?
-      permissions.remove_photo?(user: user, photo: photo)
+      permissions.remove_photo?(identity: identity, photo: photo)
     end
 
-    context 'when the user is the creator of the photo' do
-      let(:creator) { user }
+    context 'when the identity is the creator of the photo' do
+      let(:creator) { identity }
 
       it 'returns true' do
         return_value.should be true
       end
     end
-    context 'when the user is not the creator of the photo' do
-      let(:creator) { double(:another_user) }
+    context 'when the identity is not the creator of the photo' do
+      let(:creator) { double(:another_identity) }
 
       it 'returns false' do
         return_value.should be false
