@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe IdentityService do
-  let(:identity_service) { described_class.resolve }
+describe IdentificationService do
+  let(:identification_service) { described_class.resolve }
 
   describe '#record_new_identity' do
-    let(:identity) { identity_service.record_new_identity }
+    let(:identity) { identification_service.record_new_identity }
     it 'creates and returns a new identity' do
       identity.should be_instance_of Identity
       identity.should_not be_new_record
@@ -34,7 +34,7 @@ describe IdentityService do
     before(:each) { Identity.stub(:find_by_email_address).with(credentials[:email_address]).and_return(existing_identity) }
 
     def identify
-      identity_service.identify(identity: identity, credentials: credentials)
+      identification_service.identify(identity: identity, credentials: credentials)
     end
 
     shared_examples_for 'successful identification' do

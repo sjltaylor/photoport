@@ -9,7 +9,7 @@ module Presenters
     @collection_presenter ||= CollectionPresenter.resolve(url_helper: self)
   end
 
-  def user_presenter
-    @user_presenter ||= UserPresenter.resolve(url_helper: self)
+  def identification_presenter
+    @identification_presenter ||= IdentificationPresenter.resolve(url_helper: self)
   end
 end

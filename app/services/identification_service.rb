@@ -1,6 +1,6 @@
 require 'bcrypt'
 
-class IdentityService
+class IdentificationService
   include BCrypt
 
   def record_new_identity(context={})

@@ -9,7 +9,7 @@ Photoport::Application.routes.draw do
     resources :photos, only: [:create, :show, :destroy]
   end
 
-  post 'users/identify' => 'users#identify'
+  post 'identify' => 'identities#create'
 
   # resources :collections, only: [] do
   #

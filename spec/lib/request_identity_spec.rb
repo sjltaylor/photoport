@@ -2,8 +2,8 @@ require 'spec_helper'
 
 describe RequestIdentity do
   let(:instance) { Object.new.extend(RequestIdentity) }
-  let(:identity_service) { double(:identity_service) }
-  before(:each) { instance.stub(:identity_service).and_return(identity_service) }
+  let(:identification_service) { double(:identification_service) }
+  before(:each) { instance.stub(:identification_service).and_return(identification_service) }
 
   describe '#request_identity' do
     let(:session) { { identity_id: identity_id } }
@@ -33,11 +33,11 @@ describe RequestIdentity do
       let(:identity_id) { nil }
       let(:new_identity) { double(:new_identity, id: 1443) }
 
-      before(:each) { identity_service.stub(:create_identity).with(no_args).and_return(new_identity) }
+      before(:each) { identification_service.stub(:create_identity).with(no_args).and_return(new_identity) }
 
       it 'creates and returns a identity' do
         request_identity.should be new_identity
-        identity_service.should have_received(:create_identity).with(no_args)
+        identification_service.should have_received(:create_identity).with(no_args)
       end
       it 'stores the new identitys id in the session' do
         request_identity
