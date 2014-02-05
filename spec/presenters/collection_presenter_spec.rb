@@ -5,21 +5,45 @@ describe CollectionPresenter do
   let(:collection_presenter) { described_class.resolve(url_helper: url_helper) }
   let(:collection) { double(:collection, id: 3232, photos: (1..10).map{|i| double("photo_#{i}")}) }
 
-  describe '#full' do
-    let(:full) { collection_presenter.full(collection) }
+  describe '#collection(collection)' do
+    let(:collection_presentation) { collection_presenter.collection(collection) }
     let(:add_photo_url) { 'add/photo/url' }
 
-    before(:each) { collection_presenter.photo_presenter.stub(:full).and_return(:photo_presentation) }
+    before(:each) { collection_presenter.stub(:photo).and_return(:photo_presentation) }
     before(:each) { url_helper.stub(:collection_photos_url).with(collection).and_return(add_photo_url) }
 
     it 'includes the id' do
-      full[:id].should be collection.id
+      collection_presentation[:id].should be collection.id
     end
     it 'includes photos' do
-      full[:photos].should(eq(collection.photos.map{:photo_presentation}))
+      collection_presentation[:photos].should(eq(collection.photos.map{:photo_presentation}))
     end
     it 'includes a url to add a new photo' do
-      full[:add].should be add_photo_url
+      collection_presentation[:add].should be add_photo_url
+    end
+  end
+
+  describe '#photo(photo)' do
+    let(:photo_file_url) { 'url/to/image' }
+    let(:photo_url) { 'url/to/photo' }
+    let(:photo) { double(:photo, collection: double(:collection), id: 443) }
+    before(:each) { url_helper.stub(:collection_photo_url).with(photo.collection, photo, format: :jpg).and_return(photo_file_url) }
+    before(:each) { url_helper.stub(:collection_photo_url).with(photo.collection, photo, format: :json).and_return(photo_url) }
+
+    let(:photo_presentation) { collection_presenter.photo(photo) }
+
+    it 'includes a url of the image file' do
+      photo_presentation[:download].should be photo_file_url
+      url_helper.should have_received(:collection_photo_url).with(photo.collection, photo, format: :jpg)
+    end
+
+    it 'includes a url of the photo data' do
+      photo_presentation[:url].should be photo_url
+      url_helper.should have_received(:collection_photo_url).with(photo.collection, photo, format: :json)
+    end
+
+    it 'includes the photo id' do
+      photo_presentation[:id].should be photo.id
     end
   end
 end
