@@ -4,16 +4,16 @@ describe CollectionsController do
   describe '#new' do
     let(:collection_presentation) {double(:collection_presentation)}
     let(:show_default_data) { double(:show_default_data)}
-    let(:stored_user) {double(:stored_user) }
-    let(:user_service) { double(:user_service)}
+    let(:request_identity) {double(:request_identity) }
+    let(:cms_service) { double(:cms_service)}
     let(:collection_presenter) {double(:collection_presenter)}
 
     before(:each) do
-      controller.stub(:stored_user => stored_user)
+      controller.stub(:request_identity => request_identity)
       controller.stub(:collection_presenter => collection_presenter)
-      collection_presenter.stub(:full => collection_presentation)
-      controller.stub(:user_service => user_service)
-      user_service.stub(:show_default_data).with(user: stored_user).and_return(show_default_data)
+      collection_presenter.stub(:collection => collection_presentation)
+      controller.stub(:cms_service => cms_service)
+      cms_service.stub(:show_default_data).with(identity: request_identity).and_return(show_default_data)
       controller.stub(:render)
     end
 

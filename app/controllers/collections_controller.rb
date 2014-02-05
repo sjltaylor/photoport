@@ -1,5 +1,5 @@
 class CollectionsController < ApplicationController
   def new
-    render(locals: {collection: collection_presenter.full(user_service.show_default_data(user: stored_user))})
+    render(locals: {collection: collection_presenter.collection(cms_service.show_default_data(identity: request_identity))})
   end
 end
