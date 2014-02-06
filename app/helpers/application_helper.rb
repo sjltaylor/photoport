@@ -1,10 +1,11 @@
 module ApplicationHelper
+  include Services
+  include Presenters
+  include RequestIdentity
 
-  def photoport_cms_user
-    {
-      'userId'    => user_signed_in? ? current_user.id : nil,
-      'sessionId' => session.id
-    }
+  def request_identity
+    request_identity = super
+    identification_presenter.identity(request_identity)
   end
 
   def templates *args

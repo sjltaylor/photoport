@@ -32,7 +32,7 @@
           type: "POST",
           url: user.get('identify'),
           headers: headers(),
-          data: credentials,
+          data: { credentials: credentials },
           dataType: 'json'
         });
       }

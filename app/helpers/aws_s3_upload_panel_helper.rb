@@ -2,16 +2,16 @@ require 'base64'
 require 'ostruct'
 
 module AwsS3UploadPanelHelper
-
   def aws_s3_upload_panel
-    @aws_s3_upload_panel ||= AwsS3UploadPanelConfiguration.new(self)
+    @aws_s3_upload_panel ||= AwsS3UploadPanelConfiguration.new(session)
   end
 
   class AwsS3UploadPanelConfiguration
-    attr_accessor :controller
+    include RequestIdentity
+    attr_accessor :session
 
-    def initialize(controller)
-      self.controller = controller
+    def initialize(session)
+      self.session = session
     end
 
     def policy
@@ -54,10 +54,10 @@ module AwsS3UploadPanelHelper
 
     protected
     def upload_key
-      if controller.user_signed_in?
-        "ul/user/#{controller.current_user.id}"
+      if request_identity.identified?
+        "ul/user/#{request_identity.id}"
       else
-        "ul/session/#{controller.session.id}"
+        "ul/session/#{session.id}"
       end
       .concat('/{fileKey}')
     end

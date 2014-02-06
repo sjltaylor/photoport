@@ -3,7 +3,7 @@ require 'bcrypt'
 class IdentificationService
   include BCrypt
 
-  def record_new_identity(context={})
+  def create_identity(context={})
     Identity.create.tap {|identity| identity.collections.create }
   end
   def identify(context={})
@@ -28,7 +28,6 @@ class IdentificationService
       end
     else
       if Password.new(existing_identity.password_hash) == password
-        # identities collections become owned by exiting identities
         Collection.where(creator_id: identity.id).update_all(creator_id: existing_identity.id)
         identity.destroy!
         identity = existing_identity
@@ -37,9 +36,6 @@ class IdentificationService
         error = 'identify.password_mismatch'
         message = I18n.t(error)
       end
-      # match the passwords using secure password comparison from PasswordSec
-      # set an error and return if the password don't match
-      # merge
     end
 
     {

@@ -3,8 +3,8 @@ require 'spec_helper'
 describe IdentificationService do
   let(:identification_service) { described_class.resolve }
 
-  describe '#record_new_identity' do
-    let(:identity) { identification_service.record_new_identity }
+  describe '#create_identity' do
+    let(:identity) { identification_service.create_identity }
     it 'creates and returns a new identity' do
       identity.should be_instance_of Identity
       identity.should_not be_new_record
