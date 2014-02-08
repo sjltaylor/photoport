@@ -69,10 +69,6 @@ Photoport = (function () {
     return keyframes;
   }
 
-  function onAnimationEnd () {
-
-  }
-
   function Photoport (options) {
     checkOptions(options);
     this.container = options.container;
@@ -377,6 +373,10 @@ Photoport = (function () {
 
       var previousPosition = this.position;
       this.position = newPosition;
+
+      if (newPosition === previousPosition) {
+        setTimeout(deferred.resolve.bind(deferred), 0);
+      }
 
       if ('current' in this) {
         this.current.el.classList.remove('current');

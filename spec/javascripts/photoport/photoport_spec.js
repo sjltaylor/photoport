@@ -38,7 +38,7 @@ describe('photoport', function () {
   }
 
   function deferredSpy () {
-    var deferred = jasmine.createSpyObj('deferred', ['resolve']);
+    var deferred = jasmine.createSpyObj('deferred', ['resolve', 'done']);
     spyOn(Photoport, 'Deferred').andReturn(deferred);
     spyOn(deferred.resolve, 'bind').andReturn(deferred.resolve);
     return deferred;
@@ -453,6 +453,14 @@ describe('photoport', function () {
           expect(args.bubbles).toBe(true);
         });
       });
+      describe('seeking to the same position', function () {
+        it('resolves the deferred on next tick', function () {
+          photoport.seek(0);
+          spyOn(window, 'setTimeout');
+          photoport.seek(0);
+          expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
+        });
+      });
     });
     describe('when no content has been added', function () {
       it('throws an exception', function () {
@@ -858,11 +866,6 @@ describe('photoport', function () {
           expect(eventArgs.detail.deferred).toBe(deferred);
         });
       });
-      it('calls fitContent()', function () {
-        spyOn(photoport, 'fitContent');
-        photoport.remove(content);
-        expect(photoport.fitContent).toHaveBeenCalled();
-      });
       describe('when the content is before the current position', function () {
         beforeEach(function () {
           content = testContent[1];
@@ -1080,7 +1083,7 @@ describe('photoport', function () {
           rtn = deferred.resolve();
         });
 
-        describe('when the defered is not yet resolved', function () {
+        describe('when the deferred is not yet resolved', function () {
           it('sets isResolved to true', function () {
             expect(deferred.isResolved).toBe(true);
           });
@@ -1121,7 +1124,7 @@ describe('photoport', function () {
           return deferred.done(fn);
         }
 
-        describe('when the defered is not yet resolved', function () {
+        describe('when the deferred is not yet resolved', function () {
           it('adds the callback to the list of callbacks', function () {
             expect(deferred.queues.done.indexOf(callback2)).toBe(1);
           });
