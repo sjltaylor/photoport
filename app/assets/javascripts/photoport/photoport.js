@@ -259,9 +259,10 @@ Photoport = (function () {
 
       return deferred;
     },
-    remove: function (content) {
-      var index = this.sequence.indexOf(content);
+    remove: function (contentToRemove) {
+      var index = this.sequence.indexOf(contentToRemove);
       var deferred;
+      var removedFirstItem = false;
 
       if (index === -1) {
         deferred = new Photoport.Deferred();
@@ -275,25 +276,41 @@ Photoport = (function () {
         if (this.sequence.length === 1) {
           this.position = null;
         } else {
-          deferred = this.seek(decr(this.position));
+          if (this.position === 0) {
+            removedFirstItem = true;
+            deferred = this.seek(1);
+          } else {
+            deferred = this.seek(decr(this.position));
+          }
         }
       }
 
       this.sequence.splice(index, 1);
-      this.dom.content.removeChild(content.el);
-      this.fitContent();
-
-      content.el.removeEventListener('mousedown', content.mousedownHandler);
+      contentToRemove.el.removeEventListener('mousedown', contentToRemove.mousedownHandler);
 
       if (deferred === undefined) {
         deferred = new Photoport.Deferred();
         setTimeout(deferred.resolve.bind(deferred), 0);
       }
 
+      deferred.done(function () {
+        if(removedFirstItem) {
+          this.dom.content.style.transitionDuration = 0;
+          this.dom.content.style.left = 0;
+          this.dom.content.removeChild(contentToRemove.el);
+          // we want the transitionDuration to be restored on the next tick; allow the dom to be updated
+          setTimeout(function () { this.dom.content.style.transitionDuration = ''; }.bind(this), 0);
+          this.position = 0;
+        } else {
+          this.dom.content.removeChild(contentToRemove.el);
+        }
+        this.fitContent();
+      }.bind(this));
+
       this.el().dispatchEvent(new CustomEvent('photoport-content-remove', {
         bubbles: true,
         detail: {
-          content: content,
+          content: contentToRemove,
           deferred: deferred
         }
       }));
