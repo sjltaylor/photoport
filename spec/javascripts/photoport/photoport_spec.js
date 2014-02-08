@@ -283,18 +283,27 @@ describe('photoport', function () {
   });
   describe('seek(position)', function () {
     describe('when photoport has content', function () {
+      var deferred;
+
       beforeEach(function () {
+        deferred = jasmine.createSpyObj('deferred', ['resolve']);
+        spyOn(Photoport, 'Deferred').andReturn(deferred);
         addSomeContentToPhotoport();
         photoport.start();
         expect(photoport.count()).toBe(5);
       });
+
       it('sets the position', function () {
         expect(photoport.position).toBe(0);
         photoport.seek(2);
         expect(photoport.position).toBe(2);
       });
-      it('returns the photoport', function () {
-        expect(photoport.seek(2)).toBe(photoport);
+      it('returns a Photoport.Deferred', function () {
+        expect(photoport.seek(2)).toBe(deferred);
+      });
+      it('calls the resolve on the returned deferred when the transition ends', function () {
+        photoport.dom.content.dispatchEvent(new Event('webkitTransitionEnd'));
+        expect(deferred.resolve).toHaveBeenCalled();
       });
       it('sets the current content to the element in the sequence at the specified position', function () {
         photoport.seek(2);
@@ -343,6 +352,11 @@ describe('photoport', function () {
             photoport.previous();
             expect(photoport.bounceLeft).toHaveBeenCalled();
           });
+          it('calls resolve on the deferred when the animation ends', function () {
+            photoport.previous();
+            photoport.dom.content.dispatchEvent(new Event('webkitAnimationEnd'));
+            expect(deferred.resolve).toHaveBeenCalled();
+          });
         });
         describe('when seeking next from the last position', function () {
           beforeEach(function () {
@@ -360,6 +374,11 @@ describe('photoport', function () {
             photoport.seek('last');
             photoport.next();
             expect(photoport.bounceRight).toHaveBeenCalled();
+          });
+          it('calls resolve on the deferred when the animation ends', function () {
+            photoport.next();
+            photoport.dom.content.dispatchEvent(new Event('webkitAnimationEnd'));
+            expect(deferred.resolve).toHaveBeenCalled();
           });
         });
       });
@@ -406,6 +425,9 @@ describe('photoport', function () {
         });
         it('includes the newPosition', function () {
           expect(args.detail.newPosition).toBe(4);
+        });
+        it('includes the deferred', function () {
+          expect(args.detail.deferred).toBe(deferred);
         });
         it('bubbles', function () {
           expect(args.bubbles).toBe(true);
@@ -822,7 +844,7 @@ describe('photoport', function () {
           photoport.remove(content);
           expect(photoport.seek).toHaveBeenCalledWith(1);
         });
-        describe('when the content is the last in the sequence', function () {
+        describe('when the content is the only item in the sequence', function () {
           beforeEach(function () {
             resetPhotoport();
             addSomeContentToPhotoport(1);

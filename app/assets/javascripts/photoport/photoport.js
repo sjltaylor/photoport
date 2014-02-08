@@ -315,13 +315,22 @@ Photoport = (function () {
         newPosition = 0;
       }
 
+      var deferred = new Photoport.Deferred();
+
+      var onAnimationEnd = function () {
+        deferred.resolve();
+      };
+
       if (bounce) {
-        this['bounce'+direction]();
+        this.dom.content.addEventListener('webkitAnimationEnd', onAnimationEnd);
+        this['bounce' + direction]();
+      } else {
+        this.dom.content.addEventListener('webkitTransitionEnd', onAnimationEnd);
       }
 
       var newLeft = -1 * newPosition * this.portRect().width;
-
       this.dom.content.style.left = newLeft + 'px';
+
       var previousPosition = this.position;
       this.position = newPosition;
 
@@ -335,11 +344,12 @@ Photoport = (function () {
         bubbles: true,
         detail: {
           previousPosition: previousPosition,
-          newPosition: newPosition
+          newPosition: newPosition,
+          deferred: deferred
         }
       }));
 
-      return this;
+      return deferred;
     },
     interlude: function (contentDescriptor) {
       var dom = this.dom;
@@ -387,6 +397,32 @@ Photoport = (function () {
       this.dom.keyframes.innerHTML = createBounceKeyframes(name, start, -1);
       this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
+  };
+
+  Photoport.Deferred = function Deferred () {
+    // this.isResolved = false;
+    // this.callbacks = {
+    //   done: []
+    // };
+  };
+
+  Photoport.Deferred.prototype = {
+    // resolve: function () {
+    //   this.isResolved = true;
+    //   this.callbacks.done.forEach(function (cb) {
+    //     cb();
+    //   });
+    //   return this;
+    // },
+    // done: function (cb) {
+    //   if (this.isResolved) {
+    //     setTimeout(cb, 0);
+    //   } else {
+    //     this.callbacks.done.push(cb);
+    //   }
+
+    //   return this;
+    // }
   };
 
   return Photoport;
