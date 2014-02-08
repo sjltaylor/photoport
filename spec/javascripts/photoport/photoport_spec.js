@@ -983,4 +983,106 @@ describe('photoport', function () {
       expect(photoport.count()).toBe(10);
     });
   });
+
+  describe('Photoport.Deferred', function () {
+    var deferred;
+
+    beforeEach(function () {
+      deferred = new Photoport.Deferred();
+    });
+
+    describe('constructor', function () {
+      it('sets isResolved to false', function () {
+        expect(deferred.isResolved).toBe(false);
+      });
+      it('sets an empty queue of callbacks', function () {
+        expect(deferred.queues.done).toEqual([]);
+      });
+    });
+
+    describe('prototype functions', function () {
+      var callback1, callback2;
+
+      beforeEach(function () {
+        callback1 = jasmine.createSpy('callback1');
+        callback2 = jasmine.createSpy('callback2');
+
+        deferred.done(callback1).done(callback2);
+      });
+
+      describe('resolve()', function () {
+        var rtn;
+
+        beforeEach(function () {
+          rtn = deferred.resolve();
+        });
+
+        describe('when the defered is not yet resolved', function () {
+          it('sets isResolved to true', function () {
+            expect(deferred.isResolved).toBe(true);
+          });
+          it('calls all callbacks', function () {
+            expect(callback1).toHaveBeenCalled();
+            expect(callback2).toHaveBeenCalled();
+          });
+          it('returns the deferred', function () {
+            expect(rtn).toBe(deferred);
+          });
+          it('clears the queue of callbacks', function () {
+            expect(deferred.queues.done).toBeNull();
+          });
+        });
+        describe('when the deferred is already resolved', function () {
+          beforeEach(function () {
+            rtn = deferred.resolve();
+          });
+
+          it('does not call callbacks', function () {
+            expect(callback1.callCount).toBe(1);
+            expect(callback2.callCount).toBe(1);
+          });
+          it('returns the deferred', function () {
+             expect(rtn).toBe(deferred);
+          });
+        });
+      });
+
+      describe('done(cb)', function () {
+        var fn;
+
+        beforeEach(function () {
+          fn = function () {};
+        });
+
+        function done () {
+          return deferred.done(fn);
+        }
+
+        describe('when the defered is not yet resolved', function () {
+          it('adds the callback to the list of callbacks', function () {
+            expect(deferred.queues.done.indexOf(callback2)).toBe(1);
+          });
+          it('returns the deferred', function () {
+            expect(done()).toBe(deferred);
+          });
+        });
+        describe('when the deferred is resolved', function () {
+          beforeEach(function () {
+            deferred.resolve();
+          });
+          it('calls the callback on the next tick', function () {
+            spyOn(window, 'setTimeout');
+            done();
+            expect(setTimeout).toHaveBeenCalledWith(fn, 0);
+          });
+          it('does not add the callback to the list', function () {
+            expect(deferred.queues.done).toBeNull();
+          });
+          it('returns the deferred', function () {
+            expect(done()).toBe(deferred);
+          });
+        });
+      });
+    });
+  });
 });
