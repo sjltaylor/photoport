@@ -97,9 +97,16 @@ Photoport = (function () {
       this.dom.content.style.webkitAnimation = '';
       this.dom.keyframes.innerHTML = '';
     }.bind(this));
+
+    Photoport.instances.push(this);
   }
 
+  Photoport.instances = [];
+
   Photoport.prototype = {
+    destroy: function () {
+      Photoport.instances.splice(Photoport.instances.indexOf(this), 1);
+    },
     fit: function (content) {
       el = content.el || this.current.el;
 

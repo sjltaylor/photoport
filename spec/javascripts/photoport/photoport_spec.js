@@ -7,6 +7,10 @@ describe('photoport', function () {
     resetPhotoport();
   });
 
+  afterEach(function () {
+    photoport.destroy();
+  });
+
   function resetPhotoport () {
     container = document.createElement('div');
     photoport = new Photoport({container:container});
@@ -87,6 +91,10 @@ describe('photoport', function () {
       expect(photoport.dom.interlude.style.display).toBe('none');
     });
 
+    it('puts the instance in the array of Photoport instance', function () {
+      expect(Photoport.instances.indexOf(photoport)).toBe(0);
+    })
+
     describe("options", function () {
       it("throws an error if the container is not an HTMLDivElement", function () {
 
@@ -98,6 +106,12 @@ describe('photoport', function () {
           new Photoport(options);
         }).toThrow();
       });
+    });
+  });
+  describe('destroy()', function () {
+    it('removes the instance from the list of instances', function () {
+      photoport.destroy();
+      expect(Photoport.instances.indexOf(photoport)).toBe(-1);
     });
   });
   describe('portRect()', function () {
