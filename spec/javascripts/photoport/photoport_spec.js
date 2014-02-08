@@ -37,6 +37,13 @@ describe('photoport', function () {
     }
   }
 
+  function deferredSpy () {
+    var deferred = jasmine.createSpyObj('deferred', ['resolve']);
+    spyOn(Photoport, 'Deferred').andReturn(deferred);
+    spyOn(deferred.resolve, 'bind').andReturn(deferred.resolve);
+    return deferred;
+  }
+
   describe('constructor', function () {
 
     it('inserts a photoport root div into the container', function () {
@@ -300,8 +307,7 @@ describe('photoport', function () {
       var deferred;
 
       beforeEach(function () {
-        deferred = jasmine.createSpyObj('deferred', ['resolve']);
-        spyOn(Photoport, 'Deferred').andReturn(deferred);
+        deferred = deferredSpy();
         addSomeContentToPhotoport();
         photoport.start();
         expect(photoport.count()).toBe(5);
@@ -461,8 +467,7 @@ describe('photoport', function () {
     var deferred;
 
     beforeEach(function () {
-      deferred = jasmine.createSpyObj('deferred', ['resolve']);
-      spyOn(Photoport, 'Deferred').andReturn(deferred);
+      deferred = deferredSpy();
       addSomeContentToPhotoport();
       photoport.start();
     });
@@ -787,8 +792,7 @@ describe('photoport', function () {
       photoport.start();
       eventListenerCalled = false;
       eventArgs = null;
-      deferred = jasmine.createSpyObj('deferred', ['resolve',  'done']);
-      spyOn(Photoport, 'Deferred').andReturn(deferred);
+      deferred = deferredSpy();
       eventListener = function (e) {
         eventArgs = e;
         eventListenerCalled = true;

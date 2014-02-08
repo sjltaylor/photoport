@@ -246,7 +246,7 @@ Photoport = (function () {
 
       var deferred = new Photoport.Deferred();
 
-      setTimeout(deferred.resolve, 0);
+      setTimeout(deferred.resolve.bind(deferred), 0);
 
       this.el().dispatchEvent(new CustomEvent('photoport-content-insert', {
         bubbles: true,
@@ -265,7 +265,7 @@ Photoport = (function () {
 
       if (index === -1) {
         deferred = new Photoport.Deferred();
-        setTimeout(deferred.resolve, 0);
+        setTimeout(deferred.resolve.bind(deferred), 0);
         return deferred;
       }
 
@@ -287,7 +287,7 @@ Photoport = (function () {
 
       if (deferred === undefined) {
         deferred = new Photoport.Deferred();
-        setTimeout(deferred.resolve, 0);
+        setTimeout(deferred.resolve.bind(deferred), 0);
       }
 
       this.el().dispatchEvent(new CustomEvent('photoport-content-remove', {
@@ -343,8 +343,10 @@ Photoport = (function () {
       var deferred = new Photoport.Deferred();
 
       var onAnimationEnd = function () {
+        this.dom.content.removeEventListener('webkitAnimationEnd', onAnimationEnd);
+        this.dom.content.removeEventListener('webkitTransitionEnd', onAnimationEnd);
         deferred.resolve();
-      };
+      }.bind(this);
 
       if (bounce) {
         this.dom.content.addEventListener('webkitAnimationEnd', onAnimationEnd);
