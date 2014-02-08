@@ -458,7 +458,11 @@ describe('photoport', function () {
     });
   });
   describe('insert(el, position)', function () {
+    var deferred;
+
     beforeEach(function () {
+      deferred = jasmine.createSpyObj('deferred', ['resolve']);
+      spyOn(Photoport, 'Deferred').andReturn(deferred);
       addSomeContentToPhotoport();
       photoport.start();
     });
@@ -473,8 +477,8 @@ describe('photoport', function () {
       photoport.insert(content, 3);
       expect(photoport.sequence[3]).toBe(content);
     });
-    it('returns the photoport', function () {
-      expect(photoport.insert(testContent[0])).toBe(photoport);
+    it('returns a deferred', function () {
+      expect(photoport.insert(testContent[0])).toBe(deferred);
     });
     it('calls fit() with the element to be displayed', function () {
       spyOn(photoport, 'fit');
@@ -486,7 +490,7 @@ describe('photoport', function () {
       photoport.insert(testContent[3]);
       expect(photoport.subsume).toHaveBeenCalledWith(testContent[3]);
     });
-    describe('interpreting mouse events', function () {
+    describe('interpreting mouse events on the new content', function () {
       var contentDescriptor,
           actionListener,
           actionListenerArgs,
@@ -657,11 +661,19 @@ describe('photoport', function () {
       it('bubbles', function () {
         expect(eventArgs.bubbles).toBe(true);
       });
+      it('includes the deferred', function () {
+        expect(eventArgs.detail.deferred).toBe(deferred);
+      });
       it('includes the position in which the content was inserted in the event args', function () {
         expect(eventArgs.detail.position).toBe(1);
       });
     });
     describe('when the element is inserted before the current position', function () {
+      it('resolves the deferred on next tick', function () {
+        spyOn(window, 'setTimeout');
+        photoport.insert(testContent[0]);
+        expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
+      });
       describe('when the photoport has been started', function () {
         it('incremements the position', function () {
           photoport.next();
@@ -679,6 +691,15 @@ describe('photoport', function () {
           photoport.insert(testContent[0], 0);
           expect(photoport.position).toBe(null);
         });
+      });
+    });
+    describe('when the element is inserted after the current position', function () {
+      it('resolves the deferred on next tick', function () {
+        spyOn(window, 'setTimeout');
+        expect(photoport.sequence.length).toBeGreaterThan(2);
+        photoport.seek(1);
+        photoport.insert(testContent[0], 2);
+        expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
       });
     });
     describe('when the element is inserted at the current position', function () {

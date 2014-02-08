@@ -244,15 +244,20 @@ Photoport = (function () {
 
       contentDescriptor.el.addEventListener('mousedown', contentDescriptor.mousedownHandler);
 
+      var deferred = new Photoport.Deferred();
+
+      setTimeout(deferred.resolve, 0);
+
       this.el().dispatchEvent(new CustomEvent('photoport-content-insert', {
         bubbles: true,
         detail: {
           content: contentDescriptor,
-          position: position
+          position: position,
+          deferred: deferred
         }
       }));
 
-      return this;
+      return deferred;
     },
     remove: function (content) {
       var index = this.sequence.indexOf(content);
