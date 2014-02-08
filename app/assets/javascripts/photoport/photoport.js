@@ -249,7 +249,13 @@ Photoport = (function () {
     },
     remove: function (content) {
       var index = this.sequence.indexOf(content);
-      if (index === -1) return this;
+      var deferred;
+
+      if (index === -1) {
+        deferred = new Photoport.Deferred();
+        setTimeout(deferred.resolve, 0);
+        return deferred;
+      }
 
       if (index < this.position) {
         this.position = decr(this.position);
@@ -257,7 +263,7 @@ Photoport = (function () {
         if (this.sequence.length === 1) {
           this.position = null;
         } else {
-          this.seek(decr(this.position));
+          deferred = this.seek(decr(this.position));
         }
       }
 
@@ -267,13 +273,20 @@ Photoport = (function () {
 
       content.el.removeEventListener('mousedown', content.mousedownHandler);
 
+      if (deferred === undefined) {
+        deferred = new Photoport.Deferred();
+        setTimeout(deferred.resolve, 0);
+      }
+
       this.el().dispatchEvent(new CustomEvent('photoport-content-remove', {
         bubbles: true,
         detail: {
-          content: content
+          content: content,
+          deferred: deferred
         }
       }));
-      return this;
+
+      return deferred;
     },
     start: function () {
       this.fitContent();

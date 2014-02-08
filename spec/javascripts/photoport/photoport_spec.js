@@ -745,12 +745,15 @@ describe('photoport', function () {
     var eventListener;
     var eventListenerCalled;
     var eventArgs;
+    var deferred;
 
     beforeEach(function () {
       addSomeContentToPhotoport();
       photoport.start();
       eventListenerCalled = false;
       eventArgs = null;
+      deferred = jasmine.createSpyObj('deferred', ['resolve',  'done']);
+      spyOn(Photoport, 'Deferred').andReturn(deferred);
       eventListener = function (e) {
         eventArgs = e;
         eventListenerCalled = true;
@@ -762,8 +765,13 @@ describe('photoport', function () {
       beforeEach(function () {
         content = createContent();
       });
-      it('returns the photoport', function () {
-        expect(photoport.remove(content)).toBe(photoport);
+      it('returns a deferred', function () {
+        expect(photoport.remove(content)).toBe(deferred);
+      });
+      it('resolves the deferred on next tick', function () {
+        spyOn(window, 'setTimeout');
+        photoport.remove(content);
+        expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
       });
       it('does not emit a photoport-content-remove', function () {
         photoport.remove(content);
@@ -773,9 +781,6 @@ describe('photoport', function () {
     describe('when the content is in the sequence', function () {
       beforeEach(function () {
         content = testContent[2];
-      });
-      it('returns the photoport', function () {
-        expect(photoport.remove(content)).toBe(photoport);
       });
       it('is removed from the sequence', function () {
         photoport.remove(content);
@@ -809,6 +814,10 @@ describe('photoport', function () {
           photoport.remove(content);
           expect(eventArgs.bubbles).toBe(true);
         });
+        it('includes the deferred', function () {
+          photoport.remove(content);
+          expect(eventArgs.detail.deferred).toBe(deferred);
+        });
       });
       it('calls fitContent()', function () {
         spyOn(photoport, 'fitContent');
@@ -824,6 +833,11 @@ describe('photoport', function () {
           photoport.remove(content);
           expect(photoport.position).toBe(1);
         });
+        it('resolves the deferred on next tick', function () {
+          spyOn(window, 'setTimeout');
+          photoport.remove(content);
+          expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
+        });
       });
       describe('when the content is after the current position', function () {
         beforeEach(function () {
@@ -833,16 +847,21 @@ describe('photoport', function () {
         it('does not change the current position', function () {
           expect(photoport.position).toBe(1);
         });
+        it('resolves the deferred on next tick', function () {
+          spyOn(window, 'setTimeout');
+          photoport.remove(content);
+          expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
+        });
       });
       describe('when the content is in the current position', function () {
         beforeEach(function () {
           content = testContent[2];
           photoport.seek(2);
         });
-        it('seeks to the position one less than the current', function () {
-          spyOn(photoport, 'seek');
-          photoport.remove(content);
-          expect(photoport.seek).toHaveBeenCalledWith(1);
+        it('returns the deferred from the seek operation', function () {
+          var seekDeferred = jasmine.createSpyObj('seek deferred', ['resolve', 'done']);
+          spyOn(photoport, 'seek').andReturn(seekDeferred);
+          expect(photoport.remove(content)).toBe(seekDeferred);
         });
         describe('when the content is the only item in the sequence', function () {
           beforeEach(function () {
@@ -860,6 +879,11 @@ describe('photoport', function () {
             spyOn(photoport, 'seek');
             photoport.remove(content);
             expect(photoport.seek).not.toHaveBeenCalled();
+          });
+          it('resolves the deferred on next tick', function () {
+            spyOn(window, 'setTimeout');
+            photoport.remove(content);
+            expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
           });
         });
       });
