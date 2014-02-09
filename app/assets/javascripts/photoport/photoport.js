@@ -102,6 +102,7 @@ Photoport = (function () {
   Photoport.prototype = {
     destroy: function () {
       Photoport.instances.splice(Photoport.instances.indexOf(this), 1);
+      this.dom.root.remove();
     },
     fit: function (content) {
       el = content.el || this.current.el;
@@ -180,14 +181,22 @@ Photoport = (function () {
         position = this.sequence.length;
       }
 
+      if (typeof position === 'string') {
+        position = this.indexForNamedPosition(position);
+      }
+
       position = Math.min(position, this.sequence.length);
 
       if (position < 0) {
         position = Math.max(position + this.sequence.length, 0);
       }
 
-      if (this.position !== null && position <= this.position) {
+      if (this.position !== null && position < this.position) {
         this.position++;
+        this.dom.content.style.transitionDuration = 0;
+        this.dom.content.style.left = -1 * this.position * this.portRect().width + 'px';
+        setTimeout(function () { this.dom.content.style.transitionDuration = ''; }.bind(this), 0);
+        // we want the transitionDuration to be restored on the next tick; allow the dom to be updated
       }
 
       this.subsume(contentDescriptor);
@@ -206,39 +215,7 @@ Photoport = (function () {
 
       this.fitContent();
 
-      var photoport = this;
-      contentDescriptor.mousedownHandler = function (e) {
-
-        var timeout = setTimeout(function () {
-          contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
-
-          photoport.el().dispatchEvent(new CustomEvent('photoport-content-hold', {
-            bubbles: true,
-            detail: {
-              content: contentDescriptor
-            }
-          }));
-        }, 350);
-
-        var mouseupHandler = function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-
-          contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
-          clearTimeout(timeout);
-
-          photoport.el().dispatchEvent(new CustomEvent('photoport-content-action', {
-            bubbles: true,
-            detail: {
-              content: contentDescriptor
-            }
-          }));
-        };
-
-        contentDescriptor.el.addEventListener('mouseup', mouseupHandler);
-      };
-
-      contentDescriptor.el.addEventListener('mousedown', contentDescriptor.mousedownHandler);
+      this.setupMouseInteraction(contentDescriptor);
 
       var deferred = new Photoport.Deferred();
 
@@ -333,13 +310,8 @@ Photoport = (function () {
         throw new Error('Nothing added to Photoport');
       }
 
-      switch(newPosition) {
-        case 'last':
-          newPosition = this.sequence.length - 1;
-          break;
-        case 'first':
-          newPosition = 0;
-          break;
+      if (typeof newPosition === 'string') {
+        newPosition = this.indexForNamedPosition(newPosition);
       }
 
       var direction = newPosition > this.position ? 'Right' : 'Left';
@@ -441,6 +413,51 @@ Photoport = (function () {
       this.dom.keyframes.innerHTML = createBounceKeyframes(name, start, -1);
       this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
+    setupMouseInteraction: function (contentDescriptor) {
+      var photoport = this;
+      contentDescriptor.mousedownHandler = function (e) {
+
+        var timeout = setTimeout(function () {
+          contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
+
+          photoport.el().dispatchEvent(new CustomEvent('photoport-content-hold', {
+            bubbles: true,
+            detail: {
+              content: contentDescriptor
+            }
+          }));
+        }, 350);
+
+        var mouseupHandler = function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+
+          contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
+          clearTimeout(timeout);
+
+          photoport.el().dispatchEvent(new CustomEvent('photoport-content-action', {
+            bubbles: true,
+            detail: {
+              content: contentDescriptor
+            }
+          }));
+        };
+
+        contentDescriptor.el.addEventListener('mouseup', mouseupHandler);
+      };
+
+      contentDescriptor.el.addEventListener('mousedown', contentDescriptor.mousedownHandler);
+    },
+    indexForNamedPosition: function (position) {
+      switch(position) {
+        case 'last':
+          return this.sequence.length - 1;
+        case 'first':
+          return 0;
+        default:
+          return position;
+      }
+    }
   };
 
   Photoport.Deferred = function Deferred () {
