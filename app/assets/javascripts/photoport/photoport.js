@@ -81,12 +81,22 @@ Photoport = (function () {
 
     this.dom.rightHandle.addEventListener('click', function (e) {
       e.preventDefault();
+      this.dom.rightHandleGlyph.classList.add('pulse');
       this.next();
+    }.bind(this));
+
+    this.dom.rightHandleGlyph.addEventListener('webkitTransitionEnd', function () {
+      this.dom.rightHandleGlyph.classList.remove('pulse');
     }.bind(this));
 
     this.dom.leftHandle.addEventListener('click', function (e) {
       e.preventDefault();
+      this.dom.leftHandleGlyph.classList.add('pulse');
       this.previous();
+    }.bind(this));
+
+    this.dom.leftHandleGlyph.addEventListener('webkitTransitionEnd', function () {
+      this.dom.leftHandleGlyph.classList.remove('pulse');
     }.bind(this));
 
     this.dom.content.addEventListener('webkitAnimationEnd', function () {

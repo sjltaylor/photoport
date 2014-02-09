@@ -34,6 +34,13 @@
       color: rgba(128,128,128,0.125);
       user-select: none;
       -webkit-user-select: none;
+      transition-property: color text-shadow;
+      transition-duration: 125ms;
+
+      &.pulse {
+        color: rgba(128,128,128, 0.185);
+        text-shadow: rgba(128,128,128, 0.185) 0 0 3px;
+      }
     }
   }
 
@@ -81,3 +88,4 @@
     }
   }
 }
+
