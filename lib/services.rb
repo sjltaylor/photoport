@@ -6,7 +6,7 @@ module Services
   end
 
   def browsing_service
-    @browsing_service ||= BrowsingService.resolve(dragonfly_photos_app: Dragonfly[:photoport_cms])
+    @browsing_service ||= BrowsingService.resolve(dragonfly_photos_app: Dragonfly.app(:photoport_cms))
   end
 
   def identification_service

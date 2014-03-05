@@ -1,7 +1,9 @@
 class Photo < ActiveRecord::Base
+  extend Dragonfly::Model
+
   belongs_to :collection
 
-  image_accessor :photo
+  dragonfly_accessor :photo, app: :photoport_cms
 
   validates :photo_uid, presence: true
   validates :collection, presence: true

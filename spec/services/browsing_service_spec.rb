@@ -24,7 +24,7 @@ describe BrowsingService do
       browsing_service.dragonfly_photos_app.stub(:fetch).with(photo.photo_uid).and_return(dragonfly_double)
 
       dragonfly_double.stub(:thumb).with('600x').and_return(dragonfly_double)
-      dragonfly_double.stub(:jpg).and_return(dragonfly_double)
+      dragonfly_double.stub(:encode).with('jpg').and_return(dragonfly_double)
       dragonfly_double.stub(:file).and_return(double(:photo_file, path: expected_path))
     end
 

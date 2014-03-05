@@ -17,7 +17,8 @@ gem 'resolve', git: 'https://github.com/sjltaylor/resolve'
 gem 'rack-cache', :require => 'rack/cache'
 gem 'fog'
 gem 'unf'
-gem 'dragonfly', '~> 0.9.15'
+gem 'dragonfly', '~> 1.0.3'
+gem 'dragonfly-s3_data_store'
 gem 'aasm'
 gem 'better_errors'
 gem 'bcrypt-ruby'
@@ -28,7 +29,8 @@ group :test do
 end
 
 group :test, :development do
+  gem 'pry'
+  gem 'pry-nav'
   gem 'rspec-rails'
   gem 'jasmine-rails'
-  gem 'debugger'
 end
