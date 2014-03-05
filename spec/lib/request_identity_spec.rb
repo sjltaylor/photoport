@@ -14,23 +14,7 @@ describe RequestIdentity do
       instance.send :request_identity
     end
 
-    context 'when the identity has visited previously' do
-      let(:identity_id) { 4444 }
-      let(:identity) { double(:identity) }
-      before(:each) { Identity.stub(:find).with(identity_id).and_return(identity) }
-
-      it 'returns the identity' do
-        request_identity.should be identity
-      end
-
-      it 'calls the Identity store with the id from the session' do
-        request_identity
-        Identity.should have_received(:find).with(identity_id)
-      end
-    end
-
-    context 'when the identity has not visited previously' do
-      let(:identity_id) { nil }
+    shared_examples 'creates a new identity' do
       let(:new_identity) { double(:new_identity, id: 1443) }
 
       before(:each) { identification_service.stub(:create_identity).with(no_args).and_return(new_identity) }
@@ -43,6 +27,31 @@ describe RequestIdentity do
         request_identity
         session[:identity_id].should be 1443
       end
+    end
+
+    context 'when the identity has visited previously' do
+      let(:identity_id) { 4444 }
+      let(:identity) { double(:identity) }
+      before(:each) { Identity.stub(:find_by_id).with(identity_id).and_return(identity) }
+
+      it 'returns the identity' do
+        request_identity.should be identity
+      end
+
+      it 'calls the Identity store with the id from the session' do
+        request_identity
+        Identity.should have_received(:find_by_id).with(identity_id)
+      end
+    end
+
+    context 'when the identity has not visited previously' do
+      let(:identity_id) { nil }
+      include_examples 'creates a new identity'
+    end
+
+    context 'when the identity does not exist' do
+      let(:identity_id) { '1432' }
+      include_examples 'creates a new identity'
     end
   end
 end
