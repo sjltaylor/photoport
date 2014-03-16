@@ -18,17 +18,18 @@
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
     <!--[if lt IE 9]>
       <script src="js/html5shiv.js"></script>
+      <script src="js/respond.min.js"></script>
     <![endif]-->
   </head>
   <body>
     <ul class="demo-sidebar hidden-md">
-      <li><a href="#fui-alert">Alert</a></li>
+      <li><a href="#fui-alert">Alerts</a></li>
       <li><a href="#fui-bottom-menu">Bottom Menu</a></li>
-      <li><a href="#fui-breadcrumb">Breadcrumb</a></li>
-      <li><a href="#fui-button">Button</a></li>
+      <li><a href="#fui-breadcrumb">Breadcrumbs</a></li>
+      <li><a href="#fui-button">Buttons</a></li>
       <li><a href="#fui-carousel">Carousel</a></li>
-      <li><a href="#fui-checkbox">Checkbox</a></li>
-      <li><a href="#fui-radio">Radio</a></li>
+      <li><a href="#fui-checkbox">Checkboxes</a></li>
+      <li><a href="#fui-radio">Radio buttons</a></li>
       <li><a href="#fui-dialog">Dialog</a></li>
       <li><a href="#fui-dropdown">Dropdown</a></li>
       <li><a href="#fui-iconbar">Iconbar</a></li>
@@ -48,6 +49,7 @@
       <li><a href="#fui-tables">Tables</a></li>
       <li><a href="#fui-tagsinput">Tags Input</a></li>
       <li><a href="#fui-tooltip">Tooltip</a></li>
+      <li><a href="#fui-typeahead">Typeahead</a></li>
       <li><a href="#fui-slider">Slider</a></li>
       <li><a href="#fui-spinner">Spinner</a></li>
     </ul> <!-- /nav -->
@@ -57,12 +59,12 @@
     <div class="container">
       <div class="demo-row">
         <div class="demo-title">
-          <h3>Alert</h3>
+          <h3>Alerts</h3>
         </div>
 
         <div class="demo-content">
           <p>
-            Restyled <a href="http://getbootstrap.com/components/#alerts">Bootstrap alerts</a> without any new functionality.
+            Restyled <a href="http://getbootstrap.com/components/#alerts">Bootstrap alerts</a> with no change to the functionality.
           </p>
           <div class="alert">
             <button type="button" class="close fui-cross" data-dismiss="alert"></button>
@@ -90,8 +92,8 @@
 
         <div class="demo-content">
           <p>
-            Better alternative to a Footer that can fit few stacks of links. Organize
-            columns using grids &mdash; they are so powerfull and responsive.
+            A better alternative to a Footer that can fit several stacks of links. Organize your
+            columns by using grids &mdash; they are so powerfull and responsive.
             No JS required. Go inspect the&nbsp;markup!
           </p>
         </div>
@@ -136,8 +138,8 @@
         </div>
         <div class="demo-content">
           <br/>
-          <p class="ptl mtl">Yes, it looks awesome without limited width. Don't forget
-          to place <code>container</code> inside.
+          <p class="ptl mtl">Yes, it looks awesome without width limitations. Don't forget
+          to place a <code>container</code> element inside.
           </p>
 <pre class="prettyprint">
 &lt;div class="bottom-menu"&gt;
@@ -146,8 +148,8 @@
 &lt;/div&gt;
 </pre>
           <p class="ptl">
-            We added two color schemes: light and inverse. To make it look dark add
-            <code>bottom-menu-inverse</code> as an additional class.
+            We have added two color schemes: light and inverse. To use the dark look add
+            <code>bottom-menu-inverse</code> as an additional class for your container.
           </p>
 <pre class="prettyprint">
 &lt;div class="bottom-menu bottom-menu-inverse"&gt;
@@ -155,10 +157,10 @@
 </pre>
 
           <p class="ptl">
-            To add social icons we reserved a special class
-            <code>bottom-icons</code>.
-            Just put a list with icons somewhere inside
-            <code>bottom-menu</code> and you're good to go:
+            We have reserved a special class
+            <code>bottom-icons</code> for listing social icons.
+            Just put a list with icons inside a
+            <code>bottom-menu</code> element and you're good to go:
           </p>
 <pre class="prettyprint">
 &lt;div class="bottom-menu"&gt;
@@ -171,15 +173,15 @@
 </pre>
 
           <p class="ptl">
-            We also added one more modifier <code>bottom-menu-large</code> &mdash;
-            Use it when you have tons of links to add some space around.
+            We have added one more modifier: <code>bottom-menu-large</code>.
+            You can use it to add some space around links if you have a bunch of them in a menu.
           </p>
 <pre class="prettyprint">
 &lt;div class="bottom-menu bottom-menu-large"&gt;
 &lt;/div&gt;
 </pre>
 
-          <p class="ptl">Now try it out:</p>
+          <p class="ptl">Now lets try it out:</p>
 
         </div>
       </div><!-- /.demo-row -->
@@ -333,12 +335,12 @@
     <div class="container ptl mtl">
       <div class="demo-row ptl mtl">
         <div class="demo-title">
-          <h3>Breadcrumb</h3>
+          <h3>Breadcrumbs</h3>
         </div>
 
         <div class="demo-content">
           <p>
-            We restyled default <a href="http://getbootstrap.com/components/#breadcrumbs">Bootstrap breadcrumb</a> and added one more &mdash; crisp textish look without any graphics.
+            We have restyled the default <a href="http://getbootstrap.com/components/#breadcrumbs">Bootstrap breadcrumbs</a> component and have added one more style &mdash; crisp looking text without any graphics.
           </p>
           <ul class="breadcrumb">
             <li><a href="#fakelink">Home</a></li>
@@ -376,7 +378,7 @@
 </pre>
 
           <p class="ptl">
-            Arrows are added through Less as a Flat UI Icons font glyph. You're free to change the delimiter inside <code>breadcrumbs.less</code>:
+            Arrows are added through LESS as a Flat UI Icons font glyph. You are free to change the delimiter in <code>breadcrumbs.less</code>:
           </p>
 <pre class="prettyprint">
 &gt; li {
@@ -402,12 +404,12 @@
 
       <div class="demo-row">
         <div class="demo-title">
-          <h3>Button</h3>
+          <h3>Buttons</h3>
         </div>
 
         <div class="demo-content">
           <p>
-            After restyling <a href="http://getbootstrap.com/css/#buttons">Bootstrap buttons</a> we decided to add <code>btn-hg</code> size that will be used for main call to actions on a page:
+            After restyling the <a href="http://getbootstrap.com/css/#buttons">Bootstrap buttons</a>, we have decided to add a new size: <code>btn-hg</code> which will be used for the main call to action buttons on the page:
           </p>
           <p class="mbl">
             <button class="btn btn-hg btn-primary">Huge Button</button>
@@ -419,7 +421,7 @@
 </pre>
 
           <p class="ptl">
-            In addition to that we added <code>btn-embossed</code> to make button look more clickable. But still we prefer using them flat.
+            In addition, we have added <code>btn-embossed</code> to make buttons look more realistic, but we still prefer them flat.
           </p>
           <p class="mbl">
             <button class="btn btn-embossed btn-primary">Embossed Button</button>
@@ -431,7 +433,7 @@
 </pre>
 
           <p class="ptl">
-            In some cases buttons should become wider. Yes, we did that as well:
+            In some cases buttons need to become wider. Yes, we have taken care of that as well:
           </p>
           <p class="mbl">
             <button class="btn btn-primary btn-wide mrm">Save</button>
@@ -444,7 +446,7 @@
 </pre>
 
           <p class="ptl">
-            One more new thing: <code>btn-tip</code>. Use it when need to highlight a part of the button text:
+            Another new thing is <code>btn-tip</code>. Use it when you need to highlight a part of the button text:
           </p>
           <p class="mbl">
             <button class="btn btn-primary">
@@ -460,7 +462,7 @@
 </pre>
 
           <p class="ptl">
-            Finally you can use social buttons out of box:
+            Finally, a nice way to use social buttons out of the box:
           </p>
           <p class="mbl">
             <button class="btn btn-default btn-social-pinterest mrs">
@@ -496,7 +498,7 @@
 </pre>
 
           <p class="ptl">
-            As usual you can set different colors:
+            As usual you can assign different colors to your buttons:
           </p>
           <p class="mbl">
             <button class="btn btn-default mrs">Default</button>
@@ -518,7 +520,7 @@
 </pre>
 
           <p>
-            Button groups, toolbar, disabled state also work as expected.
+            Button groups, toolbars, and disabled state also work as expected.
           </p>
           <div id="fui-carousel"></div>
         </div>
@@ -531,7 +533,7 @@
 
         <div class="demo-content">
           <p>
-            Restyled <a href="http://getbootstrap.com/javascript/#carousel">Bootstrap carousel</a> without any new functionality.
+            Here is the restyled <a href="http://getbootstrap.com/javascript/#carousel">Bootstrap carousel</a> with no change to the functionality.
           </p>
           <div id="myCarousel" class="carousel slide">
             <ol class="carousel-indicators">
@@ -592,12 +594,12 @@
 
       <div class="demo-row">
         <div class="demo-title">
-          <h3>Checkbox</h3>
+          <h3>Checkboxes</h3>
         </div>
 
         <div class="demo-content">
           <p>
-            Using flat style checkbox requires JS plugin that creates all custom markup for us. Let's take a look:
+            Using flat style checkboxes requires a JS plugin which creates all the custom markup for us. Let's take a look:
           </p>
           <label class="checkbox" for="checkbox1">
             <input type="checkbox" value="" id="checkbox1" data-toggle="checkbox">
@@ -616,7 +618,7 @@
             Checkbox
           </label>
 
-          <h6 class="ptl">Usage via data attributes:</h6>
+          <h6 class="ptl">The Data Attributes:</h6>
 <pre class="prettyprint">
 &lt;label class="checkbox" for="checkbox1"&gt;
   &lt;input type="checkbox" value="" id="checkbox1" data-toggle="checkbox"&gt;
@@ -624,43 +626,43 @@
 &lt;/label&gt;
 </pre>
 
-          <h6 class="ptl">Usage via JS:</h6>
+          <h6 class="ptl">The JS:</h6>
 <pre class="prettyprint">
 $(':checkbox').checkbox();
 </pre>
 
           <div class="pvm">
-            <h6>Methods</h6>
+            <h6>Methods:</h6>
           </div>
           <p class="mbl">
             <strong>.checkbox('toggle')</strong>
             <br/>
-            toggles checkbox state from <span class="text-info">checked</span>
+            toggles the checkbox state from <span class="text-info">checked</span>
             to <span class="text-info">unchecked</span> and back.
           </p>
           <p class="mbl">
             <strong>.checkbox('check')</strong>
             <br/>
-            sets checkbox state to <span class="text-info">checked</span>.
+            sets the checkbox state to <span class="text-info">checked</span>.
           </p>
           <p class="mbl">
             <strong>.checkbox('uncheck')</strong>
             <br/>
-            sets checkbox state to <span class="text-info">unchecked</span>.
+            sets the checkbox state to <span class="text-info">unchecked</span>.
           </p>
 <pre class="prettyprint">
 $(':checkbox').checkbox('check');
 </pre>
 
           <div class="pbm ptl">
-            <h6>Events</h6>
+            <h6>Events:</h6>
           </div>
           <p class="mbl">
             <strong>.on('toggle')</strong>
             <br/>
-            Fired when checkbox state changed between
-            <span class="text-info">check</span> &harr;
-            <span class="text-info">uncheck</span>.
+            Fired when the checkbox state changes between
+            <span class="text-info">checked</span> and
+            <span class="text-info">unchecked</span>.
           </p>
           <p class="mbl">
             <strong>.on('change')</strong>
@@ -678,12 +680,12 @@ $(':checkbox').on('toggle', function() {
 
       <div class="demo-row">
         <div class="demo-title">
-          <h3>Radio</h3>
+          <h3>Radio buttons</h3>
         </div>
 
         <div class="demo-content">
           <p>
-            Firm radio also requires using JS plugin. We try making things easy so you won't have to spend huge amount of time playing around with custom&nbsp;components.
+            Styling radio buttons also requires using a JS plugin. We have tried making things easy so you won't have to spend a huge amount of time playing around with custom&nbsp;components.
           </p>
           <label class="radio">
             <input type="radio" name="group1" value="1" data-toggle="radio">
@@ -702,7 +704,7 @@ $(':checkbox').on('toggle', function() {
             Radio is on
           </label>
 
-          <h6 class="ptl">Usage via data attributes:</h6>
+          <h6 class="ptl">The Data Attributes:</h6>
 <pre class="prettyprint">
 &lt;label class="radio"&gt;
   &lt;input type="radio" name="group1" value="1" data-toggle="radio"&gt;
@@ -715,42 +717,42 @@ $(':checkbox').on('toggle', function() {
 &lt;/label&gt;
 </pre>
 
-          <h6 class="ptl">Usage via JS:</h6>
+          <h6 class="ptl">The JS:</h6>
 <pre class="prettyprint">
 $(':radio').radio();
 </pre>
 
           <div class="pvm">
-            <h6>Methods</h6>
+            <h6>Methods:</h6>
           </div>
           <p class="mbl">
             <strong>.radio('check')</strong>
             <br/>
-            sets radio state to <span class="text-info">checked</span>.
+            sets the radio button state to <span class="text-info">checked</span>.
           </p>
           <p class="mbl">
             <strong>.radio('uncheck')</strong>
             <br/>
-            sets radio state to <span class="text-info">unchecked</span>.
+            sets the radio state to <span class="text-info">unchecked</span>.
           </p>
 <pre class="prettyprint">
 $(':radio').radio('check');
 </pre>
 
           <div class="pbm ptl">
-            <h6>Events</h6>
+            <h6>Events:</h6>
           </div>
           <p class="mbl">
             <strong>.on('toggle')</strong>
             <br/>
-            Fired when radio state changed between
-            <span class="text-info">check</span> &harr;
-            <span class="text-info">uncheck</span>.
+            Fired when the radio button state changes between
+            <span class="text-info">checked</span> and
+            <span class="text-info">unchecked</span>.
           </p>
           <p class="mbl">
             <strong>.on('change')</strong>
             <br/>
-            Same as <span class="text-info">toggle</span> with just one difference &mdash; event sends for each radio which state was changed.
+            Same as <span class="text-info">toggle</span> with just one difference &mdash; the event is fired for each radio button that gets a state change.
           </p>
 <pre class="prettyprint">
 $(':radio').on('toggle', function() {
@@ -763,20 +765,20 @@ $(':radio').on('toggle', function() {
 
       <div class="demo-row">
         <div class="demo-title">
-          <h3>Dialog</h3>
+          <h3>Dialogs</h3>
         </div>
 
         <div class="demo-content">
           <p class="mbl">
-            Dialog is an alternative to <code>alert</code>. It makes more sense to use dialogs when you want to inline a text, buttons and form elements into a one single row.
+            A dialog box is an alternative for an <code>alert</code>. It makes more sense to use dialogs when you want to have inline text, buttons and form elements in one single row.
           </p>
 
           <p class="mbl">
-            If you need to extend its functionality please do write your custom code to <code>less/modules/dialog.less</code> and new changes will apear on each code recompile (through CodeKit or whatever tool you're using).
+            If you need to extend its functionality, please write your custom code to <code>less/modules/dialog.less</code> and the changes will apear on each code recompile (through CodeKit or whatever tool you're using).
           </p>
 
           <p>
-            It is highly recommended to let dialog fill the whole page width so it catches more attention.
+            It is highly recommended to let the dialog fill the whole page width so it catches more attention.
           </p>
         </div> <!-- /.demo-content -->
       </div> <!-- /.demo-row -->
@@ -919,11 +921,11 @@ $(':radio').on('toggle', function() {
 
         <div class="demo-content">
           <p class="mbl">
-            Same <a href="http://getbootstrap.com/components/#dropdowns">Bootstrap dropdown</a> used as a part of the <code>select</code>, <code>btn-group</code>, <code>nav-tabs</code> and eventually other components to present information as a menu.
+            The same <a href="http://getbootstrap.com/components/#dropdowns">Bootstrap dropdown</a> is used as a part of the <code>select</code>, <code>btn-group</code>, <code>nav-tabs</code> and eventually other components to present information as a menu.
           </p>
 
           <p class="mbl">
-            Notice <code>dropdown-arrow</code> which is needed when you want to add a small triangle that visually connects clickable element with a dropdown menu.
+            Notice <code>dropdown-arrow</code>, which is needed when you want to add a small triangle that visually connects the clickable element with the dropdown menu.
           </p>
 
           <select name="info" class="mbn">
@@ -974,7 +976,7 @@ $(':radio').on('toggle', function() {
           </div>
 
           <p>
-            For highlighting information we added 2 additional states for the dropdown-menu items: <code>selected</code> and <code>highlighted</code>:
+            To highlight the information we added 2 additional states for the dropdown-menu items: <code>selected</code> and <code>highlighted</code>:
           </p>
 <pre class="prettyprint">
 &lt;i class="dropdown-arrow"&gt;&lt;/i&gt;
@@ -999,7 +1001,7 @@ $(':radio').on('toggle', function() {
 
         <div class="demo-content">
           <p class="mbl">
-            New component created to have one more navigation style with icons. It has 2 orientation modes: <span class="text-info">horizontal</span> and <span class="text-info">vertical</span>:
+            A new component created to have one more navigation style with icons. It has 2 orientation modes: <span class="text-info">horizontal</span> and <span class="text-info">vertical</span>:
           </p>
 
           <div class="iconbar">
@@ -1043,7 +1045,7 @@ $(':radio').on('toggle', function() {
 </pre>
 
           <p class="mbl pvl">
-            Of course you can choose one of the available additional colors:
+            Of course you can choose one of these available additional colors:
           </p>
 
           <div class="row mbl">
@@ -1112,7 +1114,7 @@ $(':radio').on('toggle', function() {
 </pre>
 
           <p class="ptl">
-            To mark icon as active just add <code>active</code> class to a <code>li</code> tag:
+            To mark an icon as active just add <code>active</code> as a class for the <code>li</code> tag:
           </p>
 <pre class="prettyprint">
 &lt;div class="iconbar"&gt;
@@ -1125,7 +1127,7 @@ $(':radio').on('toggle', function() {
 </pre>
 
           <p class="ptl">
-            To mark icon with unread indicator append <code>iconbar-unread</code> this way:
+            To mark an icon with an unread indicator append <code>iconbar-unread</code> this way:
           </p>
 <pre class="prettyprint">
 &lt;div class="iconbar"&gt;
@@ -1149,7 +1151,7 @@ $(':radio').on('toggle', function() {
 
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://getbootstrap.com/css/#forms">Bootstrap input</a>. Added <span class="text-info">flat</span> style(to remove borders completely):
+            The restyled <a href="http://getbootstrap.com/css/#forms">Bootstrap input</a>. Add <span class="text-info">flat</span> as an additional class to completely remove the borders:
           </p>
 					
 					<div class="row">
@@ -1171,7 +1173,7 @@ $(':radio').on('toggle', function() {
 &lt;input type="text" placeholder="Enter something" class="form-control flat" /&gt;
 </pre>
 
-          <p class="ptl">And few sizes:</p>
+          <p class="ptl">You can have a few different sizes:</p>
           <div class="row">
           	<div class="col-lg-5">
 	          	<input type="text" value="" placeholder="Huge" class="form-control input-hg" />
@@ -1202,7 +1204,7 @@ $(':radio').on('toggle', function() {
 &lt;input type="text" class="form-control input-sm" placeholder="Small" /&gt;
 </pre>
 
-          <p class="ptl">With icon inside:</p>
+          <p class="ptl">You can have an icon inside:</p>
           <div class="row">
           	<div class="col-lg-5">
 	          	<div class="form-group">
@@ -1222,7 +1224,7 @@ $(':radio').on('toggle', function() {
 &lt;/div&gt;
 </pre>
 
-          <p class="ptl">With input append/prepend:</p>
+          <p class="ptl">You can have the input with append/prepend options:</p>
           <div class="row">
 	          <div class="col-lg-6">
 	          	<div class="form-group">
@@ -1263,7 +1265,7 @@ $(':radio').on('toggle', function() {
 </pre>
 
           <p class="ptl">
-            Different color styles and disabled state work as expected:
+            The different color styles and the disabled state work as expected:
             <div class="row">
             	<div class="col-lg-6">
 	            	<div class="form-group has-error">
@@ -1295,7 +1297,7 @@ $(':radio').on('toggle', function() {
           </p>
 
           <p class="ptl mtl">
-            Search form doesn't have any background color set to append/prepend:
+            The search form doesn't have any background color set to append/prepend:
           </p>
           <div class="row">
 	          <div class="col-lg-6">
@@ -1322,6 +1324,7 @@ $(':radio').on('toggle', function() {
 		        	</div>
 	          </div>
           </div> 
+          
           <div id="fui-datepicker"></div>
         </div> <!-- /.demo-content -->
       </div> <!-- /.demo-row -->
@@ -1333,7 +1336,7 @@ $(':radio').on('toggle', function() {
 
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://jqueryui.com/datepicker">jQuery UI Datepicker</a>.
+            The restyled <a href="http://jqueryui.com/datepicker">jQuery UI Datepicker</a>.
           </p>
           <div class="row">
 	          <div class="col-lg-6">
@@ -1528,7 +1531,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
 
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://getbootstrap.com/components/#labels">Bootstrap labels</a>.
+            The restyled <a href="http://getbootstrap.com/components/#labels">Bootstrap labels</a>.
           </p>
 
           <span class="label label-default">Default</span>
@@ -1559,7 +1562,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
 
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://getbootstrap.com/javascript/#modals">Bootstrap modal</a>.
+            The restyled <a href="http://getbootstrap.com/javascript/#modals">Bootstrap modal</a>.
           </p>
 
           <div class="components-static-modal">
@@ -1613,7 +1616,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
         </div>
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://getbootstrap.com/components/#nav">Bootstrap navs</a>.
+            The restyled <a href="http://getbootstrap.com/components/#nav">Bootstrap navs</a>.
           </p>
           <h5 class="mbl">
             1. Pills
@@ -1754,7 +1757,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
         </div>
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://getbootstrap.com/components/#navbar">Bootstrap navbar</a>.
+            The restyled <a href="http://getbootstrap.com/components/#navbar">Bootstrap navbar</a>.
           </p>
 
           <nav class="navbar navbar-default" role="navigation">
@@ -2040,7 +2043,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
 &lt;/nav&gt;
 </pre>  
 
-          <p class="ptl">Fixed to Bottom:</p>
+          <p class="ptl">Fixed to bottom:</p>
 <pre class="prettyprint mvl">
 &lt;nav class="navbar navbar-default navbar-fixed-bottom" role="navigation"&gt;
 &lt;!-- Navbar content --&gt;
@@ -2064,7 +2067,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
         </div>
         <div class="demo-content">
           <p>
-            Short pagination where links have a button look. Used for navigating to a next/prev item.
+            Short pagination where links have a button look. Used for navigating to the next/prev item.
           </p>
           <ul class="pager">
             <li class="previous">
@@ -2108,7 +2111,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
         </div>
         <div class="demo-content">
           <p>
-            <a href="http://getbootstrap.com/components/#pagination">Bootstrap pagination</a> restyling. Added additional dropdown navigation, minimalistic look and text-only look. Also few color schemes with alternative layout.
+            The restyled <a href="http://getbootstrap.com/components/#pagination">Bootstrap pagination</a>. We have added a dropdown navigation, a minimalistic look and a text-only look. We have also added a few color schemes with an alternative layout.
           </p>
           <div class="pagination">
             <ul>
@@ -2166,7 +2169,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
 &lt;/div&gt;
 </pre>
 
-          <p class="mtl ptl">Minimal look:</p>
+          <p class="mtl ptl">The minimal look:</p>
           <div class="pagination pagination-minimal">
             <ul>
               <li class="previous"><a href="#fakelink" class="fui-arrow-left"></a></li>
@@ -2200,7 +2203,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
 &lt;/div&gt;
 </pre>
 
-          <p class="mvl ptl">Text look:</p>
+          <p class="mvl ptl">The text look:</p>
           <ul class="pagination-plain">
             <li class="previous"><a href="#fakelink">← Previous</a></li>
             <li><a href="#fakelink">1</a></li>
@@ -2230,7 +2233,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
 &lt;/ul&gt;
 </pre>
 
-          <p class="mvl ptl">Various color schemes:</p>
+          <p class="mvl ptl">The various color schemes:</p>
           <div class="pagination pagination-danger">
             <a href="#fakelink" class="btn btn-danger previous">
               <i class="fui-arrow-left"></i>
@@ -2344,7 +2347,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
         </div>
         <div class="demo-content">
           <p>
-            Restyled <a href="http://getbootstrap.com/javascript/#popovers">Bootstrap popover</a>.
+            The restyled <a href="http://getbootstrap.com/javascript/#popovers">Bootstrap popover</a>.
           </p>
           <div class="demo-popovers">
             <div class="popover right">
@@ -2418,7 +2421,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
         </div>
         <div class="demo-content">
           <p>
-            Restyled <a href="http://getbootstrap.com/components/#progress">Bootstrap progress</a>.
+            The restyled <a href="http://getbootstrap.com/components/#progress">Bootstrap progress</a>.
           </p>
           <div class="progress">
             <div class="progress-bar" style="width: 45%;"></div>
@@ -2450,13 +2453,13 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
         </div>
         <div class="demo-content">
           <p class="mbl">
-            Custom select due to inability of styling a system one. It is based on <a href="https://github.com/silviomoreto/bootstrap-select">Selectpicker</a> plug-in with a slightly modified source to meet Bootstrap naming convention.
+            We have made a custom select due to the inability of styling the system one. It is based on the <a href="https://github.com/silviomoreto/bootstrap-select">Selectpicker</a> plug-in with the source slightly modified to meet Bootstrap naming convention.
           </p>
           <p class="mbl">
-            Component inherits entire styling from button so you can use all its colors and sizes without any problems. Also we supported <span class="text-info">multiple</span> select state as well as <span class="text-info">block</span> mode where it takes all available space.
+            The component inherits its entire style from the button so you can use all its colors and sizes without any problems. We have also supported the <span class="text-info">multiple</span> select state as well as the <span class="text-info">block</span> mode where it takes all the available space.
           </p>
           <p class="mbl pbl">
-            Grids are supported as&nbsp;well. For more technical details read <a href="https://github.com/silviomoreto/bootstrap-select#usage">original&nbsp;documentation</a>.
+            Grids are supported here as&nbsp;well. For more technical details read the <a href="https://github.com/silviomoreto/bootstrap-select#usage">original&nbsp;documentation</a>.
           </p>
           <select name="huge" class="select-block mbl">
             <optgroup label="Profile">
@@ -2479,7 +2482,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
           </select>
 
           <p class="mvl">
-            You can write markup as you usually do without any difference:
+            You can write the markup as you would usually do, without any difference:
           </p>
 
 <pre class="prettyprint mvl">
@@ -2497,7 +2500,7 @@ $(datepickerSelector).datepicker('widget').css({'margin-left': -$(datepickerSele
 </pre>
 
           <p class="mvl ptl">
-            And then transform all system selects into a custom ones with JS:
+            Then transform all the system selects into custom ones with JS:
           </p>
 
 <pre class="prettyprint mvl">
@@ -2519,10 +2522,10 @@ $("select").selectpicker({style: 'btn-hg btn-primary', menuStyle: 'dropdown-inve
         </div>
         <div class="demo-content">
           <p class="mbl">
-            Custom switch can be used instead of checkbox. It has 2 styles: <span class="text-info">circle</span>(default) and <span class="text-info">square</span>. Drag is supported.
+            You can use a custom switch instead of a checkbox. It can have 2 styles: <span class="text-info">circle</span> (default) and <span class="text-info">square</span>. Drag functionality is also supported.
           </p>
           <p class="mbl pbl">
-            For more technical details read <a href="http://www.larentis.eu/switch">original documentation</a>.
+            For more technical details read the <a href="http://www.larentis.eu/switch">original documentation</a>.
           </p>
           <span class="mrl">
             <input type="checkbox" checked data-toggle="switch" />
@@ -2569,7 +2572,7 @@ $("select").selectpicker({style: 'btn-hg btn-primary', menuStyle: 'dropdown-inve
         </div>
         <div class="demo-content">
           <p class="mbl pbl">
-            Restyled <a href="http://getbootstrap.com/css/#tables">Bootstrap tables</a>. Added mobile support.
+            The restyled <a href="http://getbootstrap.com/css/#tables">Bootstrap tables</a> with added mobile support.
           </p>
 
           <h5 class="mbl">Striped</h5>
@@ -2707,10 +2710,10 @@ $("select").selectpicker({style: 'btn-hg btn-primary', menuStyle: 'dropdown-inve
         </div>
         <div class="demo-content">
           <p class="mbl">
-            Used for entering multiple tags with ability to remove/add new and validating already existing ones. Available 2 color schemes: grey(default) and primary.
+            Used for managing multiple tags with the ability of adding a new one and removing or validating an existing one. It is available in 2 color schemes: grey(default) and primary.
           </p>
           <p class="mbl pbl">
-            Based on <a href="http://xoxco.com/projects/code/tagsinput">Tags Input Plugin</a>. For more technical details read <a href="https://github.com/xoxco/jQuery-Tags-Input#instructions">official plug-in&nbsp;documentation</a>.
+            This component is based on the <a href="http://xoxco.com/projects/code/tagsinput">Tags Input Plugin</a>. For more technical details read the <a href="https://github.com/xoxco/jQuery-Tags-Input#instructions">official plug-in&nbsp;documentation</a>.
           </p>
 
           <input name="tagsinput" class="tagsinput tagsinput-primary" value="Clean,Fresh,Modern,Unique" />
@@ -2738,7 +2741,7 @@ $(".tagsinput").tagsInput();
         </div>
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://getbootstrap.com/javascript/#tooltips">Bootstrap tooltip</a>. Added 1 new light look.
+            The restyled <a href="http://getbootstrap.com/javascript/#tooltips">Bootstrap tooltip</a>. We have added one new lighter look.
           </p>
 
           <div style="width: 40%; padding-left: 10px; height: 60px;">
@@ -2760,6 +2763,23 @@ $(".tagsinput").tagsInput();
 <pre class="prettyprint mvl">
 &lt;p data-toggle="tooltip" data-tooltip-style="light" title="Tooltip copy"&gt;&lt;/p&gt;
 </pre>
+          <div id="fui-typeahead"></div>
+        </div> <!-- /.demo-content -->
+      </div> <!-- /.demo-row -->
+
+            <div class="demo-row">
+        <div class="demo-title">
+          <h3>Typeahead</h3>
+        </div>
+        <div class="demo-content">
+          <p class="mbl">
+            The restyled <a href="http://twitter.github.io/typeahead.js">Twitter Typeahead</a>.
+          </p>
+
+          <div class="form-group">
+            <input class="form-control" type="text" id="typeahead-demo-01" />
+          </div>
+
           <div id="fui-slider"></div>
         </div> <!-- /.demo-content -->
       </div> <!-- /.demo-row -->
@@ -2770,18 +2790,18 @@ $(".tagsinput").tagsInput();
         </div>
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://jqueryui.com/slider">jQuery UI slider</a>. Added slider segments.
+            The restyled <a href="http://jqueryui.com/slider">jQuery UI slider</a> with added slider segments.
           </p>
 
-          <div id="slider" class="ui-slider"></div>
+          <div id="slider"></div>
 
-          <p class="ptl">Markup:</p>
+          <p class="ptl">The markup:</p>
 
 <pre class="prettyprint mvl">
-&lt;div id="slider" class="ui-slider"&gt;&lt;/div&gt;
+&lt;div id="slider"&gt;&lt;/div&gt;
 </pre>
 
-          <p class="ptl">JS:</p>
+          <p class="ptl">The JS:</p>
 
 <pre class="prettyprint mvl">
 var $slider = $("#slider");
@@ -2796,39 +2816,74 @@ if ($slider.length > 0) {
 }
 </pre>
 
-          <p class="pvl">How <span class="text-info">addSliderSegments()</span> work?</p>
-          <p>This is an extended jQuery method placed in the <code>application.js</code>. It calculates how many segments to append by looking at a <span class="text-info">slider("option").max</span> which shows a maximum slider value.</p>
+          <p class="pvl">How does <span class="text-info">addSliderSegments()</span> work?</p>
+          <p>This is an extended jQuery method placed in the <code>application.js</code> file. It calculates how many segments to append to the slider by looking at a <span class="text-info">slider("option").max</span> which shows a maximum slider value.</p>
 
 <pre class="prettyprint mvl">
 // Add segments to a slider
-$.fn.addSliderSegments = function (amount) {
+$.fn.addSliderSegments = function (amount, orientation) {    
   return this.each(function () {
-    var segmentGap = 100 / (amount - 1) + "%"
-      , segment = "&lt;div class='ui-slider-segment' style='margin-left: " + segmentGap + ";'&gt;&lt;/div&gt;";
-    $(this).prepend(segment.repeat(amount - 2));
+    if (orientation == "vertical") {
+      var output = ''
+        , i;
+      for (i = 1; i &lt;= amount - 2; i++) {
+        output += '&lt;div class="ui-slider-segment" style="top:' + 100 / (amount - 1) * i + '%;"&gt;&lt;/div&gt;';
+      };
+      $(this).prepend(output);
+    } else {
+      var segmentGap = 100 / (amount - 1) + "%"
+        , segment = '&lt;div class="ui-slider-segment" style="margin-left: ' + segmentGap + ';"&gt;&lt;/div&gt;';
+      $(this).prepend(segment.repeat(amount - 2));
+    }
   });
 };
 </pre>
 
-          <p class="pvl">Custom slider values</p>
+          <p class="pvl">Vertical slider:</p>
 
           <div class="pbl">
-            <div id="slider3" class="ui-slider">
+            <div id="vertical-slider" style="height: 200px;"></div>
+          </div>
+
+          <p class="ptl">The markup:</p>
+
+<pre class="prettyprint mvl">
+&lt;div id="vertical-slider" style="height: 200px;"&gt;&lt;/div&gt;
+</pre>
+
+          <p class="ptl">The JS:</p>
+
+<pre class="prettyprint mvl">
+var $verticalSlider = $("#vertical-slider");
+if ($verticalSlider.length) {
+  $verticalSlider.slider({
+    min: 1,
+    max: 5,
+    value: 3,
+    orientation: "vertical",
+    range: "min"
+  }).addSliderSegments($verticalSlider.slider("option").max, "vertical");
+}
+</pre>
+<p class="pvl">Custom slider values:</p>
+
+          <div class="pbl">
+            <div id="slider3">
               <span class="ui-slider-value first"></span>
               <span class="ui-slider-value last"></span>
             </div>
           </div>
 
-          <p class="ptl">Markup:</p>
+          <p class="ptl">The markup:</p>
 
 <pre class="prettyprint mvl">
-&lt;div id="slider3" class="ui-slider"&gt;
+&lt;div id="slider3"&gt;
   &lt;span class="ui-slider-value first"&gt;&lt;/span&gt;
   &lt;span class="ui-slider-value last"&gt;&lt;/span&gt;
 &lt;/div&gt;
 </pre>
 
-          <p class="ptl">JS:</p>
+          <p class="ptl">The JS:</p>
 
 <pre class="prettyprint mvl">
 var $slider3 = $("#slider3")
@@ -2870,17 +2925,52 @@ if ($slider3.length > 0) {
         </div>
         <div class="demo-content">
           <p class="mbl">
-            Restyled <a href="http://jqueryui.com/spinner">jQuery UI spinner</a>.
+            The restyled <a href="http://jqueryui.com/spinner">jQuery UI spinner</a>.
           </p>
 
           <div class="form-group">
-            <input type="text" id="spinner-01" value="0" class="form-control spinner">
+            <input type="text" id="spinner-01" value="0" class="form-control spinner" />
           </div>
 
 <pre class="prettyprint mvl">
 &lt;div class="form-group"&gt;
   &lt;input type="text" id="spinner-01" value="0" class="spinner" /&gt;
 &lt;/div&gt;
+</pre>
+
+          <p class="mbl">
+            A few different sizes for spinner:
+          </p>
+
+          <div class="row">
+            <div class="col-lg-5">
+              <input type="text" id="spinner-02" value="0" class="form-control input-hg spinner" />
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-lg-5">
+              <input type="text" id="spinner-03" value="0" class="form-control input-lg spinner" />
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-lg-5">
+              <input type="text" id="spinner-04" value="0" class="form-control spinner" />
+            </div>
+          </div>
+          <hr />
+          <div class="row">
+            <div class="col-lg-5">
+              <input type="text" id="spinner-05" value="0" class="form-control input-sm spinner" />
+            </div>
+          </div>
+
+<pre class="prettyprint mvl">
+&lt;input type="text" id="spinner-02" value="0" class="form-control input-hg spinner" /&gt;
+&lt;input type="text" id="spinner-03" value="0" class="form-control input-lg spinner" /&gt;
+&lt;input type="text" id="spinner-04" value="0" class="form-control spinner" /&gt;
+&lt;input type="text" id="spinner-05" value="0" class="form-control input-sm spinner" /&gt;
 </pre>
         </div> <!-- /.demo-content -->
       </div> <!-- /.demo-row -->
@@ -2899,6 +2989,7 @@ if ($slider3.length > 0) {
     <script src="js/holder.js"></script>
     <script src="js/jquery.tagsinput.js"></script>
     <script src="js/jquery.placeholder.js"></script>
+    <script src="js/typeahead.js"></script>
     <script src="bootstrap/js/google-code-prettify/prettify.js"></script>
     <script src="js/application.js"></script>
   </body>

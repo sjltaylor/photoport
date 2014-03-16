@@ -250,9 +250,7 @@
 .static-modal-backdrop .modal {
   bottom: auto;
   display: block;
-  left: auto;
   position: relative;
-  right: auto;
   top: auto;
   z-index: 1;
   overflow: hidden;
@@ -260,14 +258,12 @@
 }
 .static-modal-backdrop .modal-dialog {
   padding: 0;
-  left: 0;
 }
 .components-static-modal .modal {
   bottom: auto;
   display: block;
   left: auto;
   position: relative;
-  right: auto;
   top: auto;
   z-index: 1;
   overflow: visible;
@@ -278,7 +274,6 @@
 }
 .components-static-modal .modal-dialog {
   padding: 0;
-  left: 0;
 }
 .demo-sidebar {
   font-size: 14px;

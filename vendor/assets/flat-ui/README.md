@@ -1,4 +1,4 @@
-Flat UI Pro 1.2.3
+Flat UI Pro 1.2.5
 =======
 
 Flat UI Pro
@@ -24,5 +24,10 @@ http://designmodo.com/flat
 + [http://twitter.com/iurevych](http://twitter.com/iurevych)
 + [http://github.com/iurevych](http://github.com/iurevych)
 
+**Dmitry Pytkin**
+
++ [http://twitter.com/pytkin](http://twitter.com/pytkin)
++ [http://github.com/pytkin](http://github.com/pytkin)
+
 ## Typeface
-Flat UI Free is made using the Lato typeface, which can be downloaded for free here: http://www.google.com/webfonts/specimen/Lato
+Flat UI Pro is made using the Lato typeface, which can be downloaded for free here: http://www.google.com/webfonts/specimen/Lato
