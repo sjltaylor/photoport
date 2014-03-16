@@ -5,8 +5,8 @@ describe IdentitiesController do
     let(:error) { nil }
     let(:new_identity) { false }
     let(:request_identity) { double(:request_identity) }
-    let(:identification_service) { double(:identification_service) }
-    let(:identification_presenter) { double(:identification_presenter) }
+    let(:services) { double(:services) }
+    let(:presenters) { double(:presenters) }
     let(:identification_attempt) { { new_identity: new_identity, error: error } }
     let(:identification_attempt_presentation) { double(:identification_attempt_presentation) }
     let(:credentials) { { email_address: 'email@address.meow', password: 'iamyourfather'}.stringify_keys }
@@ -14,11 +14,11 @@ describe IdentitiesController do
 
     before(:each) do
       controller.stub(:request_identity => request_identity)
-      controller.stub(:identification_presenter => identification_presenter)
-      identification_presenter.stub(:identification_attempt => identification_attempt_presentation)
-      controller.stub(:identification_service => identification_service)
+      controller.stub(:presenters => presenters)
+      presenters.stub(:identification_attempt => identification_attempt_presentation)
+      controller.stub(:services => services)
       controller.stub(:render) {|opts|  @response_status_code ||= opts[:status] }
-      identification_service.stub(:identify).and_return(identification_attempt)
+      services.stub(:identify).and_return(identification_attempt)
     end
 
     before(:each) { identify }
@@ -28,7 +28,7 @@ describe IdentitiesController do
     end
 
     it 'calls the identification service with the given credentials' do
-      identification_service.should have_received(:identify).with(identity: request_identity, credentials: credentials.symbolize_keys)
+      services.should have_received(:identify).with(identity: request_identity, credentials: credentials.symbolize_keys)
     end
 
     it 'renders the identification attempt presentation as a json payload' do

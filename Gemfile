@@ -12,7 +12,9 @@ gem 'ejs'
 gem 'sprockets', '>= 2.0.0'
 gem 'less-rails'
 gem 'sass'
-gem 'resolve', git: 'https://github.com/sjltaylor/resolve'
+gem 'resolve',  '>= 0.0.3', git: '../../resolve'
+gem 'services', '>= 0.0.3', path: '../../services'
+gem 'sentry', '>= 0.0.1', path: '../../sentry'
 
 gem 'rack-cache', :require => 'rack/cache'
 gem 'fog'
@@ -33,4 +35,5 @@ group :test, :development do
   gem 'pry-nav'
   gem 'rspec-rails'
   gem 'jasmine-rails'
+  gem 'binding_of_caller'
 end

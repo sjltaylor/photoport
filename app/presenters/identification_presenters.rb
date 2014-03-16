@@ -1,4 +1,4 @@
-class IdentificationPresenter
+module IdentificationPresenters
   depends_on :url_helper
 
   def identity(identity)

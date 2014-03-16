@@ -1,15 +1,14 @@
 require 'bcrypt'
 
-class IdentificationService
-  include BCrypt
+module IdentificationServices
 
-  def create_identity(context={})
+  def create_identity
     Identity.create.tap {|identity| identity.collections.create }
   end
-  def identify(context={})
-    identity      = context[:identity]
-    password      = context[:credentials][:password]
-    email_address = context[:credentials][:email_address]
+
+  def identify(identity:, credentials:)
+    password      = credentials.fetch(:password)
+    email_address = credentials.fetch(:email_address)
 
     existing_identity = Identity.find_by_email_address(email_address)
 
@@ -27,7 +26,7 @@ class IdentificationService
         message = I18n.t(error)
       end
     else
-      if Password.new(existing_identity.password_hash) == password
+      if BCrypt::Password.new(existing_identity.password_hash) == password
         Collection.where(creator_id: identity.id).update_all(creator_id: existing_identity.id)
         identity.destroy!
         identity = existing_identity

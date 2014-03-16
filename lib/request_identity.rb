@@ -7,7 +7,7 @@ module RequestIdentity
 
     return identity unless identity.blank?
 
-    return identification_service.create_identity.tap do |new_identity|
+    return services.create_identity.tap do |new_identity|
       session[:identity_id] = new_identity.id
     end
   end

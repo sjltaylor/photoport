@@ -5,15 +5,15 @@ describe CollectionsController do
     let(:collection_presentation) {double(:collection_presentation)}
     let(:show_default_data) { double(:show_default_data)}
     let(:request_identity) {double(:request_identity) }
-    let(:cms_service) { double(:cms_service)}
-    let(:collection_presenter) {double(:collection_presenter)}
+    let(:services) { double(:services)}
+    let(:presenters) {double(:presenters)}
 
     before(:each) do
       controller.stub(:request_identity => request_identity)
-      controller.stub(:collection_presenter => collection_presenter)
-      collection_presenter.stub(:collection => collection_presentation)
-      controller.stub(:cms_service => cms_service)
-      cms_service.stub(:show_default_data).with(identity: request_identity).and_return(show_default_data)
+      controller.stub(:presenters => presenters)
+      presenters.stub(:collection => collection_presentation)
+      controller.stub(:services => services)
+      services.stub(:show_default_data).with(identity: request_identity).and_return(show_default_data)
       controller.stub(:render)
     end
 

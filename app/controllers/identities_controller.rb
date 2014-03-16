@@ -1,6 +1,6 @@
 class IdentitiesController < ApplicationController
   def create
-    identification_attempt = identification_service.identify(identity: request_identity, credentials: params[:credentials].symbolize_keys)
+    identification_attempt = services.identify(identity: request_identity, credentials: params[:credentials].symbolize_keys)
 
     status_code = case(identification_attempt)
     when there_was_a_problem_with_the_credentials
@@ -11,7 +11,7 @@ class IdentitiesController < ApplicationController
       200
     end
 
-    payload = identification_presenter.identification_attempt(identification_attempt)
+    payload = presenters.identification_attempt(identification_attempt)
 
     render status: status_code, json: payload
   end

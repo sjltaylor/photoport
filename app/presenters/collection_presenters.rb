@@ -1,4 +1,4 @@
-class CollectionPresenter
+module CollectionPresenters
   depends_on :url_helper
 
   def collection(collection)

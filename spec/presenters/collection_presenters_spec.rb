@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe CollectionPresenter do
+describe CollectionPresenters do
   let(:url_helper) { double(:url_helper) }
-  let(:collection_presenter) { described_class.resolve(url_helper: url_helper) }
+  let(:collection_presenter) { Class.new.include(described_class).resolve(url_helper: url_helper) }
   let(:collection) { double(:collection, id: 3232, photos: (1..10).map{|i| double("photo_#{i}")}) }
 
   describe '#collection(collection)' do
