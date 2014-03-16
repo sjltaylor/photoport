@@ -67,7 +67,7 @@ describe CmsServices do
     context 'when the identity has collections' do
       let(:collections) { ['first', 'second'] }
       it 'returns the first' do
-        show_default_data.should be collections[0]
+        show_default_data[:collection].should be collections[0]
       end
     end
     context 'when the identity has no collections' do
@@ -84,7 +84,7 @@ describe CmsServices do
         collections.should have_received(:create)
       end
       it 'returns the newly created collection' do
-        show_default_data.should be new_collection
+        show_default_data[:collection].should be new_collection
       end
     end
   end

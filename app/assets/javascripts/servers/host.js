@@ -26,6 +26,13 @@
         });
       }
     },
+    landing: function () {
+      return $.ajax({
+        type: "GET",
+        headers: headers(),
+        dataType: 'json'
+      });
+    },
     users: {
       identify: function (user, credentials) {
         return $.ajax({

@@ -5,7 +5,9 @@ module CmsServices
 
   def show_default_data(identity:)
     identity.collections.create if identity.collections.empty?
-    return identity.collections.first
+    {
+      collection: identity.collections.first
+    }
   end
 
   def remove_photo(identity:, photo:)

@@ -2,33 +2,40 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
 
   Editor.Controller = {
     run: function () {
-      var layout = new Editor.Layout();
-      var collection = new PhotoportCMS.Collection(PHOTOPORT_CMS.collection);
-      var user = new PhotoportCMS.Collection(PHOTOPORT_CMS.collection);
+      PhotoportCMS.host.landing().done(function (landing) {
 
-      var uploadPanel =  PhotoportCMS.UploadPanel.Controller.makeView({
-        collection: collection
-      });
+        window.PHOTOPORT_CMS = {
+          uploadPanelConfig: landing.upload_panel_config
+        };
 
-      var photoportContainerView = PhotoportCMS.PhotoportContainer.Controller.makeView({
-        collection: collection,
-        uploadPanel: uploadPanel
-      });
+        var layout = new Editor.Layout();
+        var collection = new PhotoportCMS.Collection(landing.collection);
+        var user = new PhotoportCMS.Collection(landing.identity);
 
-      var identifyView = PhotoportCMS.Identify.Controller.makeView({
-        user: user
-      });
+        var uploadPanel =  PhotoportCMS.UploadPanel.Controller.makeView({
+          collection: collection
+        });
 
-      photoportContainerView.on('save', function () {
-        layout.contentRegion.show(identifyView);
-      });
+        var photoportContainerView = PhotoportCMS.PhotoportContainer.Controller.makeView({
+          collection: collection,
+          uploadPanel: uploadPanel
+        });
 
-      identifyView.on('close-save', function () {
+        var identifyView = PhotoportCMS.Identify.Controller.makeView({
+          user: user
+        });
+
+        photoportContainerView.on('save', function () {
+          layout.contentRegion.show(identifyView);
+        });
+
+        identifyView.on('close-save', function () {
+          layout.contentRegion.show(photoportContainerView);
+        });
+
+        PhotoportCMS.mainRegion.show(layout);
         layout.contentRegion.show(photoportContainerView);
-      });
-
-      PhotoportCMS.mainRegion.show(layout);
-      layout.contentRegion.show(photoportContainerView);
+      }).error(console.warn);
     }
   };
 });
