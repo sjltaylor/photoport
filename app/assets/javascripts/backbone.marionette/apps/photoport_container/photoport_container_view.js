@@ -31,6 +31,8 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       this.once('show', function () {
         this.photoport.seek(0);
       }, this);
+
+      this.listenTo(this.identity, 'change:status', this.__update__);
     },
     onRender: function () {
       this.uploadPanel.render();
@@ -39,7 +41,6 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
     },
     onShow: function () {
       this.photoport.start();
-      this.update();
     },
     onSave: function () {
       this.trigger('save');
@@ -73,7 +74,7 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       // noop
     },
     __update__: function () {
-      if (this.collection.photos.length) {
+      if (this.collection.photos.length && !this.identity.isIdentified()) {
         this.ui.savePrompt.show();
       } else {
         this.ui.savePrompt.hide();

@@ -20,9 +20,8 @@ module ContentPresenters
   def landing(collection:, identity:, session_id:)
     {
       collection:          self.collection(collection),
-      identity:            identity,
-      upload_panel_config: aws_s3_upload_panel_config(identity: identity, session_id: session_id),
-      identify:            url_helper.identify_url
+      identity:            self.identity(identity),
+      upload_panel_config: aws_s3_upload_panel_config(identity: identity, session_id: session_id)
     }
   end
 end

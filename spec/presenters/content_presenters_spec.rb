@@ -53,11 +53,11 @@ describe ContentPresenters do
     let(:session_id) { double(:session_id) }
     let(:collection) { double(:collection) }
     let(:identity) { double(:identity) }
-    let(:identify_url) { 'identify/url' }
+    let(:identity_presentation) { double(:identity_presentation) }
 
     before(:each) { presenters.stub(:aws_s3_upload_panel_config).with(identity: identity, session_id: session_id).and_return(aws_s3_upload_panel_config) }
     before(:each) { presenters.stub(:collection => collection) }
-    before(:each) { url_helper.stub(identify_url: identify_url) }
+    before(:each) { presenters.stub(:identity).with(identity).and_return(identity_presentation) }
 
     def landing
       presenters.landing(collection: collection, identity: identity, session_id: session_id)
@@ -70,11 +70,9 @@ describe ContentPresenters do
       landing[:collection].should be collection
       presenters.should have_received(:collection).with(collection)
     end
-    it 'includes the identity' do
-      landing[:identity].should be identity
-    end
-    it 'includes the idenify url' do
-      landing[:identify].should == identify_url
+    it 'includes the identity presentation of the identity' do
+      landing[:identity].should be identity_presentation
+      presenters.should have_received(:identity).with(identity)
     end
   end
 end

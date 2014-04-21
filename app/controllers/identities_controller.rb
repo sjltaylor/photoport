@@ -1,7 +1,6 @@
 class IdentitiesController < ApplicationController
   def create
     identification_attempt = services.identify(identity: request_identity, credentials: params[:credentials].symbolize_keys)
-
     status_code = case(identification_attempt)
     when there_was_a_problem_with_the_credentials
       422

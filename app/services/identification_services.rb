@@ -28,7 +28,7 @@ module IdentificationServices
     else
       if BCrypt::Password.new(existing_identity.password_hash) == password
         Collection.where(creator_id: identity.id).update_all(creator_id: existing_identity.id)
-        identity.destroy!
+        identity.destroy! if identity != existing_identity
         identity = existing_identity
         message = I18n.t('identify.login')
       else

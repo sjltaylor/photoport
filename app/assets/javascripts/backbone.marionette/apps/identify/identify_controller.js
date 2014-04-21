@@ -3,14 +3,21 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
   Identify.Controller = {
     makeView: function (opts) {
       var view = new Identify.View(opts);
-      var user = opts.user;
+      var identity = opts.identity;
+
+      identity.on('change:status', function () {
+        if (identity.isIdentified()) {
+          view.dismiss();
+        }
+      });
 
       view.on('save', function (credentials) {
-        PhotoportCMS.host.users.identify(user, credentials)
-          .done(function () {
-            debugger
+        PhotoportCMS.host.users.identify(identity, credentials)
+          .done(function (result) {
+            if (result.error) console.error(arguments);
+            identity.set(result.identity);
           }).fail(function () {
-            debugger
+            view.showError(arguments);
           });
       });
 

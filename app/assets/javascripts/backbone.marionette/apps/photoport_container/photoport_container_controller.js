@@ -19,6 +19,7 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       var view =  new PhotoportContainer.View({
         uploadPanel: opts.uploadPanel,
         collection: collection,
+        identity: opts.identity,
         contentDescriptorDelegate: this.contentDescriptorFor
       });
 
@@ -29,6 +30,8 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
         }).render();
         view.showPanel(editPanel);
       });
+
+
 
       return view;
     }

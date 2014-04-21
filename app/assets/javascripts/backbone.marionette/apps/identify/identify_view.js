@@ -13,7 +13,7 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
       passwordField: 'form input[name="password"]'
     },
     onCancelSave: function () {
-      this.trigger('close-save');
+      this.dismiss();
     },
     onShow: function () {
       this.ui.emailField.focus();
@@ -22,7 +22,7 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
       e.preventDefault();
       e.stopPropagation();
       this.trigger('save', {
-        emailAddress: this.ui.emailField.val(),
+        email_address: this.ui.emailField.val(),
         password: this.ui.passwordField.val()
       });
     },

@@ -10,7 +10,7 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
 
         var layout = new Editor.Layout();
         var collection = new PhotoportCMS.Collection(landing.collection);
-        var user = new PhotoportCMS.Collection(landing.identity);
+        var identity = new PhotoportCMS.Identity(landing.identity);
 
         var uploadPanel =  PhotoportCMS.UploadPanel.Controller.makeView({
           collection: collection
@@ -18,11 +18,12 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
 
         var photoportContainerView = PhotoportCMS.PhotoportContainer.Controller.makeView({
           collection: collection,
+          identity: identity,
           uploadPanel: uploadPanel
         });
 
         var identifyView = PhotoportCMS.Identify.Controller.makeView({
-          user: user
+          identity: identity
         });
 
         photoportContainerView.on('save', function () {
@@ -35,7 +36,7 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
 
         PhotoportCMS.mainRegion.show(layout);
         layout.contentRegion.show(photoportContainerView);
-      }).error(console.warn);
+      }).error(console.error);
     }
   };
 });

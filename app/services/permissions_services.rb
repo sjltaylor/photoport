@@ -15,4 +15,5 @@ module PermissionsServices
 
   allow :create_identity
   allow :show_default_data
+  allow :identify
 end
