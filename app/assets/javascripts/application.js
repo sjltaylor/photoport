@@ -11,13 +11,8 @@
 // GO AFTER THE REQUIRES BELOW.
 //
 
-// from the flat-ui directory
-// ------------------------------------------
-//= require js/jquery-2.0.3.min
-//= require js/bootstrap.min
-//= require js/html5shiv
-// ------------------------------------------
 //
+//= require jquery
 //= require underscore
 //= require backbone
 //= require backbone.marionette
