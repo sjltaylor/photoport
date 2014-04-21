@@ -11,6 +11,10 @@ Photoport::Application.routes.draw do
 
   post 'identify' => 'identities#create'
 
+  if Rails.env.test? || Rails.env.development?
+    get '/reset' => 'test_hooks#reset'
+  end
+
   # resources :collections, only: [] do
   #
   # end
