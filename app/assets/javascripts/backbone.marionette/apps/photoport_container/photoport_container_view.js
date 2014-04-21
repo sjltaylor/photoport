@@ -41,6 +41,7 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
     },
     onShow: function () {
       this.photoport.start();
+      this.update();
     },
     onSave: function () {
       this.trigger('save');

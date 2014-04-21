@@ -5,7 +5,7 @@ module ContentPresenters
     {
       id:     collection.id,
       photos: collection.photos.map{|p| photo(p)},
-      add:    url_helper.collection_photos_url(collection)
+      add:    url_helper.collection_photos_url(collection, format: :json)
     }
   end
 

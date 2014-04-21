@@ -4,7 +4,7 @@ module IdentificationPresenters
   def identity(identity)
     {
       status: identity.status,
-      identify: url_helper.identify_url
+      identify: url_helper.identify_url(format: :json)
     }
   end
 

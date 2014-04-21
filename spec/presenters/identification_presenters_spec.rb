@@ -2,9 +2,11 @@ require 'spec_helper'
 
 describe IdentificationPresenters do
   let(:identify_url) { 'identify-url' }
-  let(:url_helper) { double(:url_helper, identify_url: identify_url) }
+  let(:url_helper) { double(:url_helper) }
   let(:identity_presenter) { Class.new.include(described_class).resolve(url_helper: url_helper) }
   let(:identity) { double(:identity, status: 'anonymous') }
+
+  before(:each) { url_helper.stub(:identify_url).with(format: :json).and_return(identify_url) }
 
   describe '#identity' do
     let(:identity_presentation) { identity_presenter.identity(identity) }

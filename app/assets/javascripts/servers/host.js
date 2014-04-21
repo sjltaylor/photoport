@@ -14,7 +14,8 @@
           url: collection.get('add'),
           headers: headers(),
           data: { file_key: fileKey },
-          dataType: 'json'
+          dataType: 'json',
+          cache: false
         });
       },
       remove: function (photo) {
@@ -22,15 +23,18 @@
           type: "DELETE",
           url: photo.get('url'),
           headers: headers(),
-          dataType: 'json'
+          dataType: 'json',
+          cache: false
         });
       }
     },
     landing: function () {
       return $.ajax({
         type: "GET",
+        url: '/start.json',
         headers: headers(),
-        dataType: 'json'
+        dataType: 'json',
+        cache: false
       });
     },
     users: {
@@ -40,7 +44,8 @@
           url: user.get('identify'),
           headers: headers(),
           data: { credentials: credentials },
-          dataType: 'json'
+          dataType: 'json',
+          cache: false
         });
       }
     }

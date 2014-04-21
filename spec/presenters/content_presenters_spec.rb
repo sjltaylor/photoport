@@ -11,7 +11,7 @@ describe ContentPresenters do
     let(:add_photo_url) { 'add/photo/url' }
 
     before(:each) { presenters.stub(:photo).and_return(:photo_presentation) }
-    before(:each) { url_helper.stub(:collection_photos_url).with(collection).and_return(add_photo_url) }
+    before(:each) { url_helper.stub(:collection_photos_url).with(collection, format: :json).and_return(add_photo_url) }
 
     it 'includes the id' do
       collection_presentation[:id].should be collection.id
