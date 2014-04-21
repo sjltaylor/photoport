@@ -1,7 +1,7 @@
 class Identity < ActiveRecord::Base
   include AASM
 
-  has_many :collections, foreign_key: :creator_id
+  has_many :collections, foreign_key: :creator_id, dependent: :destroy
 
   aasm(column: :status) do
     state :anonymous, initial: true
