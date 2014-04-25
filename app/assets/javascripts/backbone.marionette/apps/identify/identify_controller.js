@@ -11,7 +11,7 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
         }
       });
 
-      view.on('save', function (credentials) {
+      view.on('identify', function (credentials) {
         PhotoportCMS.host.users.identify(identity, credentials)
           .done(function (result) {
             if (result.error) console.error(arguments);

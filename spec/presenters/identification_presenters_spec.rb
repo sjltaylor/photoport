@@ -2,11 +2,13 @@ require 'spec_helper'
 
 describe IdentificationPresenters do
   let(:identify_url) { 'identify-url' }
+  let(:sign_out_url) { 'sign-out-url' }
   let(:url_helper) { double(:url_helper) }
   let(:identity_presenter) { Class.new.include(described_class).resolve(url_helper: url_helper) }
-  let(:identity) { double(:identity, status: 'anonymous') }
+  let(:identity) { double(:identity, status: 'anonymous', identified?: false) }
 
   before(:each) { url_helper.stub(:identify_url).with(format: :json).and_return(identify_url) }
+  before(:each) { url_helper.stub(:sign_out_url).with(format: :json).and_return(sign_out_url) }
 
   describe '#identity' do
     let(:identity_presentation) { identity_presenter.identity(identity) }
@@ -16,6 +18,23 @@ describe IdentificationPresenters do
     end
     it 'includes an identify url' do
       identity_presentation[:identify].should == identify_url
+    end
+    it 'includes a sign_out url' do
+      identity_presentation[:sign_out].should == sign_out_url
+    end
+
+    context 'when the identity is anonymous' do
+      it 'does not include an email address' do
+        identity_presentation.should_not have_key(:email_address)
+      end
+    end
+
+    context 'when the identity is identified' do
+      let(:identity) { double(:identity, status: 'identified', identified?: true, email_address: 'email@address.net') }
+
+      it 'includes the email address of the identity' do
+        identity_presentation[:email_address].should == identity.email_address
+      end
     end
   end
 

@@ -2,10 +2,15 @@ module IdentificationPresenters
   depends_on :url_helper
 
   def identity(identity)
-    {
+    p = {
       status: identity.status,
-      identify: url_helper.identify_url(format: :json)
+      identify: url_helper.identify_url(format: :json),
+      sign_out: url_helper.sign_out_url(format: :json)
     }
+
+    p[:email_address] = identity.email_address if identity.identified?
+
+    p
   end
 
   def identification_attempt(identification_attempt_result)

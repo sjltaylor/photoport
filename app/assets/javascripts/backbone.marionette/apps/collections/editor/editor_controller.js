@@ -26,11 +26,30 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
           identity: identity
         });
 
+        var signInView = PhotoportCMS.Identify.Controller.makeView({
+          identity: identity,
+          template: 'sign_in'
+        });
+
+        var identityStatusView = PhotoportCMS.IdentityStatus.Controller.makeView({
+          identity: identity
+        });
+
+        identityStatusView.render();
+        $(document.body).append(identityStatusView.$el);
+        identityStatusView.on('sign-in', function () {
+          layout.contentRegion.show(signInView);
+        });
+
         photoportContainerView.on('save', function () {
           layout.contentRegion.show(identifyView);
         });
 
-        identifyView.on('close-save', function () {
+        identifyView.on('close-identify', function () {
+          layout.contentRegion.show(photoportContainerView);
+        });
+
+        signInView.on('close-identify', function () {
           layout.contentRegion.show(photoportContainerView);
         });
 

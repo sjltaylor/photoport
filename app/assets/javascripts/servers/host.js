@@ -47,6 +47,9 @@
           dataType: 'json',
           cache: false
         });
+      },
+      signOut: function () {
+        alert('signing out');
       }
     }
   };

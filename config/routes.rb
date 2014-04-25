@@ -4,17 +4,20 @@ Photoport::Application.routes.draw do
   get 'status' => 'status#index'
 
   get 'start' => 'collections#new'
-  
+
   mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
 
   resources :collections, only: [:new, :create] do
     resources :photos, only: [:create, :show, :destroy]
   end
 
-  post 'identify' => 'identities#create'
+  post 'identify' => 'identities#identify'
+  get  'sign_out' => 'identities#sign_out'
 
   if Rails.env.test? || Rails.env.development?
-    get '/reset' => 'test_hooks#reset'
+    namespace :test_hooks do
+      get ':action'
+    end
   end
 
   # resources :collections, only: [] do

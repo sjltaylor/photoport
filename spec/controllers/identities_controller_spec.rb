@@ -24,7 +24,7 @@ describe IdentitiesController do
     before(:each) { identify }
 
     def identify
-      post 'create', credentials: credentials
+      post 'identify', credentials: credentials
     end
 
     it 'calls the identification service with the given credentials' do

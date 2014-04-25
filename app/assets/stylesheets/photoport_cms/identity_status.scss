@@ -1,0 +1,15 @@
+.identity-status-view {
+  position: fixed;
+  top: 0;
+  right: 7.5%;
+  font-size: 0.85em;
+
+  a, a:focus, a:hover, a:visited {
+    color: $black;
+  }
+
+  .sign-out .email {
+    color: #aaa;
+    margin: 0 10px;
+  }
+}
