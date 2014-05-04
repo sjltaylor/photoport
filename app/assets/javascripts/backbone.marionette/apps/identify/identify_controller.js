@@ -14,10 +14,14 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
       view.on('identify', function (credentials) {
         PhotoportCMS.host.users.identify(identity, credentials)
           .done(function (result) {
-            if (result.error) console.error(arguments);
             identity.set(result.identity);
-          }).fail(function () {
-            view.showError(arguments);
+          }).fail(function (response) {
+            if (response.status === 422 && (typeof response.responseJSON === 'object')) {
+              var payload = response.responseJSON
+              view.showError(payload.error, payload.message);
+            } else {
+              console.error(response);
+            }
           });
       });
 

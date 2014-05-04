@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 4.0.2'
+gem 'rails', '~> 4.1.0'
 gem 'pg'
 
 # Bundle edge Rails instead:
@@ -24,7 +24,7 @@ gem 'dragonfly-s3_data_store'
 gem 'aasm'
 gem 'better_errors'
 gem 'bcrypt-ruby'
-gem 'blobject'
+gem 'blobject', '>= 0.4.1'
 
 group :test do
   gem 'shoulda'

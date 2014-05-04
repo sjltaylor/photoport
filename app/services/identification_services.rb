@@ -7,41 +7,47 @@ module IdentificationServices
   end
 
   def identify(identity:, credentials:)
-    password      = credentials.fetch(:password)
-    email_address = credentials.fetch(:email_address)
+    password      = credentials[:password]
+    email_address = credentials[:email_address]
+
+    result = Blobject.new(identity: identity, new_identity: false)
+
+    result.error, result.message = validate_email_address(email_address)
+
+    return result.to_hash if result.error.present?
 
     existing_identity = Identity.find_by_email_address(email_address)
 
-    new_identity = existing_identity.nil?
+    result.new_identity = existing_identity.nil?
 
-    if new_identity
+    if result.new_identity
       if PasswordSec.barely_secure_password?(password)
-        identity.email_address = email_address
-        identity.password_hash = BCrypt::Password.create(password)
-        identity.identify
-        identity.save!
-        message = I18n.t('identify.new')
+        result.identity.email_address = email_address
+        result.identity.password_hash = BCrypt::Password.create(password)
+        result.identity.identify
+        result.identity.save!
       else
-        error = 'identify.weak_password'
-        message = I18n.t(error)
+        result.error = 'password.too_weak'
+        result.message = I18n.t(result.error)
       end
     else
       if BCrypt::Password.new(existing_identity.password_hash) == password
         Collection.where(creator_id: identity.id).update_all(creator_id: existing_identity.id)
         identity.destroy! if identity != existing_identity
-        identity = existing_identity
-        message = I18n.t('identify.login')
+        result.identity = existing_identity
+        result.message = I18n.t('identify.login')
       else
-        error = 'identify.password_mismatch'
-        message = I18n.t(error)
+        result.error = 'password.mismatch'
+        result.message = I18n.t(result.error)
       end
     end
 
-    {
-      identity: identity,
-      new_identity: new_identity,
-      error: error,
-      message: message
-    }
+    return result.to_hash
+  end
+
+  protected
+  def validate_email_address(email_address)
+    return 'email_address.missing', I18n.t('email_address.missing') if email_address.blank?
+    return 'email_address.invalid', I18n.t('email_address.invalid') unless email_address =~ /\A.+@.+\Z/
   end
 end

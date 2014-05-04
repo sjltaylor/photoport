@@ -5,9 +5,14 @@
   width: 380px;
   margin: 100px auto 30px;
 
-  .prompt {
+  .prompt, .error-flash {
     margin: 10px;
     font-size: 14px;
+  }
+
+  .error-flash {
+    color: $red;
+    display: none;
   }
 
   form {

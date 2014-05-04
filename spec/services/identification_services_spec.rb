@@ -41,9 +41,6 @@ describe IdentificationServices do
       it 'indicates there was no error' do
         identify[:error].should be_nil
       end
-      it 'includes a success message' do
-        identify[:message].should eq(success_message)
-      end
     end
 
     shared_examples_for 'unsuccessful identification' do
@@ -87,8 +84,8 @@ describe IdentificationServices do
 
       describe 'but the password doesnt match' do
         let(:existing_identities_password_hash) { BCrypt::Password.create('something-else') }
-        let(:error_message) { I18n.t('identify.password_mismatch') }
-        let(:error_code) { 'identify.password_mismatch' }
+        let(:error_message) { I18n.t('password.mismatch') }
+        let(:error_code) { 'password.mismatch' }
         include_examples 'unsuccessful identification'
         it 'indicates the identity is not a new identity' do
           identify[:new_identity].should be false
@@ -102,7 +99,6 @@ describe IdentificationServices do
 
     describe 'when the identity does not exist already' do
       let(:existing_identity) { nil }
-      let(:success_message) { I18n.t('identify.new') }
       include_examples 'successful identification'
       it 'sets the email address' do
         identify
@@ -134,13 +130,35 @@ describe IdentificationServices do
 
       describe 'but the password is not strong enough' do
         let(:barely_secure_password) { false }
-        let(:error_message) { I18n.t('identify.weak_password') }
-        let(:error_code) { 'identify.weak_password' }
+        let(:error_message) { I18n.t('password.too_weak') }
+        let(:error_code) { 'password.too_weak' }
 
         include_examples 'unsuccessful identification'
         it 'indicates the identity is a new identity' do
           identify[:new_identity].should be true
         end
+      end
+    end
+
+    describe 'when the email address is not valid' do
+      let(:credentials) { { email_address: 'email', password: '' } }
+      let(:error_message) { I18n.t('email_address.invalid') }
+      let(:error_code) { 'email_address.invalid' }
+
+      include_examples 'unsuccessful identification'
+    end
+    describe 'when the email address is missing' do
+      let(:error_message) { I18n.t('email_address.missing') }
+      let(:error_code) { 'email_address.missing' }
+
+      describe 'represented as an empty string' do
+        let(:credentials) { { email_address: '', password: '' } }
+        include_examples 'unsuccessful identification'
+      end
+
+      describe 'represented as a missing entry' do
+        let(:credentials) { { password: '' } }
+        include_examples 'unsuccessful identification'
       end
     end
   end

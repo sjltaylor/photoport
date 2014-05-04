@@ -10,13 +10,18 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
       'submit form': 'onIdentify'
     },
     ui: {
+      prompts: '.prompt',
+      form: 'form',
       emailField: 'form input[name="email"]',
-      passwordField: 'form input[name="password"]'
+      passwordField: 'form input[name="password"]',
+      errorFlash: '.error-flash'
     },
     initialize: function () {
       this.template = this.options.template || this.template;
     },
     onCancel: function () {
+      //this.ui.form.reset();
+      //this.clearError();
       this.dismiss();
     },
     onShow: function () {
@@ -33,8 +38,9 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
     dismiss: function () {
       this.trigger('close-identify');
     },
-    showError: function (errorMessage) {
-      alert(errorMessage);
+    showError: function (error, message) {
+      this.ui.prompts.hide();
+      this.ui.errorFlash.show().text(message);
     }
   });
 });
