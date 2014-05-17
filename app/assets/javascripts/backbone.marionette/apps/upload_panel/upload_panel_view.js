@@ -1,6 +1,6 @@
 //= require templates/photo_upload_panel
 
-PhotoportCMS.module('UploadPanel', function (UploadPanel, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, Marionette, $, _) {
   UploadPanel.View = Marionette.ItemView.extend({
     template: "photo_upload_panel",
     className: 'photoport-cms-upload-panel',

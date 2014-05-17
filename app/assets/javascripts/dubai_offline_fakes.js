@@ -1,6 +1,6 @@
 console.warn("Dubai offline fakes are in effect. See require statements in landing.js");
 
-PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('PhotoportContainer', function (PhotoportContainer, Collections, Backbone, Marionette, $, _) {
 
   PhotoportContainer.Controller.map = function(photo) {
     photo.set('download', undefined);

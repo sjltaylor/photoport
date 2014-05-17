@@ -1,11 +1,9 @@
-//= require 'templates/collections/editor'
-
 /*
   Region extensions shows and hides regions rather than closing and removing them.
 */
-PhotoportCMS.PageRegion = Backbone.Marionette.Region.extend({});
+Collections.PageRegion = Backbone.Marionette.Region.extend({});
 
-_.extend(PhotoportCMS.PageRegion.prototype, {
+_.extend(Collections.PageRegion.prototype, {
   initialize: function () {
     this.views = [];
   },
@@ -45,18 +43,4 @@ _.extend(PhotoportCMS.PageRegion.prototype, {
     this.views.splice(this.views.indexOf(view), 1);
     view.close();
   }
-});
-
-PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Backbone, Marionette, $, _) {
-
-  Editor.Layout = Marionette.Layout.extend({
-    template: "collections/editor",
-    className: 'collection-editor-layout',
-    regions: {
-      contentRegion: {
-        selector: "#page_body",
-        regionType: PhotoportCMS.PageRegion
-      }
-    }
-  });
 });

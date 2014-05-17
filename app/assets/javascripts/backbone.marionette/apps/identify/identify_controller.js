@@ -1,4 +1,4 @@
-PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('Identify', function (Identify, Collections, Backbone, Marionette, $, _) {
 
   Identify.Controller = {
     makeView: function (opts) {
@@ -12,7 +12,7 @@ PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Mari
       });
 
       view.on('identify', function (credentials) {
-        PhotoportCMS.host.users.identify(identity, credentials)
+        Collections.host.users.identify(identity, credentials)
           .done(function (result) {
             identity.set(result.identity);
           }).fail(function (response) {

@@ -6,6 +6,9 @@
   <%= yield :head %>
 </head>
 <body>
+  <div id="primary_navigation" class="page-controls">
+    <%= link_to 'Collections', collections_path, class: 'home' %>
+  </div>
   <div id="main">
     <%= yield %>
   </div>

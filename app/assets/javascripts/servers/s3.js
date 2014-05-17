@@ -1,6 +1,6 @@
 (function () {
 
-  PhotoportCMS.s3 = {
+  Collections.s3 = {
     uploadPhotos: function (config, files) {
       var uploadData = config["upload_form_data"];
 
@@ -40,7 +40,7 @@
           processData: false
         });
 
-        deferred.photoportCmsMetadata = { fileKey: fileKey };
+        deferred.CollectionsMetadata = { fileKey: fileKey };
         promises.push(deferred.promise());
       }
 

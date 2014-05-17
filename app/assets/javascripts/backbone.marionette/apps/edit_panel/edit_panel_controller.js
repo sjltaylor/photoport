@@ -1,4 +1,4 @@
-PhotoportCMS.module('EditPanel', function (EditPanel, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('EditPanel', function (EditPanel, Collections, Backbone, Marionette, $, _) {
 
   EditPanel.Controller = {
     makeView: function (opts) {
@@ -8,7 +8,7 @@ PhotoportCMS.module('EditPanel', function (EditPanel, PhotoportCMS, Backbone, Ma
       var view = new EditPanel.View(opts);
 
       view.once('remove-current', function () {
-        PhotoportCMS.host.photos.remove(photo).done(function () {
+        Collections.host.photos.remove(photo).done(function () {
           collection.photos.remove(photo);
         }).fail(console.error);
       });

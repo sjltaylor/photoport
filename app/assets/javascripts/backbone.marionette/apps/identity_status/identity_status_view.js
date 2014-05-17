@@ -1,6 +1,6 @@
 //= require templates/identity_status
 
-PhotoportCMS.module('IdentityStatus', function (IdentityStatus, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('IdentityStatus', function (IdentityStatus, Collections, Backbone, Marionette, $, _) {
   IdentityStatus.View = Marionette.ItemView.extend({
     template: 'identity_status',
     className: 'identity-status-view',

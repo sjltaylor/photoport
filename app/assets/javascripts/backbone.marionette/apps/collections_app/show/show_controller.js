@@ -1,37 +1,37 @@
-PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('Show', function (Show, Collections, Backbone, Marionette, $, _) {
 
-  Editor.Controller = {
+  Show.Controller = {
     run: function () {
-      PhotoportCMS.host.landing().done(function (landing) {
+      Collections.host.landing().done(function (landing) {
 
         window.PHOTOPORT_CMS = {
           uploadPanelConfig: landing.upload_panel_config
         };
 
-        var layout = new Editor.Layout();
-        var collection = new PhotoportCMS.Collection(landing.collection);
-        var identity = new PhotoportCMS.Identity(landing.identity);
+        var layout = new Collections.AppLayout();
+        var collection = new Collections.Collection(landing.collection);
+        var identity = new Collections.Identity(landing.identity);
 
-        var uploadPanel =  PhotoportCMS.UploadPanel.Controller.makeView({
+        var uploadPanel =  Collections.UploadPanel.Controller.makeView({
           collection: collection
         });
 
-        var photoportContainerView = PhotoportCMS.PhotoportContainer.Controller.makeView({
+        var photoportContainerView = Collections.PhotoportContainer.Controller.makeView({
           collection: collection,
           identity: identity,
           uploadPanel: uploadPanel
         });
 
-        var identifyView = PhotoportCMS.Identify.Controller.makeView({
+        var identifyView = Collections.Identify.Controller.makeView({
           identity: identity
         });
 
-        var signInView = PhotoportCMS.Identify.Controller.makeView({
+        var signInView = Collections.Identify.Controller.makeView({
           identity: identity,
           template: 'sign_in'
         });
 
-        var identityStatusView = PhotoportCMS.IdentityStatus.Controller.makeView({
+        var identityStatusView = Collections.IdentityStatus.Controller.makeView({
           identity: identity
         });
 
@@ -53,7 +53,7 @@ PhotoportCMS.module('CollectionsApp.Editor', function (Editor, PhotoportCMS, Bac
           layout.contentRegion.show(photoportContainerView);
         });
 
-        PhotoportCMS.mainRegion.show(layout);
+        Collections.mainRegion.show(layout);
         layout.contentRegion.show(photoportContainerView);
       }).error(console.error);
     }

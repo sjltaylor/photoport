@@ -1,4 +1,4 @@
-PhotoportCMS.module('IdentityStatus', function (IdentityStatus, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('IdentityStatus', function (IdentityStatus, Collections, Backbone, Marionette, $, _) {
 
   IdentityStatus.Controller = {
     makeView: function (opts) {

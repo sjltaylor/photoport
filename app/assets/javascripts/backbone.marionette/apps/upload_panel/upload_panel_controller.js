@@ -1,13 +1,13 @@
-PhotoportCMS.module('UploadPanel', function (UploadPanel, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, Marionette, $, _) {
 
   UploadPanel.Controller = {
     uploadPhotos: function (collection, files) {
 
       function onS3UploadDone(data, statusText, jqXHR) {
-        var fileKey = jqXHR.photoportCmsMetadata.fileKey;
+        var fileKey = jqXHR.CollectionsMetadata.fileKey;
         console.warn("CALLING HOST WITH FILE KEY: ", fileKey);
 
-        PhotoportCMS.host.photos.create(collection, fileKey).success(function (photo) {
+        Collections.host.photos.create(collection, fileKey).success(function (photo) {
           console.warn("SERVER RESPONSE:", photo);
           collection.photos.add(photo);
         }).fail(function () {
@@ -19,7 +19,7 @@ PhotoportCMS.module('UploadPanel', function (UploadPanel, PhotoportCMS, Backbone
         console.error('failed uploading photos to s3', arguments);
       }
 
-      var promises = PhotoportCMS.s3.uploadPhotos(PHOTOPORT_CMS.uploadPanelConfig, files);
+      var promises = Collections.s3.uploadPhotos(PHOTOPORT_CMS.uploadPanelConfig, files);
 
       promises.forEach(function (promise) {
         promise.done(onS3UploadDone).fail(onS3UploadFail);

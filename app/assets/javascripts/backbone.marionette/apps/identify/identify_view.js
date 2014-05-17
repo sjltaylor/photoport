@@ -1,7 +1,7 @@
 //= require templates/identify
 //= require templates/sign_in
 
-PhotoportCMS.module('Identify', function (Identify, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('Identify', function (Identify, Collections, Backbone, Marionette, $, _) {
   Identify.View = Marionette.ItemView.extend({
     template: 'identify',
     className: 'identify-view',

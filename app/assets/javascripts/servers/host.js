@@ -6,7 +6,7 @@
     };
   }
 
-  PhotoportCMS.host = {
+  Collections.host = {
     photos: {
       create: function (collection, fileKey) {
         return $.ajax({

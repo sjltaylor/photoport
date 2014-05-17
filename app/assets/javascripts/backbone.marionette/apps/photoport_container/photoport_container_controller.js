@@ -1,4 +1,4 @@
-PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('PhotoportContainer', function (PhotoportContainer, Collections, Backbone, Marionette, $, _) {
 
   PhotoportContainer.Controller = {
     contentDescriptorFor: function (photo) {
@@ -24,7 +24,7 @@ PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, Photopor
       });
 
       view.on('edit', function (content) {
-        var editPanel = PhotoportCMS.EditPanel.Controller.makeView({
+        var editPanel = Collections.EditPanel.Controller.makeView({
           collection: collection,
           photo: content.photo
         }).render();

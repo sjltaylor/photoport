@@ -2,7 +2,7 @@
 //= require templates/photoport_container
 
 
-PhotoportCMS.module('PhotoportContainer', function (PhotoportContainer, PhotoportCMS, Backbone, Marionette, $, _) {
+Collections.module('PhotoportContainer', function (PhotoportContainer, Collections, Backbone, Marionette, $, _) {
   PhotoportContainer.View = Marionette.ItemView.extend({
     template: 'photoport_container',
     className: 'photoport-container',

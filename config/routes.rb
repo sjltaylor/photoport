@@ -3,11 +3,11 @@ Photoport::Application.routes.draw do
   root :to => 'collections#new'
   get 'status' => 'status#index'
 
-  get 'start' => 'collections#new'
+  get 'start' => 'collections#start'
 
   mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
 
-  resources :collections, only: [:new, :create] do
+  resources :collections, only: [:new, :show, :create, :index] do
     resources :photos, only: [:create, :show, :destroy]
   end
 

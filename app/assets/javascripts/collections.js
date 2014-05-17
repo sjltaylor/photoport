@@ -1,0 +1,1 @@
+Collections = new Marionette.Application();

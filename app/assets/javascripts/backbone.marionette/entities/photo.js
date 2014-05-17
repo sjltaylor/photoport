@@ -1,3 +1,3 @@
-PhotoportCMS.Photo = Backbone.Model.extend({
+Collections.Photo = Backbone.Model.extend({
 
 });
