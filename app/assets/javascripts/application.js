@@ -12,7 +12,7 @@
 //
 
 //
-//= require jquery
-//= require underscore
-//= require backbone
-//= require backbone.marionette
+//= require jquery/dist/jquery.min
+//= require underscore/underscore
+//= require backbone/backbone
+//= require backbone.marionette/lib/backbone.marionette

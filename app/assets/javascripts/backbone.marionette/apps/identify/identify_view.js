@@ -3,11 +3,13 @@
 
 Collections.module('Identify', function (Identify, Collections, Backbone, Marionette, $, _) {
   Identify.View = Marionette.ItemView.extend({
-    template: 'identify',
+    template: 'sign_in',
     className: 'identify-view',
     events: {
+      'click .js-back': 'onBack',
       'click .js-cancel': 'onCancel',
-      'submit form': 'onIdentify'
+      'submit form': 'onIdentify',
+      'click .js-save': 'onSave'
     },
     ui: {
       prompts: '.prompt',
@@ -19,10 +21,11 @@ Collections.module('Identify', function (Identify, Collections, Backbone, Marion
     initialize: function () {
       this.template = this.options.template || this.template;
     },
+    onBack: function () {
+      history.back();
+    },
     onCancel: function () {
-      //this.ui.form.reset();
-      //this.clearError();
-      this.dismiss();
+      this.trigger('cancel');
     },
     onShow: function () {
       this.ui.emailField.focus();
@@ -35,12 +38,14 @@ Collections.module('Identify', function (Identify, Collections, Backbone, Marion
         password: this.ui.passwordField.val()
       });
     },
-    dismiss: function () {
-      this.trigger('close-identify');
-    },
     showError: function (error, message) {
       this.ui.prompts.hide();
       this.ui.errorFlash.show().text(message);
+    },
+    onSave: function () {
+      e.preventDefault();
+      e.stopPropagation();
+      this.trigger('save');
     }
   });
 });

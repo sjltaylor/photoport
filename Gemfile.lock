@@ -60,7 +60,7 @@ GEM
     commonjs (0.2.7)
     debug_inspector (0.0.2)
     diff-lcs (1.2.5)
-    dragonfly (1.0.3)
+    dragonfly (1.0.5)
       multi_json (~> 1.0)
       rack
     dragonfly-s3_data_store (1.0.3)
@@ -102,7 +102,7 @@ GEM
     mime-types (1.25.1)
     mini_portile (0.5.2)
     minitest (5.3.3)
-    multi_json (1.9.3)
+    multi_json (1.10.1)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.8.0)

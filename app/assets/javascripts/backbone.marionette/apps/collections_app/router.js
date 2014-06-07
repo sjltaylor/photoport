@@ -1,6 +1,7 @@
 Collections.Router = Marionette.AppRouter.extend({
   appRoutes: {
-    "": "editor",
-    "collections": "collections"
+    '': 'show',
+    'collections': 'collections',
+    'sign_in': 'sign_in'
   }
 });

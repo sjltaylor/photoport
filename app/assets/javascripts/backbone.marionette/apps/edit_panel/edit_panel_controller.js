@@ -12,7 +12,7 @@ Collections.module('EditPanel', function (EditPanel, Collections, Backbone, Mari
           collection.photos.remove(photo);
         }).fail(console.error);
       });
-
+      
       return view;
     }
   };

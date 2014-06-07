@@ -4,35 +4,37 @@ Collections.module('IdentityStatus', function (IdentityStatus, Collections, Back
   IdentityStatus.View = Marionette.ItemView.extend({
     template: 'identity_status',
     className: 'identity-status-view',
-    events: {
-      'click .sign-in .action': 'signIn'
-    },
+    // events: {
+    //   'click .sign-in .action': 'signIn'
+    // },
     ui: {
       signIn: '.sign-in',
       signOut: '.sign-out',
-      signOutLink: '.sign-out a',
-      currentIdentityEmail: '.sign-out .email'
+      identityDescription: '.identity'
     },
     initialize: function () {
       this.identity = this.options.identity;
-      this.listenTo(this.identity, 'change:status', this.update);
+      this.listenTo(this.identity, 'change', this.update);
     },
     onRender: function () {
       this.update();
-      this.ui.signOutLink.attr('href', this.options.identity.get('sign_out'))
     },
     update: function () {
+      var ui = this.ui;
+
       if (this.identity.isIdentified()) {
-        this.ui.signIn.hide();
-        this.ui.signOut.show();
-        this.ui.currentIdentityEmail.html(this.identity.get('email_address'));
+        ui.signIn.hide();
+        ui.signOut.show();
+        ui.identityDescription.html(this.identity.get('email_address'));
       } else {
-        this.ui.signOut.hide();
-        this.ui.signIn.show();
+        ui.identityDescription.html('anonymous');
+        ui.signOut.hide();
+        ui.signIn.show();
       }
-    },
-    signIn: function () {
-      this.trigger('sign-in');
     }
+    //,
+    // signIn: function () {
+    //   this.trigger('sign-in');
+    // }
   });
 });

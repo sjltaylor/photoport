@@ -1,28 +1,42 @@
 class IdentitiesController < ApplicationController
   def identify
-    identification_attempt = services.identify(identity: request_identity, credentials: params[:credentials].symbolize_keys)
+    respond_to do |format|
+      format.json do
 
-    identity = identification_attempt[:identity]
+        identification_attempt = services.identify(identity: request_identity, credentials: params[:credentials].symbolize_keys)
 
-    status_code = case(identification_attempt)
-    when there_was_a_problem_with_the_credentials
-      422
-    when a_stranger_identified_themselves_successfully
-      session[:identity_id] = identity.id
-      201
-    when an_existing_user_identified_themselves_successfully
-      session[:identity_id] = identity.id
-      200
+        identity = identification_attempt[:identity]
+
+        status_code = case(identification_attempt)
+        when there_was_a_problem_with_the_credentials
+          422
+        when a_stranger_identified_themselves_successfully
+          session[:identity_id] = identity.id
+          201
+        when an_existing_user_identified_themselves_successfully
+          session[:identity_id] = identity.id
+          200
+        end
+
+        payload = presenters.identification_attempt(identification_attempt)
+
+        render status: status_code, json: payload
+      end
     end
+  end
 
-    payload = presenters.identification_attempt(identification_attempt)
-
-    render status: status_code, json: payload
+  def sign_in
+    respond_to do |format|
+      format.html { application }
+    end
   end
 
   def sign_out
     session.delete :identity_id
-    redirect_to :root
+    respond_to do |format|
+      format.html { redirect_to :root }
+      format.json { render nothing: true }
+    end
   end
 
   protected

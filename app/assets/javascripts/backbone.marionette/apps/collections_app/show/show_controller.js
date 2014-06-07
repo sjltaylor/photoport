@@ -5,12 +5,7 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
       var landing = opts.landing,
           layout = opts.layout,
           identity = opts.identity,
-          identifyView = opts.identifyView,
-          signInView = opts.signInView;
-
-      window.PHOTOPORT_CMS = {
-        uploadPanelConfig: landing['upload_panel_config']
-      };
+          identifyView = opts.identifyView;
 
       var collection = new Collections.Collection(landing.collection);
 
@@ -28,11 +23,13 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
         layout.contentRegion.show(identifyView);
       });
 
-      identifyView.on('close-identify', function () {
-        layout.contentRegion.show(photoportContainerView);
+      identity.on('change:status', function () {
+        if (identity.isIdentified()) {
+          layout.contentRegion.show(photoportContainerView);
+        }
       });
 
-      signInView.on('close-identify', function () {
+      identifyView.on('cancel', function () {
         layout.contentRegion.show(photoportContainerView);
       });
 

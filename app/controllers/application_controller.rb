@@ -33,4 +33,10 @@ class ApplicationController < ActionController::Base
   def presenters
     @presenters ||= Services.from('app/presenters').resolve(url_helper: self)
   end
+
+  def application
+    respond_to do |format|
+      format.html { render 'collections/app' }
+    end
+  end
 end

@@ -16,12 +16,4 @@ class CollectionsController < ApplicationController
   def index
     application
   end
-
-  private
-
-  def application
-    respond_to do |format|
-      format.html { render 'app' }
-    end
-  end
 end

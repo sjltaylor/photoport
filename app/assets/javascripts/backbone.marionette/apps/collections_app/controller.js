@@ -1,51 +1,31 @@
 Collections.Controller = {
-  editor: function () {
-    this.app().done(function (landing) {
+  show: function () {
+    this.load().done(function (landing) {
       Collections.Show.Controller.run(landing);
     });
   },
   collections: function () {
-    this.app().done(function (landing) {
+    this.load().done(function (landing) {
       Collections.Index.Controller.run(landing);
     });
   },
-  app: function () {
+  sign_in: function () {
+    this.load().done(function (landing) {
+      Collections.layout.contentRegion.show(Collections.signInView);
+    });
+  },
+  load: function () {
     var deferred = new $.Deferred();
 
-    Collections.host.landing().done(function (landing) {
-      var layout     = new Collections.AppLayout();
-      var identity   = new Collections.Identity(landing.identity);
-
-      var identifyView = Collections.Identify.Controller.makeView({
-        identity: identity
-      });
-
-      var signInView = Collections.Identify.Controller.makeView({
-        identity: identity,
-        template: 'sign_in'
-      });
-
-      var identityStatusView = Collections.IdentityStatus.Controller.makeView({
-        identity: identity
-      });
-
-      identityStatusView.render();
-      $(document.body).append(identityStatusView.$el);
-      identityStatusView.on('sign-in', function () {
-        layout.contentRegion.show(signInView);
-      });
-
-      Collections.mainRegion.show(layout);
-
+    Collections.landingDeferred.done(function (landing) {
       deferred.resolve({
         landing: landing,
-        layout: layout,
-        identity: identity,
-        identifyView: identifyView,
-        signInView: signInView
+        layout: Collections.layout,
+        identity: Collections.identity,
+        identifyView: Collections.identifyView
       });
-    }).error(console.error);
+    });
 
-    return deferred;
+    return deferred.promise();
   }
 };

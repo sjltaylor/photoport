@@ -31,8 +31,6 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
         view.showPanel(editPanel);
       });
 
-
-
       return view;
     }
   };

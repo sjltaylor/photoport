@@ -12,7 +12,9 @@ Photoport::Application.routes.draw do
   end
 
   post 'identify' => 'identities#identify'
-  get  'sign_out' => 'identities#sign_out'
+
+  get 'sign_in'  => 'identities#sign_in'
+  get 'sign_out' => 'identities#sign_out'
 
   if Rails.env.test? || Rails.env.development?
     namespace :test_hooks do

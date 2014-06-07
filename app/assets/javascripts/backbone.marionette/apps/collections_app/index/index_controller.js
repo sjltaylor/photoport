@@ -2,7 +2,7 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
 
   Index.Controller = {
     run: function () {
-      
+
     }
   };
 });
