@@ -1,7 +1,7 @@
 Collections.module('Show', function (Show, Collections, Backbone, Marionette, $, _) {
 
   Show.Controller = {
-    run: function (opts) {
+    show: function (opts) {
       var landing = opts.landing,
           layout = opts.layout,
           identity = opts.identity,
@@ -23,17 +23,13 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
         layout.contentRegion.show(identifyView);
       });
 
-      identity.on('change:status', function () {
-        if (identity.isIdentified()) {
-          layout.contentRegion.show(photoportContainerView);
-        }
-      });
-
-      identifyView.on('cancel', function () {
-        layout.contentRegion.show(photoportContainerView);
-      });
-
       layout.contentRegion.show(photoportContainerView);
+    },
+    makeIndexView: function (opts) {
+      return new Show.IndexView(opts);
+    },
+    makeSliderView: function (opts) {
+      return new Show.SliderView(opts);
     }
   };
 });

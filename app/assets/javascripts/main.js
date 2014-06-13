@@ -4,7 +4,7 @@
 //= require_tree ./backbone.marionette
 
 Collections.addRegions({
-  mainRegion: {
+  page: {
     selector: "body",
     regionType: Collections.PageRegion
   }
@@ -14,26 +14,30 @@ Collections.addInitializer(function () {
   this.router = new this.Router({
     controller: this.Controller
   });
-  this.layout = new this.AppLayout();
-  this.landingDeferred = this.host.landing();
   this.identity = new Collections.Identity();
+  this.identity.on('change:status', function () {
+    if (this.identity.isIdentified()) {
+      Collections.router.navigate('/', true)
+    }
+  }.bind(this));
+
+  // views
   this.identifyView = Collections.Identify.Controller.makeView({
     identity: this.identity,
     template: 'identify'
   });
-
   this.signInView = Collections.Identify.Controller.makeView({
     identity: this.identity
   });
-
   this.identityStatusView = Collections.IdentityStatus.Controller.makeView({
     identity: this.identity
   });
-
-  this.identityStatusView.render();
-
-  this.mainRegion.show(this.layout);
-  this.layout.identityStatus.show(this.identityStatusView);
+  this.indexView = new Collections.Show.Controller.makeIndexView({
+    identityStatusView: this.identityStatusView
+  });
+  this.sliderView = new Collections.Show.Controller.makeSliderView({
+    indexView: this.indexView
+  });
 
   this.landingDeferred = new $.Deferred();
 

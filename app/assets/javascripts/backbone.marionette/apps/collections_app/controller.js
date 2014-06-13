@@ -1,17 +1,18 @@
 Collections.Controller = {
   show: function () {
     this.load().done(function (landing) {
-      Collections.Show.Controller.run(landing);
+      //Collections.page.show(Collections.Show.Controller.show(landing));
     });
   },
   collections: function () {
     this.load().done(function (landing) {
-      Collections.Index.Controller.run(landing);
+      Collections.page.show(Collections.sliderView);
+      Collections.sliderView.slideToIndex();
     });
   },
   sign_in: function () {
     this.load().done(function (landing) {
-      Collections.layout.contentRegion.show(Collections.signInView);
+      Collections.page.show(Collections.signInView);
     });
   },
   load: function () {
@@ -20,7 +21,6 @@ Collections.Controller = {
     Collections.landingDeferred.done(function (landing) {
       deferred.resolve({
         landing: landing,
-        layout: Collections.layout,
         identity: Collections.identity,
         identifyView: Collections.identifyView
       });
