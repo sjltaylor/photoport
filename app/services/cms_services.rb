@@ -6,7 +6,8 @@ module CmsServices
   def show_default_data(identity:)
     identity.collections.create if identity.collections.empty?
     {
-      collection: identity.collections.first
+      collections: identity.collections,
+      identity: identity
     }
   end
 

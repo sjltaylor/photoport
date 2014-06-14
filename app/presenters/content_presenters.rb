@@ -17,9 +17,9 @@ module ContentPresenters
     }
   end
 
-  def landing(collection:, identity:, session_id:)
+  def landing(collections:, identity:, session_id:)
     {
-      collection:          self.collection(collection),
+      collections:         collections.map{|collection| self.collection(collection)},
       identity:            self.identity(identity),
       upload_panel_config: aws_s3_upload_panel_config(identity: identity, session_id: session_id)
     }

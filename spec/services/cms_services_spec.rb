@@ -55,6 +55,7 @@ describe CmsServices do
   describe '#show_default_data' do
     let(:identity) { double(:identity) }
     let(:context) { { identity: identity } }
+    let(:collections) { [double(:collection)] }
 
     def show_default_data
       services.show_default_data(identity: identity)
@@ -64,18 +65,22 @@ describe CmsServices do
       identity.stub(:collections => collections)
     end
 
+    it 'returns the identity' do
+      show_default_data[:identity].should be identity
+    end
+
     context 'when the identity has collections' do
       let(:collections) { ['first', 'second'] }
-      it 'returns the first' do
-        show_default_data[:collection].should be collections[0]
+      it 'returns all collections' do
+        show_default_data[:collections].should be collections
       end
     end
     context 'when the identity has no collections' do
-      let(:collections) { double(:collections, :empty? => true) }
       let(:new_collection) { double(:new_collection) }
+      let(:collections) { [new_collection] }
 
       before(:each) do
-        collections.stub(:first => new_collection)
+        identity.collections.stub(:empty? => true)
         identity.collections.stub(:create => new_collection)
       end
 
@@ -84,7 +89,7 @@ describe CmsServices do
         collections.should have_received(:create)
       end
       it 'returns the newly created collection' do
-        show_default_data[:collection].should be new_collection
+        show_default_data[:collections].should eq(collections)
       end
     end
   end

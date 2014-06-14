@@ -48,27 +48,32 @@ describe ContentPresenters do
     end
   end
 
-  describe '#landing(identity:, collection:, session_id:)' do
+  describe '#landing(identity:, collections:, session_id:)' do
     let(:aws_s3_upload_panel_config) { double(:aws_s3_upload_panel_config) }
     let(:session_id) { double(:session_id) }
-    let(:collection) { double(:collection) }
+    let(:collections) { [double(:collection_1), double(:collections_2)] }
     let(:identity) { double(:identity) }
     let(:identity_presentation) { double(:identity_presentation) }
 
     before(:each) { presenters.stub(:aws_s3_upload_panel_config).with(identity: identity, session_id: session_id).and_return(aws_s3_upload_panel_config) }
-    before(:each) { presenters.stub(:collection => collection) }
     before(:each) { presenters.stub(:identity).with(identity).and_return(identity_presentation) }
+    before(:each) do
+      collections.each do |collection|
+        presenters.stub(:collection).with(collection).and_return(collection)
+      end
+    end
 
     def landing
-      presenters.landing(collection: collection, identity: identity, session_id: session_id)
+      presenters.landing(collections: collections, identity: identity, session_id: session_id)
     end
 
     it 'includes the upload panel configuration' do
       landing[:upload_panel_config].should be aws_s3_upload_panel_config
     end
-    it 'includes the collection' do
-      landing[:collection].should be collection
-      presenters.should have_received(:collection).with(collection)
+    it 'includes the collections mapped to collection presentations' do
+      landing[:collections].should eq collections
+      presenters.should have_received(:collection).with(collections[0])
+      presenters.should have_received(:collection).with(collections[1])
     end
     it 'includes the identity presentation of the identity' do
       landing[:identity].should be identity_presentation
