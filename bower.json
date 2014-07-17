@@ -1,0 +1,13 @@
+{
+  "name": "collections",
+  "version": "0.0.1",
+  "dependencies": {
+    "jquery": "latest",
+    "underscore": "latest",
+    "backbone": "latest",
+    "backbone.marionette": "latest",
+    "backbone.babysitter": "latest",
+    "backbone.wreqr": "latest",
+    "jquery-easing-original": "latest"
+  }
+}

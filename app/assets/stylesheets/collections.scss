@@ -3,30 +3,67 @@
 
 @import "mixins";
 @import "photoport";
-@import "photoport_cms/edit_panel";
-@import "photoport_cms/identify";
-@import "photoport_cms/identity_status";
-@import "photoport_cms/photoport_container";
-@import "photoport_cms/upload_panel";
+@import "collections/edit_panel";
+@import "collections/identify";
+@import "collections/identity_status";
+@import "collections/photoport_container";
+@import "collections/upload_panel";
+@import "collections/index";
 
-#primary_navigation {
-  position: fixed;
-  top: 0;
-  left: 7.5%;
-}
-
-#main {
-  width: 700px;
-  margin: 40px auto;
-
-  #page_body {
-    margin-top: 45px;
-  }
+body {
+  overflow: none;
+  position:absolute;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
 }
 
 .page-controls {
   font-size: 0.85em;
   a, a:focus, a:hover, a:visited {
     color: $black;
+  }
+}
+
+.index-view {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  #identity_status {
+    position: absolute;
+    top: 5px;
+    right: 3.5%;
+    font-size: 0.85em;
+  }
+
+  #list_container {
+    position: absolute;
+    width: 100%;
+    top: 100px;
+    left: 0;
+  }
+}
+
+.slider-view {
+  position: relative;
+  left: 0;
+  top: 0;
+
+  .slider-view-viewport {
+    overflow: scroll;
+  }
+
+  .slider-view-destination {
+    position: relative;
+    top: 0;
+    left: 0;
+  }
+
+  #photoport_region {
+    box-shadow: 0 3px 7px rgba(0,0,0,0.25) inset;
   }
 }

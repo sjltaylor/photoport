@@ -6,7 +6,7 @@
 Collections.addRegions({
   page: {
     selector: "body",
-    regionType: Collections.PageRegion
+    regionClass: Collections.PageRegion
   }
 });
 
@@ -14,12 +14,8 @@ Collections.addInitializer(function () {
   this.router = new this.Router({
     controller: this.Controller
   });
+  this.library = new Collections.Library();
   this.identity = new Collections.Identity();
-  this.identity.on('change:status', function () {
-    if (this.identity.isIdentified()) {
-      Collections.router.navigate('/', true)
-    }
-  }.bind(this));
 
   // views
   this.identifyView = Collections.Identify.Controller.makeView({
@@ -33,7 +29,8 @@ Collections.addInitializer(function () {
     identity: this.identity
   });
   this.indexView = new Collections.Show.Controller.makeIndexView({
-    identityStatusView: this.identityStatusView
+    identityStatusView: this.identityStatusView,
+    library: this.library
   });
   this.sliderView = new Collections.Show.Controller.makeSliderView({
     indexView: this.indexView
@@ -43,6 +40,7 @@ Collections.addInitializer(function () {
 
   this.host.landing().done(function (landing) {
     this.identity.set(landing.identity);
+    this.library.set(landing.collections);
     window.PHOTOPORT_CMS = {
       uploadPanelConfig: landing['upload_panel_config']
     };
@@ -50,7 +48,7 @@ Collections.addInitializer(function () {
   }.bind(this)).error(console.error);
 }.bind(Collections));
 
-Collections.on('initialize:after', function(){
+Collections.on('start', function(){
   if (Backbone.history) {
     Backbone.history.start({ pushState: true });
     $(document).on('click', 'a[data-push-state]', function (evt) {

@@ -5,7 +5,8 @@ module ContentPresenters
     {
       id:     collection.id,
       photos: collection.photos.map{|p| photo(p)},
-      add:    url_helper.collection_photos_url(collection, format: :json)
+      add:    url_helper.collection_photos_url(collection, format: :json),
+      show:   url_helper.collection_path(collection)
     }
   end
 
@@ -21,6 +22,7 @@ module ContentPresenters
     {
       collections:         collections.map{|collection| self.collection(collection)},
       identity:            self.identity(identity),
+      index:               url_helper.root_path,
       upload_panel_config: aws_s3_upload_panel_config(identity: identity, session_id: session_id)
     }
   end

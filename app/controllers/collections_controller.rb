@@ -9,11 +9,11 @@ class CollectionsController < ApplicationController
     end
   end
 
-  def new
+  def show
     application
   end
 
-  def index
+  def new
     application
   end
 end

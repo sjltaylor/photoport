@@ -2,11 +2,8 @@
   "name": "backbone.marionette",
   "description": "Make your Backbone.js apps dance with a composite application architecture!",
   "homepage": "http://marionettejs.org",
-  "main": [
-    "./lib/backbone.marionette.js",
-    "./lib/core/amd/backbone.marionette.js"
-  ],
-  "version": "1.8.6",
+  "main": "./lib/core/backbone.marionette.js",
+  "version": "2.0.2",
   "keywords": [
     "backbone",
     "framework",
@@ -40,20 +37,19 @@
     "underscore": "1.4.4 - 1.6.0",
     "backbone.babysitter": "^0.1.0",
     "backbone.wreqr": "^1.0.0",
-    "jquery": "^1.8.0 || ^2.0.0"
+    "jquery": "1.8.0 - 2.1.0"
   },
   "devDependencies": {
     "sinonjs": "1.7.3",
     "jasmine-sinon": "0.3.1"
   },
-  "_release": "1.8.6",
+  "_release": "2.0.2",
   "_resolution": {
     "type": "version",
-    "tag": "v1.8.6",
-    "commit": "e0185ea1194e5ebfcdb7366d78dc66574885e3de"
+    "tag": "v2.0.2",
+    "commit": "e9141e61cfe77638a0884e800e7a7d58fccae414"
   },
   "_source": "git://github.com/marionettejs/backbone.marionette.git",
-  "_target": "~1.8.6",
-  "_originalSource": "backbone.marionette",
-  "_direct": true
+  "_target": "*",
+  "_originalSource": "backbone.marionette"
 }

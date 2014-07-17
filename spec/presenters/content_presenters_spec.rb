@@ -9,9 +9,11 @@ describe ContentPresenters do
   describe '#collection(collection)' do
     let(:collection_presentation) { presenters.collection(collection) }
     let(:add_photo_url) { 'add/photo/url' }
+    let(:show_collection_path) { 'show/collection/path' }
 
     before(:each) { presenters.stub(:photo).and_return(:photo_presentation) }
     before(:each) { url_helper.stub(:collection_photos_url).with(collection, format: :json).and_return(add_photo_url) }
+    before(:each) { url_helper.stub(:collection_path).with(collection).and_return(show_collection_path) }
 
     it 'includes the id' do
       collection_presentation[:id].should be collection.id
@@ -21,6 +23,9 @@ describe ContentPresenters do
     end
     it 'includes a url to add a new photo' do
       collection_presentation[:add].should be add_photo_url
+    end
+    it 'includes a url to show the collection' do
+      collection_presentation[:show].should be show_collection_path
     end
   end
 
@@ -54,13 +59,16 @@ describe ContentPresenters do
     let(:collections) { [double(:collection_1), double(:collections_2)] }
     let(:identity) { double(:identity) }
     let(:identity_presentation) { double(:identity_presentation) }
-
+    let(:root_path) { double(:root_path) }
     before(:each) { presenters.stub(:aws_s3_upload_panel_config).with(identity: identity, session_id: session_id).and_return(aws_s3_upload_panel_config) }
     before(:each) { presenters.stub(:identity).with(identity).and_return(identity_presentation) }
     before(:each) do
       collections.each do |collection|
         presenters.stub(:collection).with(collection).and_return(collection)
       end
+    end
+    before(:each) do
+      url_helper.stub(:root_path).and_return(root_path)
     end
 
     def landing
@@ -78,6 +86,10 @@ describe ContentPresenters do
     it 'includes the identity presentation of the identity' do
       landing[:identity].should be identity_presentation
       presenters.should have_received(:identity).with(identity)
+    end
+    it 'includes the index path' do
+      landing[:index].should be root_path
+      url_helper.should have_received(:root_path).with(no_args)
     end
   end
 end

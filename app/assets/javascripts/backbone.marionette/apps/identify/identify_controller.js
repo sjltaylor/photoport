@@ -8,6 +8,7 @@ Collections.module('Identify', function (Identify, Collections, Backbone, Marion
       view.on('identify', function (credentials) {
         Collections.host.users.identify(identity, credentials).done(function (result) {
           identity.set(result.identity);
+          Collections.router.navigate('/', true);
         }).fail(function (response) {
           if (response.status === 422 && (typeof response.responseJSON === 'object')) {
             var payload = response.responseJSON

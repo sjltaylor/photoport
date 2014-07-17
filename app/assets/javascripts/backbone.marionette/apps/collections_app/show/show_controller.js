@@ -1,13 +1,9 @@
 Collections.module('Show', function (Show, Collections, Backbone, Marionette, $, _) {
 
   Show.Controller = {
-    show: function (opts) {
-      var landing = opts.landing,
-          layout = opts.layout,
-          identity = opts.identity,
-          identifyView = opts.identifyView;
-
-      var collection = new Collections.Collection(landing.collection);
+    makePhotoportView: function (opts) {
+      var collection = opts.collection,
+        identity = opts.identity;
 
       var uploadPanel =  Collections.UploadPanel.Controller.makeView({
         collection: collection
@@ -19,14 +15,16 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
         uploadPanel: uploadPanel
       });
 
-      photoportContainerView.on('save', function () {
-        layout.contentRegion.show(identifyView);
-      });
-
-      layout.contentRegion.show(photoportContainerView);
+      return photoportContainerView;
     },
     makeIndexView: function (opts) {
-      return new Show.IndexView(opts);
+      var listView = Collections.List.Controller.makeView({
+        library: opts.library
+      });
+      return new Show.IndexView({
+        listView: listView,
+        identityStatusView: opts.identityStatusView
+      });
     },
     makeSliderView: function (opts) {
       return new Show.SliderView(opts);

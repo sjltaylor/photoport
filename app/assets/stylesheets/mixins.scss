@@ -1,5 +1,6 @@
 $green: #1abc9c;
 $grey: #adadad;
+$darkening-etch: rgba(0, 0, 0, 0.1);
 $black: #303030;
 $red: #e74c3c;
 
@@ -11,4 +12,11 @@ $red: #e74c3c;
   -ms-user-select: none;
   user-select: none;
   cursor: default;
+}
+
+@mixin border-radius($radius) {
+  border-radius: $radius;
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -o-border-radius: $radius;
 }

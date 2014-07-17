@@ -67,7 +67,7 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
       this.photoport.interlude({
         el: panel.el
       });
-      panel.once('close', function () {
+      panel.once('destroy', function () {
         this.resume();
       }, this);
     },
@@ -80,6 +80,9 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
       } else {
         this.ui.savePrompt.hide();
       }
+    },
+    url: function () {
+      return this.collection.get('show');
     },
     resume: function () {
       this.photoport.resume();

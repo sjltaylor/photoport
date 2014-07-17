@@ -11,7 +11,11 @@ _.extend(Collections.PageRegion.prototype, {
     shows the view without removed the previous view(s) from the dom
   */
   show: function (view) {
-    this.ensureEl();
+    if (this.currentView === view) {
+      return this;
+    }
+
+    this._ensureElement();
     if (this.views.indexOf(view) === -1) {
       view.render();
       this.$el.append(view.$el);
