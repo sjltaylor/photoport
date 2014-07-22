@@ -65,10 +65,14 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
         top: '0px'
       });
 
+      var indexHeight = height - 40;
+
       this.index.$el.css({
         width: width + 'px',
-        height: (height - 40) + 'px'
+        height: indexHeight + 'px'
       });
+console.warn(width, indexHeight)
+      this.indexView.updateGeometry(width, indexHeight);
 
       this.photoport.$el.css({
         width: width + 'px',
@@ -79,6 +83,8 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
       var region = this[regionName];
 
       region.show(view);
+
+      this.resize();
 
       this.__sliding__ = true;
       this.ui.viewport.animate({

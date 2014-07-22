@@ -4,19 +4,11 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
   Show.IndexView = Marionette.LayoutView.extend({
     className: 'index-view',
     template: 'index_view',
+    regionClass: Collections.PageRegion,
     regions: {
-      primaryNavigationRegion: {
-        selector: '#primary_navigation',
-        regionClass: Collections.PageRegion
-      },
-      identityStatusRegion: {
-        selector: '#identity_status',
-        regionClass: Collections.PageRegion
-      },
-      listContainerRegion: {
-        selector: '#list_container',
-        regionClass: Collections.PageRegion
-      }
+      primaryNavigationRegion: '#primary_navigation',
+      identityStatusRegion: '#identity_status',
+      listContainerRegion: '#list_container'
     },
     initialize: function (opts) {
       this.identityStatusView = opts.identityStatusView;
@@ -31,6 +23,18 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
     },
     url: function () {
       return this.__url__;
+    },
+    updateGeometry: function (width, height) {
+      var container = this.listContainerRegion.$el;
+      var listWidth = 400;
+      var offset = 30;
+
+      container.css({
+        width: listWidth + 'px',
+        height: (height - (2*offset)) + 'px',
+        top: offset + 'px',
+        left: ((width / 2) - (400 / 2)) + 'px'
+      })
     }
   });
 });
