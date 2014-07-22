@@ -35,7 +35,7 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
   List.View = Marionette.CompositeView.extend({
     template: 'list_view',
     className: 'list-view',
-    childViewContainer: 'ul',
+    childViewContainer: 'ul.collections',
     childView: ListEntryView,
     ui: {
 
