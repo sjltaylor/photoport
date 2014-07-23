@@ -28,13 +28,30 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
       var container = this.listContainerRegion.$el;
       var listWidth = 400;
       var offset = 30;
+      var listHeight = (height - (2*offset));
+      var outerList = this.$el.find('ul.outer');
+      var innerList = this.$el.find('ul.inner');
+      var nonInnerListItemsHeight = 20;
+
+      this.$el.find('li.nav-header, li.controls').each(function () {
+        nonInnerListItemsHeight += $(this).outerHeight();
+      });
+
 
       container.css({
         width: listWidth + 'px',
-        height: (height - (2*offset)) + 'px',
+        height: listHeight + 'px',
         top: offset + 'px',
         left: ((width / 2) - (400 / 2)) + 'px'
-      })
+      });
+
+      outerList.css({
+        height: listHeight + 'px'
+      });
+
+      innerList.css({
+        height: (listHeight - nonInnerListItemsHeight) + 'px'
+      });
     }
   });
 });

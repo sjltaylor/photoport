@@ -19,14 +19,20 @@
 
     .list-view {
 
+      li.controls {
+        padding: 20px 0 10px;
+      }
+
       .btn.new {
-        margin: 20px auto 10px;
+        margin: 0 auto;
         width: 180px;
       }
 
-      ul.nav.nav-list.nav-list-vivid.collections {
+      ul.inner {
+        padding-top: 5px;
         margin-top: 10px;
         background-color: rgba(255,255,255,0.8);
+        overflow-y: scroll;
       }
     }
   }

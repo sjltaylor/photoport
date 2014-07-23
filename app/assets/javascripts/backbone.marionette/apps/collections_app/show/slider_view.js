@@ -71,7 +71,7 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
         width: width + 'px',
         height: indexHeight + 'px'
       });
-console.warn(width, indexHeight)
+
       this.indexView.updateGeometry(width, indexHeight);
 
       this.photoport.$el.css({
