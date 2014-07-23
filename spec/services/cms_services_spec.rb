@@ -81,15 +81,52 @@ describe CmsServices do
 
       before(:each) do
         identity.collections.stub(:empty? => true)
-        identity.collections.stub(:create => new_collection)
+        services.stub(:create_collection).with(identity: identity).and_return(new_collection)
       end
 
       it 'creates a collection' do
         show_default_data
-        collections.should have_received(:create)
+        services.should have_received(:create_collection).with(identity: identity)
       end
       it 'returns the newly created collection' do
         show_default_data[:collections].should eq(collections)
+      end
+    end
+  end
+  describe '#create_collection' do
+    let(:name) { 'example-name' }
+    let(:collection) { double(:collection, name: name, id: id) }
+    let(:id) { 123 }
+    let(:collections) { double(:collections) }
+
+    before(:each) do
+      identity.stub(:collections => collections)
+
+      collections.stub(:create).with(any_args).and_return(collection)
+    end
+
+    def create_collection
+      services.create_collection(identity: identity, name: name)
+    end
+
+    describe 'the newly created collection' do
+      context 'when a name is specified' do
+        it 'creates the collection with the specified name' do
+          create_collection
+          collections.should have_received(:create).with(name: name)
+        end
+      end
+      context 'when a name is not specified' do
+        def create_collection
+          services.create_collection(identity: identity)
+        end
+        it 'creates the collection without a name' do
+          create_collection
+          collections.should have_received(:create).with(name: nil)
+        end
+      end
+      it 'returns the collection' do
+        create_collection.should be collection
       end
     end
   end

@@ -2,23 +2,6 @@
 //= require templates/list_item_view
 
 Collections.module('List', function (List, Collections, Backbone, Marionette, $, _) {
-  var randomNames = [
-    "Mice on Wheels",
-    "Ruined Cakes",
-    "Stuff and Things",
-    "Things and Stuff",
-    "Articles of Miscellany",
-    "Varying Whitenoise Displays",
-    "Fruit of the Loom",
-    "Pigeon Examples",
-    "Pointless Buildings",
-    "Countries of Mystery",
-    "Hit List"
-  ];
-
-  function randomName() {
-    return randomNames[Math.floor(Math.random() * randomNames.length)];
-  }
 
   ListEntryView = Marionette.ItemView.extend({
     template: 'list_item_view',
@@ -27,7 +10,7 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
       name: 'a'
     },
     onRender: function () {
-      this.ui.name.text(randomName());
+      this.ui.name.text(this.model.get('name'));
       this.ui.name.attr('href', this.model.get('show'));
     }
   });

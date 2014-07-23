@@ -9,6 +9,16 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def create
+    respond_to do |format|
+      format.json do
+        identity = request_identity
+        payload  = presenters.collection(services.create_collection(identity: identity, name: params[:name]))
+        render json: payload
+      end
+    end
+  end
+
   def show
     application
   end

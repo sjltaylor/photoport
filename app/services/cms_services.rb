@@ -3,8 +3,12 @@ module CmsServices
     collection.photos.create(photo_uid: file_key).tap{|photo| photo.save!}
   end
 
+  def create_collection(identity:, name: nil)
+    identity.collections.create(name: name)
+  end
+
   def show_default_data(identity:)
-    identity.collections.create if identity.collections.empty?
+    create_collection(identity: identity) if identity.collections.empty?
     {
       collections: identity.collections,
       identity: identity

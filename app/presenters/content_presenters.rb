@@ -2,8 +2,12 @@ module ContentPresenters
   depends_on :url_helper
 
   def collection(collection)
+    name = collection.name
+    name = "Collection #{collection.id}" if name.blank?
+
     {
       id:     collection.id,
+      name:   name,
       photos: collection.photos.map{|p| photo(p)},
       add:    url_helper.collection_photos_url(collection, format: :json),
       show:   url_helper.collection_path(collection)

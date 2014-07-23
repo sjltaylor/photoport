@@ -1,10 +1,11 @@
 require 'spec_helper'
 
 describe ContentPresenters do
+  let(:name) { 'example-name' }
   let(:url_helper) { double(:url_helper) }
   let(:aws_s3_upload_panel_config) { double(:aws_s3_upload_panel_config) }
   let(:presenters) { Class.new.include(described_class).resolve(url_helper: url_helper, aws_s3_upload_panel_config: aws_s3_upload_panel_config) }
-  let(:collection) { double(:collection, id: 3232, photos: (1..10).map{|i| double("photo_#{i}")}) }
+  let(:collection) { double(:collection, id: 16329, name: name, photos: (1..10).map{|i| double("photo_#{i}")}) }
 
   describe '#collection(collection)' do
     let(:collection_presentation) { presenters.collection(collection) }
@@ -26,6 +27,17 @@ describe ContentPresenters do
     end
     it 'includes a url to show the collection' do
       collection_presentation[:show].should be show_collection_path
+    end
+    context 'when the collection has a name' do
+      it 'includes the collections name' do
+        collection.name.should == name
+      end
+    end
+    context 'when the collection does not have a name' do
+      let(:name) { nil }
+      it 'includes a computed name like "Collection :id"' do
+        collection_presentation[:name].should == 'Collection 16329'
+      end
     end
   end
 
