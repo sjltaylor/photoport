@@ -5,3 +5,5 @@ Collections.Collection = Backbone.Model.extend({
     this.photos = new Backbone.Collection(photos);
   }
 });
+
+Collections.Collection.all = new Backbone.Collection([], { model: Collections.Collection });

@@ -14,8 +14,10 @@ Collections.addInitializer(function () {
   this.router = new this.Router({
     controller: this.Controller
   });
-  this.library = new Collections.Library();
+
   this.identity = new Collections.Identity();
+
+  this.library = new Collections.Library();
 
   // views
   this.identifyView = Collections.Identify.Controller.makeView({
@@ -36,15 +38,21 @@ Collections.addInitializer(function () {
     indexView: this.indexView
   });
 
-  this.landingDeferred = new $.Deferred();
+  var landingDeferred = new $.Deferred();
+  this.landing = landingDeferred.promise();
 
   this.host.landing().done(function (landing) {
     this.identity.set(landing.identity);
-    this.library.set(landing.collections);
-    window.PHOTOPORT_CMS = {
+    this.library.set({
+      index: landing.index,
+      add: landing.add,
       uploadPanelConfig: landing['upload_panel_config']
-    };
-    this.landingDeferred.resolve(landing);
+    });
+    this.library.collections().set(landing.collections);
+    this.indexView.setUrl(this.library.get('index'));
+
+    landingDeferred.resolve(this);
+
   }.bind(this)).error(console.error);
 }.bind(Collections));
 

@@ -3,10 +3,11 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
   Show.Controller = {
     makePhotoportView: function (opts) {
       var collection = opts.collection,
-        identity = opts.identity;
+          identity = opts.identity;
 
       var uploadPanel =  Collections.UploadPanel.Controller.makeView({
-        collection: collection
+        collection: collection,
+        uploadPanelConfig: opts.uploadPanelConfig
       });
 
       var photoportContainerView = Collections.PhotoportContainer.Controller.makeView({

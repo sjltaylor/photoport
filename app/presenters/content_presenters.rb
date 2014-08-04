@@ -3,7 +3,7 @@ module ContentPresenters
 
   def collection(collection)
     name = collection.name
-    name = "Collection #{collection.id}" if name.blank?
+    name = "collection #{collection.id}" if name.blank?
 
     {
       id:     collection.id,
@@ -27,6 +27,7 @@ module ContentPresenters
       collections:         collections.map{|collection| self.collection(collection)},
       identity:            self.identity(identity),
       index:               url_helper.root_path,
+      add:                 url_helper.collections_path(format: :json),
       upload_panel_config: aws_s3_upload_panel_config(identity: identity, session_id: session_id)
     }
   end

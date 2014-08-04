@@ -28,6 +28,15 @@
         });
       }
     },
+    create: function (landing) {
+      return $.ajax({
+        type: "POST",
+        url: landing.get('add'),
+        headers: headers(),
+        dataType: 'json',
+        cache: false
+      });
+    },
     landing: function () {
       return $.ajax({
         type: "GET",

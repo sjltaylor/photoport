@@ -35,8 +35,8 @@ describe ContentPresenters do
     end
     context 'when the collection does not have a name' do
       let(:name) { nil }
-      it 'includes a computed name like "Collection :id"' do
-        collection_presentation[:name].should == 'Collection 16329'
+      it 'includes a computed name like "collection :id"' do
+        collection_presentation[:name].should == 'collection 16329'
       end
     end
   end
@@ -72,6 +72,7 @@ describe ContentPresenters do
     let(:identity) { double(:identity) }
     let(:identity_presentation) { double(:identity_presentation) }
     let(:root_path) { double(:root_path) }
+    let(:collections_path) { double(:collections_path) }
     before(:each) { presenters.stub(:aws_s3_upload_panel_config).with(identity: identity, session_id: session_id).and_return(aws_s3_upload_panel_config) }
     before(:each) { presenters.stub(:identity).with(identity).and_return(identity_presentation) }
     before(:each) do
@@ -81,12 +82,16 @@ describe ContentPresenters do
     end
     before(:each) do
       url_helper.stub(:root_path).and_return(root_path)
+      url_helper.stub(:collections_path, format: :json).and_return(collections_path)
     end
 
     def landing
       presenters.landing(collections: collections, identity: identity, session_id: session_id)
     end
 
+    it 'returns the add url for collections' do
+      landing[:add].should be collections_path
+    end
     it 'includes the upload panel configuration' do
       landing[:upload_panel_config].should be aws_s3_upload_panel_config
     end

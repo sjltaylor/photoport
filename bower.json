@@ -8,6 +8,7 @@
     "backbone.marionette": "latest",
     "backbone.babysitter": "latest",
     "backbone.wreqr": "latest",
-    "jquery-easing-original": "latest"
+    "jquery-easing-original": "latest",
+    "spin.js": "latest"
   }
 }

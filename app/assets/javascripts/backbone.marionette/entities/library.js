@@ -1,5 +1,7 @@
 //= require backbone.marionette/entities/collection
 
-Collections.Library = Backbone.Collection.extend({
-  model: Collections.Collection
+Collections.Library = Backbone.Model.extend({
+  collections: function () {
+    return Collections.Collection.all;
+  }
 });

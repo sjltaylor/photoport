@@ -21,11 +21,19 @@
 
       li.controls {
         padding: 20px 0 10px;
+        height: 54px;
       }
 
       .btn.new {
         margin: 0 auto;
         width: 180px;
+      }
+
+      .loading-indicator.new {
+        margin: 0 auto;
+        width: 18px;
+        height: 18px;
+        display: none;
       }
 
       ul.inner {

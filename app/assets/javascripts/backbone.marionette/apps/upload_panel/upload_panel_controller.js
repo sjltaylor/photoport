@@ -1,7 +1,11 @@
 Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, Marionette, $, _) {
 
   UploadPanel.Controller = {
-    uploadPhotos: function (collection, files) {
+    uploadPhotos: function (opts) {
+      var collection = opts.collection,
+          files = opts.files,
+          uploadPanelConfig = opts.uploadPanelConfig;
+
 
       function onS3UploadDone(data, statusText, jqXHR) {
         var fileKey = jqXHR.CollectionsMetadata.fileKey;
@@ -19,7 +23,7 @@ Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, 
         console.error('failed uploading photos to s3', arguments);
       }
 
-      var promises = Collections.s3.uploadPhotos(PHOTOPORT_CMS.uploadPanelConfig, files);
+      var promises = Collections.s3.uploadPhotos(uploadPanelConfig, files);
 
       promises.forEach(function (promise) {
         promise.done(onS3UploadDone).fail(onS3UploadFail);
@@ -30,7 +34,11 @@ Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, 
 
       var uploadPanel = new UploadPanel.View();
       uploadPanel.on("files:selected", function (files) {
-        controller.uploadPhotos(opts.collection, files);
+        controller.uploadPhotos({
+          collection: opts.collection,
+          files: files,
+          uploadPanelConfig: uploadPanelConfig
+        });
       });
       return uploadPanel;
     }
