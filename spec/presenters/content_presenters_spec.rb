@@ -12,31 +12,31 @@ describe ContentPresenters do
     let(:add_photo_url) { 'add/photo/url' }
     let(:show_collection_path) { 'show/collection/path' }
 
-    before(:each) { presenters.stub(:photo).and_return(:photo_presentation) }
-    before(:each) { url_helper.stub(:collection_photos_url).with(collection, format: :json).and_return(add_photo_url) }
-    before(:each) { url_helper.stub(:collection_path).with(collection).and_return(show_collection_path) }
+    before(:each) { allow(presenters).to receive(:photo).and_return(:photo_presentation) }
+    before(:each) { allow(url_helper).to receive(:collection_photos_url).with(collection, format: :json).and_return(add_photo_url) }
+    before(:each) { allow(url_helper).to receive(:collection_path).with(collection).and_return(show_collection_path) }
 
     it 'includes the id' do
-      collection_presentation[:id].should be collection.id
+      expect(collection_presentation[:id]).to be collection.id
     end
     it 'includes photos' do
-      collection_presentation[:photos].should(eq(collection.photos.map{:photo_presentation}))
+      expect(collection_presentation[:photos]).to(eq(collection.photos.map{:photo_presentation}))
     end
     it 'includes a url to add a new photo' do
-      collection_presentation[:add].should be add_photo_url
+      expect(collection_presentation[:add]).to be add_photo_url
     end
     it 'includes a url to show the collection' do
-      collection_presentation[:show].should be show_collection_path
+      expect(collection_presentation[:show]).to be show_collection_path
     end
     context 'when the collection has a name' do
       it 'includes the collections name' do
-        collection.name.should == name
+        expect(collection.name).to eq name
       end
     end
     context 'when the collection does not have a name' do
       let(:name) { nil }
       it 'includes a computed name like "collection :id"' do
-        collection_presentation[:name].should == 'collection 16329'
+        expect(collection_presentation[:name]).to eq 'collection 16329'
       end
     end
   end
@@ -45,23 +45,23 @@ describe ContentPresenters do
     let(:photo_file_url) { 'url/to/image' }
     let(:photo_url) { 'url/to/photo' }
     let(:photo) { double(:photo, collection: double(:collection), id: 443) }
-    before(:each) { url_helper.stub(:collection_photo_url).with(photo.collection, photo, format: :jpg).and_return(photo_file_url) }
-    before(:each) { url_helper.stub(:collection_photo_url).with(photo.collection, photo, format: :json).and_return(photo_url) }
+    before(:each) { allow(url_helper).to receive(:collection_photo_url).with(photo.collection, photo, format: :jpg).and_return(photo_file_url) }
+    before(:each) { allow(url_helper).to receive(:collection_photo_url).with(photo.collection, photo, format: :json).and_return(photo_url) }
 
     let(:photo_presentation) { presenters.photo(photo) }
 
     it 'includes a url of the image file' do
-      photo_presentation[:download].should be photo_file_url
-      url_helper.should have_received(:collection_photo_url).with(photo.collection, photo, format: :jpg)
+      expect(photo_presentation[:download]).to be photo_file_url
+      expect(url_helper).to have_received(:collection_photo_url).with(photo.collection, photo, format: :jpg)
     end
 
     it 'includes a url of the photo data' do
-      photo_presentation[:url].should be photo_url
-      url_helper.should have_received(:collection_photo_url).with(photo.collection, photo, format: :json)
+      expect(photo_presentation[:url]).to be photo_url
+      expect(url_helper).to have_received(:collection_photo_url).with(photo.collection, photo, format: :json)
     end
 
     it 'includes the photo id' do
-      photo_presentation[:id].should be photo.id
+      expect(photo_presentation[:id]).to be photo.id
     end
   end
 
@@ -73,16 +73,16 @@ describe ContentPresenters do
     let(:identity_presentation) { double(:identity_presentation) }
     let(:root_path) { double(:root_path) }
     let(:collections_path) { double(:collections_path) }
-    before(:each) { presenters.stub(:aws_s3_upload_panel_config).with(identity: identity, session_id: session_id).and_return(aws_s3_upload_panel_config) }
-    before(:each) { presenters.stub(:identity).with(identity).and_return(identity_presentation) }
+    before(:each) { allow(presenters).to receive(:aws_s3_upload_panel_config).with(identity: identity, session_id: session_id).and_return(aws_s3_upload_panel_config) }
+    before(:each) { allow(presenters).to receive(:identity).with(identity).and_return(identity_presentation) }
     before(:each) do
       collections.each do |collection|
-        presenters.stub(:collection).with(collection).and_return(collection)
+        allow(presenters).to receive(:collection).with(collection).and_return(collection)
       end
     end
     before(:each) do
-      url_helper.stub(:root_path).and_return(root_path)
-      url_helper.stub(:collections_path, format: :json).and_return(collections_path)
+      allow(url_helper).to receive(:root_path).and_return(root_path)
+      allow(url_helper).to receive(:collections_path).with(format: :json).and_return(collections_path)
     end
 
     def landing
@@ -90,23 +90,23 @@ describe ContentPresenters do
     end
 
     it 'returns the add url for collections' do
-      landing[:add].should be collections_path
+      expect(landing[:add]).to be collections_path
     end
     it 'includes the upload panel configuration' do
-      landing[:upload_panel_config].should be aws_s3_upload_panel_config
+      expect(landing[:upload_panel_config]).to be aws_s3_upload_panel_config
     end
     it 'includes the collections mapped to collection presentations' do
-      landing[:collections].should eq collections
-      presenters.should have_received(:collection).with(collections[0])
-      presenters.should have_received(:collection).with(collections[1])
+      expect(landing[:collections]).to eq collections
+      expect(presenters).to have_received(:collection).with(collections[0])
+      expect(presenters).to have_received(:collection).with(collections[1])
     end
     it 'includes the identity presentation of the identity' do
-      landing[:identity].should be identity_presentation
-      presenters.should have_received(:identity).with(identity)
+      expect(landing[:identity]).to be identity_presentation
+      expect(presenters).to have_received(:identity).with(identity)
     end
     it 'includes the index path' do
-      landing[:index].should be root_path
-      url_helper.should have_received(:root_path).with(no_args)
+      expect(landing[:index]).to be root_path
+      expect(url_helper).to have_received(:root_path).with(no_args)
     end
   end
 end

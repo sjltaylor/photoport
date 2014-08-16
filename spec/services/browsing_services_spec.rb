@@ -20,17 +20,17 @@ describe BrowsingServices do
     before(:each) do
       dragonfly_double = double(:dragonfly_double)
 
-      services.dragonfly_photos_app.stub(:fetch).with(photo.photo_uid).and_return(dragonfly_double)
+      allow(services.dragonfly_photos_app).to receive(:fetch).with(photo.photo_uid).and_return(dragonfly_double)
 
-      dragonfly_double.stub(:thumb).with('600x').and_return(dragonfly_double)
-      dragonfly_double.stub(:encode).with('jpg').and_return(dragonfly_double)
-      dragonfly_double.stub(:file).and_return(double(:photo_file, path: expected_path))
+      allow(dragonfly_double).to receive(:thumb).with('600x').and_return(dragonfly_double)
+      allow(dragonfly_double).to receive(:encode).with('jpg').and_return(dragonfly_double)
+      allow(dragonfly_double).to receive(:file).and_return(double(:photo_file, path: expected_path))
     end
 
     before(:each) { return_value }
 
     it 'returns the path of the resized, converted photo file' do
-      return_value.should be expected_path
+      expect(return_value).to be expected_path
     end
   end
 end

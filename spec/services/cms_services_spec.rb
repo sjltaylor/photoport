@@ -15,22 +15,22 @@ describe CmsServices do
       services.add_photo(context)
     end
 
-    before(:each) { new_photo_record.stub(:save!) }
+    before(:each) { allow(new_photo_record).to receive(:save!) }
 
     before(:each) do
       return_value
     end
 
     it 'returns the photo' do
-      return_value.should be new_photo_record
+      expect(return_value).to be new_photo_record
     end
 
     it 'saves the photo' do
-      new_photo_record.should have_received(:save!)
+      expect(new_photo_record).to have_received(:save!)
     end
 
     it 'adds the photo to the collection' do
-      collection.photos.should have_received(:create).with(photo_uid: file_key)
+      expect(collection.photos).to have_received(:create).with(photo_uid: file_key)
     end
   end
   describe '#remove_photo' do
@@ -38,7 +38,7 @@ describe CmsServices do
     let(:return_value) { remove_photo }
     let(:context) { { identity: identity, photo: photo } }
 
-    before(:each) { photo.stub(destroy: photo) }
+    before(:each) { allow(photo).to receive(:destroy).and_return(photo) }
     before(:each) { return_value }
 
     def remove_photo
@@ -46,10 +46,10 @@ describe CmsServices do
     end
 
     it 'removes the photo' do
-      photo.should have_received(:destroy).with(no_args)
+      expect(photo).to have_received(:destroy).with(no_args)
     end
     it 'returns the removed photo' do
-      return_value.should eq photo
+      expect(return_value).to eq photo
     end
   end
   describe '#show_default_data' do
@@ -62,17 +62,17 @@ describe CmsServices do
     end
 
     before(:each) do
-      identity.stub(:collections => collections)
+      allow(identity).to receive(:collections).and_return(collections)
     end
 
     it 'returns the identity' do
-      show_default_data[:identity].should be identity
+      expect(show_default_data[:identity]).to be identity
     end
 
     context 'when the identity has collections' do
       let(:collections) { ['first', 'second'] }
       it 'returns all collections' do
-        show_default_data[:collections].should be collections
+        expect(show_default_data[:collections]).to be collections
       end
     end
     context 'when the identity has no collections' do
@@ -80,16 +80,16 @@ describe CmsServices do
       let(:collections) { [new_collection] }
 
       before(:each) do
-        identity.collections.stub(:empty? => true)
-        services.stub(:create_collection).with(identity: identity).and_return(new_collection)
+        allow(identity.collections).to receive(:empty?).and_return(true)
+        allow(services).to receive(:create_collection).with(identity: identity).and_return(new_collection)
       end
 
       it 'creates a collection' do
         show_default_data
-        services.should have_received(:create_collection).with(identity: identity)
+        expect(services).to have_received(:create_collection).with(identity: identity)
       end
       it 'returns the newly created collection' do
-        show_default_data[:collections].should eq(collections)
+        expect(show_default_data[:collections]).to eq(collections)
       end
     end
   end
@@ -100,9 +100,9 @@ describe CmsServices do
     let(:collections) { double(:collections) }
 
     before(:each) do
-      identity.stub(:collections => collections)
+      allow(identity).to receive(:collections).and_return(collections)
 
-      collections.stub(:create).with(any_args).and_return(collection)
+      allow(collections).to receive(:create).with(any_args).and_return(collection)
     end
 
     def create_collection
@@ -113,7 +113,7 @@ describe CmsServices do
       context 'when a name is specified' do
         it 'creates the collection with the specified name' do
           create_collection
-          collections.should have_received(:create).with(name: name)
+          expect(collections).to have_received(:create).with(name: name)
         end
       end
       context 'when a name is not specified' do
@@ -122,11 +122,11 @@ describe CmsServices do
         end
         it 'creates the collection without a name' do
           create_collection
-          collections.should have_received(:create).with(name: nil)
+          expect(collections).to have_received(:create).with(name: nil)
         end
       end
       it 'returns the collection' do
-        create_collection.should be collection
+        expect(create_collection).to be collection
       end
     end
   end

@@ -16,14 +16,14 @@ describe PermissionsServices do
       let(:creator) { identity }
 
       it 'returns true' do
-        allow_download_photo?.should be true
+        expect(allow_download_photo?).to be true
       end
     end
     context 'when the identity is not creator of the collection to which the photo belongs' do
       let(:creator) { double(:another_identity) }
 
       it 'returns false' do
-        allow_download_photo?.should be false
+        expect(allow_download_photo?).to be false
       end
     end
   end
@@ -40,14 +40,14 @@ describe PermissionsServices do
       let(:creator) { identity }
 
       it 'returns true' do
-        allow_add_photo?.should be true
+        expect(allow_add_photo?).to be true
       end
     end
     context 'when the identity is not the creator of the collection' do
       let(:creator) { double(:another_identity) }
 
       it 'returns false' do
-        allow_add_photo?.should be false
+        expect(allow_add_photo?).to be false
       end
     end
   end
@@ -64,14 +64,14 @@ describe PermissionsServices do
       let(:creator) { identity }
 
       it 'returns true' do
-        allow_remove_photo?.should be true
+        expect(allow_remove_photo?).to be true
       end
     end
     context 'when the identity is not the creator of the photo' do
       let(:creator) { double(:another_identity) }
 
       it 'returns false' do
-        allow_remove_photo?.should be false
+        expect(allow_remove_photo?).to be false
       end
     end
   end

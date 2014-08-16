@@ -31,13 +31,13 @@ describe PasswordSec do
 
     rejectable_examples.each do |candidate|
       it "rejects an insufficiently strong password: '#{candidate}'" do
-        secure_password?(candidate).should be false
+        expect(secure_password?(candidate)).to be false
       end
     end
 
     acceptable_examples.each do |candidate|
       it "accepts a sufficiently strong password: '#{candidate}'" do
-        secure_password?(candidate).should be true
+        expect(secure_password?(candidate)).to be true
       end
     end
   end
@@ -63,13 +63,13 @@ describe PasswordSec do
 
     rejectable_examples.each do |candidate|
       it "rejects an insufficiently strong password: '#{candidate}'" do
-        barely_secure_password?(candidate).should be false
+        expect(barely_secure_password?(candidate)).to be false
       end
     end
 
     acceptable_examples.each do |candidate|
       it "accepts a sufficiently strong password: '#{candidate}'" do
-        barely_secure_password?(candidate).should be true
+        expect(barely_secure_password?(candidate)).to be true
       end
     end
   end

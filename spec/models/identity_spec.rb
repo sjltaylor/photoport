@@ -8,14 +8,14 @@ describe Identity do
   describe 'defaults' do
     it 'hash an initial status of "anonymous"' do
       identity.save # aasm populates the status field with a before validation callback
-      identity.status.should == 'anonymous'
+      expect(identity.status).to eq 'anonymous'
     end
   end
 
   describe '#identified?' do
     context 'when the identity is anonymous' do
       it 'is false' do
-        identity.should_not be_identified
+        expect(identity).to_not be_identified
       end
     end
 
@@ -23,7 +23,7 @@ describe Identity do
       before(:each) { identity.identify }
 
       it 'is true' do
-        identity.should be_identified
+        expect(identity).to be_identified
       end
     end
   end
@@ -31,7 +31,7 @@ describe Identity do
   describe 'email address' do
     it 'strips whitespace on assignment' do
       identity.email_address = '  email@address.net  '
-      identity.email_address.should eq('email@address.net')
+      expect(identity.email_address).to eq('email@address.net')
     end
   end
 
@@ -42,7 +42,7 @@ describe Identity do
       identity.save!
     end
     it 'is case insensitive' do
-      described_class.find_by_email_address('NOONE@all.com').should == identity
+      expect(described_class.find_by_email_address('NOONE@all.com')).to eq identity
     end
   end
 end

@@ -3,12 +3,12 @@ require 'spec_helper'
 describe RequestIdentity do
   let(:instance) { Object.new.extend(RequestIdentity) }
   let(:services) { double(:services) }
-  before(:each) { instance.stub(:services).and_return(services) }
+  before(:each) { allow(instance).to receive(:services).and_return(services) }
 
   describe '#request_identity' do
     let(:session) { { identity_id: identity_id } }
 
-    before(:each) { instance.stub(:session).and_return(session) }
+    before(:each) { allow(instance).to receive(:session).and_return(session) }
 
     def request_identity
       instance.send :request_identity
@@ -17,30 +17,30 @@ describe RequestIdentity do
     shared_examples 'creates a new identity' do
       let(:new_identity) { double(:new_identity, id: 1443) }
 
-      before(:each) { services.stub(:create_identity).with(no_args).and_return(new_identity) }
+      before(:each) { allow(services).to receive(:create_identity).with(no_args).and_return(new_identity) }
 
       it 'creates and returns a identity' do
-        request_identity.should be new_identity
-        services.should have_received(:create_identity).with(no_args)
+        expect(request_identity).to be new_identity
+        expect(services).to have_received(:create_identity).with(no_args)
       end
       it 'stores the new identitys id in the session' do
         request_identity
-        session[:identity_id].should be 1443
+        expect(session[:identity_id]).to be 1443
       end
     end
 
     context 'when the identity has visited previously' do
       let(:identity_id) { 4444 }
       let(:identity) { double(:identity) }
-      before(:each) { Identity.stub(:find_by_id).with(identity_id).and_return(identity) }
+      before(:each) { allow(Identity).to receive(:find_by_id).with(identity_id).and_return(identity) }
 
       it 'returns the identity' do
-        request_identity.should be identity
+        expect(request_identity).to be identity
       end
 
       it 'calls the Identity store with the id from the session' do
         request_identity
-        Identity.should have_received(:find_by_id).with(identity_id)
+        expect(Identity).to have_received(:find_by_id).with(identity_id)
       end
     end
 

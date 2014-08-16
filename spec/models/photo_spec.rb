@@ -11,12 +11,12 @@ describe Photo do
     let(:collection) { double(:collection) }
 
     before(:each) do
-      photo.stub(collection: collection)
-      collection.stub(creator: creator)
+      allow(photo).to receive(:collection).and_return(collection)
+      allow(collection).to receive(:creator).and_return(creator)
     end
 
     it 'returns the creator of the collection to which the photo belongs' do
-      photo.creator.should be collection.creator
+      expect(photo.creator).to be collection.creator
     end
   end
 end
