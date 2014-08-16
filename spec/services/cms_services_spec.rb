@@ -75,23 +75,6 @@ describe CmsServices do
         expect(show_default_data[:collections]).to be collections
       end
     end
-    context 'when the identity has no collections' do
-      let(:new_collection) { double(:new_collection) }
-      let(:collections) { [new_collection] }
-
-      before(:each) do
-        allow(identity.collections).to receive(:empty?).and_return(true)
-        allow(services).to receive(:create_collection).with(identity: identity).and_return(new_collection)
-      end
-
-      it 'creates a collection' do
-        show_default_data
-        expect(services).to have_received(:create_collection).with(identity: identity)
-      end
-      it 'returns the newly created collection' do
-        expect(show_default_data[:collections]).to eq(collections)
-      end
-    end
   end
   describe '#create_collection' do
     let(:name) { 'example-name' }

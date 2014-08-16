@@ -3,7 +3,7 @@ require 'bcrypt'
 module IdentificationServices
 
   def create_identity
-    Identity.create.tap {|identity| identity.collections.create }
+    Identity.create
   end
 
   def identify(identity:, credentials:)

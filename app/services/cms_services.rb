@@ -8,7 +8,6 @@ module CmsServices
   end
 
   def show_default_data(identity:)
-    create_collection(identity: identity) if identity.collections.empty?
     {
       collections: identity.collections,
       identity: identity

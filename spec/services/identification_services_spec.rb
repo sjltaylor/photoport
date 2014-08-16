@@ -9,9 +9,6 @@ describe IdentificationServices do
       expect(identity).to be_instance_of Identity
       expect(identity).to_not be_new_record
     end
-    it 'creates an initial collection for that identity' do
-      expect(identity.collections.count).to be 1
-    end
   end
 
   describe '#identify(identity: identity, credentials: credentials)' do
