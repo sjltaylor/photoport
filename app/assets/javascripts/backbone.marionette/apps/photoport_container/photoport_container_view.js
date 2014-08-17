@@ -81,9 +81,6 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
         this.ui.savePrompt.hide();
       }
     },
-    url: function () {
-      return this.collection.get('show');
-    },
     resume: function () {
       this.photoport.resume();
     }

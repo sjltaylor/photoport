@@ -78,6 +78,7 @@ describe CmsServices do
   end
   describe '#create_collection' do
     let(:name) { 'example-name' }
+    let(:index_geometry) { double(:index_geometry) }
     let(:collection) { double(:collection, name: name, id: id) }
     let(:id) { 123 }
     let(:collections) { double(:collections) }
@@ -89,23 +90,28 @@ describe CmsServices do
     end
 
     def create_collection
-      services.create_collection(identity: identity, name: name)
+      services.create_collection(identity: identity, name: name, index_geometry: index_geometry)
+    end
+
+    it 'is created with index geometry' do
+      create_collection
+      expect(collections).to have_received(:create).with(name: name, index_geometry: index_geometry)
     end
 
     describe 'the newly created collection' do
       context 'when a name is specified' do
         it 'creates the collection with the specified name' do
           create_collection
-          expect(collections).to have_received(:create).with(name: name)
+          expect(collections).to have_received(:create).with(name: name, index_geometry: index_geometry)
         end
       end
       context 'when a name is not specified' do
         def create_collection
-          services.create_collection(identity: identity)
+          services.create_collection(identity: identity, index_geometry: index_geometry)
         end
         it 'creates the collection without a name' do
           create_collection
-          expect(collections).to have_received(:create).with(name: nil)
+          expect(collections).to have_received(:create).with(name: nil, index_geometry: index_geometry)
         end
       end
       it 'returns the collection' do

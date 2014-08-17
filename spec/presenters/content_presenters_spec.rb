@@ -5,7 +5,14 @@ describe ContentPresenters do
   let(:url_helper) { double(:url_helper) }
   let(:aws_s3_upload_panel_config) { double(:aws_s3_upload_panel_config) }
   let(:presenters) { Class.new.include(described_class).resolve(url_helper: url_helper, aws_s3_upload_panel_config: aws_s3_upload_panel_config) }
-  let(:collection) { double(:collection, id: 16329, name: name, photos: (1..10).map{|i| double("photo_#{i}")}) }
+  let(:index_geometry) { double(:index_geometry) }
+  let(:collection) do
+    double(:collection,
+      id: 16329,
+      name: name,
+      photos: (1..10).map{|i| double("photo_#{i}")},
+      index_geometry: index_geometry)
+  end
 
   describe '#collection(collection)' do
     let(:collection_presentation) { presenters.collection(collection) }
@@ -21,6 +28,9 @@ describe ContentPresenters do
     end
     it 'includes photos' do
       expect(collection_presentation[:photos]).to(eq(collection.photos.map{:photo_presentation}))
+    end
+    it 'includes the index geometry' do
+      expect(collection_presentation[:geometry]).to be index_geometry
     end
     it 'includes a url to add a new photo' do
       expect(collection_presentation[:add]).to be add_photo_url

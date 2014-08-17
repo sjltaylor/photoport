@@ -34,9 +34,6 @@ Collections.addInitializer(function () {
     identityStatusView: this.identityStatusView,
     library: this.library
   });
-  this.sliderView = new Collections.Show.Controller.makeSliderView({
-    indexView: this.indexView
-  });
 
   var landingDeferred = new $.Deferred();
   this.landing = landingDeferred.promise();
@@ -49,7 +46,6 @@ Collections.addInitializer(function () {
       uploadPanelConfig: landing['upload_panel_config']
     });
     this.library.collections().set(landing.collections);
-    this.indexView.setUrl(this.library.get('index'));
 
     landingDeferred.resolve(this);
 

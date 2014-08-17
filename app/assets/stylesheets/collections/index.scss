@@ -10,6 +10,7 @@
     top: 5px;
     right: 3.5%;
     font-size: 0.85em;
+    z-index: 1000;
   }
 
   #list_container {
@@ -18,16 +19,9 @@
     left: 0;
 
     .list-view {
-
-      li.controls {
-        padding: 20px 0 10px;
-        height: 54px;
-      }
-
-      .btn.new {
-        margin: 0 auto;
-        width: 180px;
-      }
+      position: absolute;
+      top: 0;
+      left: 0;
 
       .loading-indicator.new {
         margin: 0 auto;
@@ -36,11 +30,22 @@
         display: none;
       }
 
-      ul.inner {
-        padding-top: 5px;
-        margin-top: 10px;
-        background-color: rgba(255,255,255,0.8);
-        overflow-y: scroll;
+      .create-prompt {
+        position: absolute;
+        text-align: center;
+        display: inline-block;
+        @include user-select-none;
+      }
+
+      ul {
+        list-style-type: none;
+        padding: 0;
+
+        li {
+          position: absolute;
+          padding: 3px 5px;
+          @include user-select-none();
+        }
       }
     }
   }

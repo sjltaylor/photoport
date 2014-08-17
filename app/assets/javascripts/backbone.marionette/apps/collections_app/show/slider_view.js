@@ -1,4 +1,3 @@
-//= require templates/slider_view
 //= require backbone.marionette/page_region
 
 Collections.module('Show', function (Show, Collections, Backbone, Marionette, $, _) {

@@ -28,11 +28,14 @@
         });
       }
     },
-    create: function (landing) {
+    create: function (landing, geometry) {
       return $.ajax({
         type: "POST",
         url: landing.get('add'),
         headers: headers(),
+        data: {
+          index_geometry: geometry
+        },
         dataType: 'json',
         cache: false
       });

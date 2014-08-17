@@ -3,8 +3,8 @@ module CmsServices
     collection.photos.create(photo_uid: file_key).tap{|photo| photo.save!}
   end
 
-  def create_collection(identity:, name: nil)
-    identity.collections.create(name: name)
+  def create_collection(identity:, index_geometry:, name: nil )
+    identity.collections.create(name: name, index_geometry: index_geometry)
   end
 
   def show_default_data(identity:)

@@ -16,30 +16,76 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
     }
   });
 
+  function touchhold (el, startEvent, timeout) {
+
+    var timeout = setTimeout(function () {
+      el.removeEventListener('mouseup', mouseupHandler);
+
+      el.dispatchEvent(new CustomEvent('hold', {
+        bubbles: true,
+        detail: {
+          startEvent: startEvent
+        }
+      }));
+    }, timeout || 350);
+
+    var mouseupHandler = function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      el.removeEventListener('mouseup', mouseupHandler);
+      clearTimeout(timeout);
+
+      el.dispatchEvent(new CustomEvent('tap', {
+        bubbles: true,
+        detail: {
+          startEvent: startEvent
+        }
+      }));
+    };
+
+    el.addEventListener('mouseup', mouseupHandler);
+  };
+
   List.View = Marionette.CompositeView.extend({
     template: 'list_view',
     className: 'list-view',
-    childViewContainer: 'ul.inner',
+    childViewContainer: 'ul',
     childView: ListEntryView,
     ui: {
-      controls: '.controls',
-      new: '.js-new'
+      createPrompt: '.create-prompt'
     },
     events: {
-      'click .js-new': 'onNewCollection'
+      'mousedown': 'onClickDown',
+      'hold': 'onNewCollection'
     },
-    onNewCollection: function () {
-      this.trigger('new-collection');
-      this.startNewCollection();
+    initialize: function () {
+      this.state = 'idle';
+    },
+    onNewCollection: function (event) {
+      var startEvent = event.originalEvent.detail.startEvent;
+      var bounds = this.el.getBoundingClientRect();
+
+      var geometry = {
+        x: startEvent.clientX,
+        y: startEvent.clientY,
+        width: bounds.width,
+        height: bounds.height
+      };
+
+      this.trigger('new-collection', geometry);
+    },
+    onClickDown: function (e) {
+      touchhold(this.el, e);
     },
     onRender: function () {
-      this.setupSpinner();
+      this.updatePrompt();
     },
-    setupSpinner: function () {
+    setupSpinner: function (geometry) {
       var opts = {
         lines: 10, // The number of lines to draw
         length:6, // The length of each line
-        width: 3, // The line thickness
+        height: 3, // The line thickness
         radius: 6, // The radius of the inner circle
         corners: 1, // Corner roundness (0..1)
         rotate: 0, // The rotation offset
@@ -51,19 +97,52 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
         hwaccel: true, // Whether to use hardware acceleration
         className: 'spinner', // The CSS class to assign to the spinner
         zIndex: 2e9, // The z-index (defaults to 2000000000)
-        top: '55%', // Top position relative to parent
-        left: '50%' // Left position relative to parent
+        top: geometry.y + 'px', // Top position relative to parent
+        left: geometry.x + 'px' // Left position relative to parent
       };
 
       this.spinner = new Spinner(opts);
     },
-    startNewCollection: function () {
-      this.ui.new.hide();
-      this.spinner.spin(this.ui.controls[0]);
+    startNewCollection: function (geometry) {
+      this.state = 'new-collection-in-progress';
+      this.ui.createPrompt.hide();
+      this.setupSpinner(geometry);
+      this.spinner.spin(this.el);
+      this.updatePrompt();
     },
     endNewCollection: function () {
+      this.state = 'idle';
       this.spinner.stop();
-      this.ui.new.show();
+      delete this.spinner;
+      this.updatePrompt();
+    },
+    updatePrompt: function () {
+      if (this.state === 'new-collection-in-progress' || this.collection.length) {
+        this.ui.createPrompt.hide();
+      } else {
+        this.ui.createPrompt.show();
+      }
+    },
+    updateGeometry: function () {
+      var viewportBounds = this.el.getBoundingClientRect();
+      var promptBounds = this.ui.createPrompt[0].getBoundingClientRect();
+
+      var left = (viewportBounds.width / 2) - (promptBounds.width / 2);
+      var top  = (viewportBounds.height / 2) - (promptBounds.height / 2);
+
+      this.ui.createPrompt.css({
+        left: left,
+        top: top
+      });
+    },
+    addChild: function(child, ChildView, index){
+      var view = Backbone.Marionette.CollectionView.prototype.addChild.apply(this, arguments);
+      var inst = view.model;
+      view.$el.css({
+        top: inst.get('geometry').y + 'px',
+        left: inst.get('geometry').x + 'px'
+      });
+      return view;
     }
   });
 });

@@ -24,7 +24,7 @@ Collections.module('IdentityStatus', function (IdentityStatus, Collections, Back
         ui.signOut.show();
         ui.identityDescription.html(this.identity.get('email_address'));
       } else {
-        ui.identityDescription.html('anonymous');
+        ui.identityDescription.html('');
         ui.signOut.hide();
         ui.signIn.show();
       }

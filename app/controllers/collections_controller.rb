@@ -13,7 +13,7 @@ class CollectionsController < ApplicationController
     respond_to do |format|
       format.json do
         identity = request_identity
-        payload  = presenters.collection(services.create_collection(identity: identity, name: params[:name]))
+        payload  = presenters.collection(services.create_collection(identity: identity, name: params[:name], index_geometry: params[:index_geometry]))
         render json: payload
       end
     end
