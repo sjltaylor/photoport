@@ -67,8 +67,8 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
       var bounds = this.el.getBoundingClientRect();
 
       var geometry = {
-        x: startEvent.clientX,
-        y: startEvent.clientY,
+        cx: startEvent.clientX,
+        cy: startEvent.clientY,
         width: bounds.width,
         height: bounds.height
       };
@@ -97,8 +97,8 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
         hwaccel: true, // Whether to use hardware acceleration
         className: 'spinner', // The CSS class to assign to the spinner
         zIndex: 2e9, // The z-index (defaults to 2000000000)
-        top: geometry.y + 'px', // Top position relative to parent
-        left: geometry.x + 'px' // Left position relative to parent
+        top: geometry.cy + 'px', // Top position relative to parent
+        left: geometry.cx + 'px' // Left position relative to parent
       };
 
       this.spinner = new Spinner(opts);
@@ -123,7 +123,8 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
         this.ui.createPrompt.show();
       }
     },
-    updateGeometry: function () {
+    updateGeometry: function (parentBounds) {
+      this.$el.width(parentBounds.width).height(parentBounds.height);
       var viewportBounds = this.el.getBoundingClientRect();
       var promptBounds = this.ui.createPrompt[0].getBoundingClientRect();
 
@@ -135,13 +136,34 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
         top: top
       });
     },
+    repositionChildren: function () {
+      this.children.each(this.positionChild.bind(this));
+    },
+    positionChild: function (view) {
+      var inst = view.model;
+
+      var centerX = inst.get('geometry').cx;
+      var centerY = inst.get('geometry').cy;
+
+      var width = view.$el.width();
+      var height = view.$el.height();
+
+      var x = centerX - (width / 2);
+      var y = centerY - (height / 2);
+
+      view.$el.css({
+        top: y + 'px',
+        left: x + 'px'
+      });
+
+      return {
+        x: x,
+        y: y
+      };
+    },
     addChild: function(child, ChildView, index){
       var view = Backbone.Marionette.CollectionView.prototype.addChild.apply(this, arguments);
-      var inst = view.model;
-      view.$el.css({
-        top: inst.get('geometry').y + 'px',
-        left: inst.get('geometry').x + 'px'
-      });
+      this.positionChild(view);
       return view;
     }
   });

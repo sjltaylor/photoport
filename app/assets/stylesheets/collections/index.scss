@@ -38,13 +38,19 @@
       }
 
       ul {
-        list-style-type: none;
+        position: absolute;
+        top: 0;
+        left: 0;
         padding: 0;
+        width: 0;
+        height: 0;
+        list-style-type: none;
 
         li {
           position: absolute;
           padding: 3px 5px;
           @include user-select-none();
+          white-space: nowrap;
         }
       }
     }
