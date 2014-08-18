@@ -13,7 +13,6 @@
 
 //
 //= require jquery/dist/jquery.min
-//= require jquery-easing-original/jquery.easing.1.3
 //= require underscore/underscore
 //= require backbone/backbone
 //= require backbone.marionette/lib/backbone.marionette
