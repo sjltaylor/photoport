@@ -1,17 +1,19 @@
 GIT
-  remote: ../../resolve
-  revision: dc2fa144b37304566838d58d859127786d46056a
+  remote: git@github.com:sjltaylor/resolve.git
+  revision: 61aaa963acaf50e71fe102269ea7102bf892132d
   specs:
     resolve (0.0.3)
       activesupport
 
-PATH
-  remote: ../../sentry
+GIT
+  remote: git@github.com:sjltaylor/sentry.git
+  revision: 164e3ce8f51a0e75c0d7609fcb66edd8c2e39661
   specs:
     sentry (0.0.1)
 
-PATH
-  remote: ../../services
+GIT
+  remote: git@github.com:sjltaylor/services.git
+  revision: 8161111a759d49b9157c49baf787f99c01b144b6
   specs:
     services (0.0.6)
 
