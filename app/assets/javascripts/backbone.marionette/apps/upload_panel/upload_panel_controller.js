@@ -31,6 +31,7 @@ Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, 
     },
     makeView: function (opts) {
       var controller = this;
+      var uploadPanelConfig = opts.uploadPanelConfig;
 
       var uploadPanel = new UploadPanel.View();
       uploadPanel.on("files:selected", function (files) {

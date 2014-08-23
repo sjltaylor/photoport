@@ -6,12 +6,10 @@ Collections.Controller = {
         collection.view = app.Show.Controller.makePhotoportView({
           collection: collection,
           identity: app.identity,
-          uploadPanelConfig: app.library.get('upload_panel_config')
+          uploadPanelConfig: app.library.get('uploadPanelConfig')
         });
       }
-
-      app.page.show(app.sliderView);
-      app.sliderView.slideToPhotoport(collection.view);
+      app.page.show(collection.view);
     });
   },
   collections: function () {
