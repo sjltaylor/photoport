@@ -25,3 +25,6 @@ config/aws.yml
 
 # keep your own TODO
 TODO
+
+# keep your own .env for foreman
+.env

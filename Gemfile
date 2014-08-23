@@ -1,12 +1,14 @@
 source 'https://rubygems.org'
 
+ruby '2.1.2'
+
 gem 'rails', '~> 4.1.4'
 gem 'pg'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'unicorn'
+gem 'puma'
 gem 'therubyracer'
 gem 'ejs'
 gem 'sprockets', '>= 2.0.0'
@@ -15,7 +17,6 @@ gem 'sass'
 gem 'resolve',  '>= 0.0.3', github: 'sjltaylor/resolve'
 gem 'services', '>= 0.0.3', github: 'sjltaylor/services'
 gem 'sentry', '>= 0.0.1', github: 'sjltaylor/sentry'
-
 gem 'rack-cache', :require => 'rack/cache'
 gem 'fog'
 gem 'unf'
