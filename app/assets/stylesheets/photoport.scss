@@ -1,84 +1,34 @@
 .photoport {
-
-  $baseWidth: 600px;
-  $baseHeight: 375px;
-  $topEdgeWidth: 10px;
-  $handleWidth: 30px;
-
-  position: relative;
+  position: absolute;
   top: 0;
   left: 0;
-  width: $baseWidth + (2 * $handleWidth);
-  height: $baseHeight + (2 * $topEdgeWidth);
-  margin: 0 auto;
-  border-radius: 8px;
-  box-shadow: inset 0 0 100px rgba(150, 150, 150, 0.1), 0 0 2px rgba(150, 150, 150, 0.3);
-  border: solid 1px rgba(180,180,180, 0.1);
+  padding: 0;
+  margin: 0;
   overflow: hidden;
-
-  .photoport-handle {
-    position: absolute;
-    top: $topEdgeWidth;
-    width: $handleWidth;
-    height: $baseHeight;
-    display: table;
-    user-select: none;
-    -webkit-user-select: none;
-    cursor: default;
-
-    .photoport-handle-glyph {
-      width: $handleWidth;
-      text-align: center;
-      vertical-align: middle;
-      display: table-cell;
-      color: rgba(128,128,128,0.125);
-      user-select: none;
-      -webkit-user-select: none;
-      transition-property: color text-shadow;
-      transition-duration: 125ms;
-
-      &.pulse {
-        color: rgba(128,128,128, 0.185);
-        text-shadow: rgba(128,128,128, 0.185) 0 0 3px;
-      }
-    }
-  }
-
-  .photoport-handle-left {
-    left: 0;
-  }
-
-  .photoport-handle-right {
-    right: 0;
-  }
-
-  .photoport-shadow {
-    pointer-events: none;
-    box-shadow: 0 0 3px rgba(0,0,0,0.15) inset;
-    position: absolute;
-    top: $topEdgeWidth - 1;
-    left: $handleWidth - 1;
-    width: $baseWidth;
-    height: $baseHeight;
-  }
+  user-select: none;
+  -webkit-user-select: none;
+  background-color: black;
 
   .photoport-port {
     position: relative;
-    top: $topEdgeWidth - 1;
-    left: $handleWidth - 1;
-    width: $baseWidth;
-    height: $baseHeight;
-    border: solid 1px rgba(255, 255, 255, 0.1);
+    top: 0;
+    left: 0;
+    width: 350px;
+    height: 285px;
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
 
     .photoport-content {
-      height: $baseHeight;
       position: absolute;
       top: 0;
       left: 0;
+      height: 100%;
       transition-property: left;
       transition-duration: 180ms;
       transition-timing-function: linear;
+      user-select: none;
+      -webkit-user-select: none;
     }
 
     .photoport-element {
@@ -88,4 +38,3 @@
     }
   }
 }
-

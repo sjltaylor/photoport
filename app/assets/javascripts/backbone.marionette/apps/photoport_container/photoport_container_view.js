@@ -1,10 +1,7 @@
 //= require photoport/photoport
-//= require templates/photoport_container
-
 
 Collections.module('PhotoportContainer', function (PhotoportContainer, Collections, Backbone, Marionette, $, _) {
   PhotoportContainer.View = Marionette.ItemView.extend({
-    template: 'photoport_container',
     className: 'photoport-container',
     events: {
       'photoport-content-hold': 'onPhotoportContentHold',
@@ -17,7 +14,7 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
       _.extend(this, this.options);
 
       this.photoport = new Photoport({
-        container: document.createElement('DIV')
+        container: this.el
       });
       this.photoport.append(this.uploadPanel.photoportContentDescriptor);
 
@@ -83,6 +80,11 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
     },
     resume: function () {
       this.photoport.resume();
+    },
+    //onResize: function (dimensions) {
+    resize: function (dimensions) {
+      //this.photoport.resize(dimensions)
+      this.photoport.resize({width: 900, height: 600})
     }
   });
 });

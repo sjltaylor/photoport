@@ -8,6 +8,6 @@ module BrowsingServices
   #   * `user`
   #   * `photo` (required)
   def download_photo(identity:, photo:)
-    dragonfly_photos_app.fetch(photo.photo_uid).thumb('600x').encode('jpg').file.path
+    dragonfly_photos_app.fetch(photo.photo_uid).encode('jpg').file.path
   end
 end

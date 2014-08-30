@@ -22,26 +22,16 @@ Photoport = (function () {
     var dom = {
       root              : div('photoport'),
       port              : div('photoport-port'),
-      shadow            : div('photoport-shadow'),
       content           : div('photoport-content'),
       interlude         : div('photoport-interlude'),
-      leftHandle        : div('photoport-handle photoport-handle-left'),
-      rightHandle       : div('photoport-handle photoport-handle-right'),
-      leftHandleGlyph   : span('fui-triangle-left-large photoport-handle-glyph'),
-      rightHandleGlyph  : span('fui-triangle-right-large photoport-handle-glyph'),
       keyframes         : document.createElement('STYLE')
     };
 
-    dom.root.appendChild(dom.leftHandle);
     dom.root.appendChild(dom.port);
-    dom.root.appendChild(dom.shadow);
-    dom.root.appendChild(dom.rightHandle);
     dom.port.appendChild(dom.content);
     dom.port.appendChild(dom.interlude);
     dom.root.appendChild(dom.keyframes);
 
-    dom.leftHandle.appendChild(dom.leftHandleGlyph);
-    dom.rightHandle.appendChild(dom.rightHandleGlyph);
 
     dom.interlude.style.display = 'none';
     dom.keyframes.classList.add('photoport-bounce-keyframes');
@@ -79,32 +69,13 @@ Photoport = (function () {
     this.state = 'normal';
     this.interludeContent = null;
 
-    this.dom.rightHandle.addEventListener('click', function (e) {
-      e.preventDefault();
-      this.dom.rightHandleGlyph.classList.add('pulse');
-      this.next();
-    }.bind(this));
-
-    this.dom.rightHandleGlyph.addEventListener('webkitTransitionEnd', function () {
-      this.dom.rightHandleGlyph.classList.remove('pulse');
-    }.bind(this));
-
-    this.dom.leftHandle.addEventListener('click', function (e) {
-      e.preventDefault();
-      this.dom.leftHandleGlyph.classList.add('pulse');
-      this.previous();
-    }.bind(this));
-
-    this.dom.leftHandleGlyph.addEventListener('webkitTransitionEnd', function () {
-      this.dom.leftHandleGlyph.classList.remove('pulse');
-    }.bind(this));
-
     this.dom.content.addEventListener('webkitAnimationEnd', function () {
       this.dom.content.style.webkitAnimation = '';
       this.dom.keyframes.innerHTML = '';
     }.bind(this));
 
     Photoport.instances.push(this);
+    window.P = this;
   }
 
   Photoport.instances = [];
@@ -169,16 +140,6 @@ Photoport = (function () {
       }
 
       return this;
-    },
-    showHandles: function () {
-      var dom       = this.dom;
-      dom.leftHandle.style.display  = 'table';
-      dom.rightHandle.style.display = 'table';
-    },
-    hideHandles: function () {
-      var dom       = this.dom;
-      dom.leftHandle.style.display  = 'none';
-      dom.rightHandle.style.display = 'none';
     },
     append: function (contentDescriptor) {
       return this.insert(contentDescriptor);
@@ -393,7 +354,6 @@ Photoport = (function () {
       this.fit(contentDescriptor);
       this.state = 'interlude';
       this.interludeContent = contentDescriptor;
-      this.hideHandles();
       return this;
     },
     resume: function () {
@@ -406,7 +366,6 @@ Photoport = (function () {
       dom.interlude.style.display = 'none';
       this.state = 'normal';
       this.interludeContent = null;
-      this.showHandles();
       return this;
     },
     count: function () {
@@ -467,6 +426,25 @@ Photoport = (function () {
         default:
           return position;
       }
+    },
+    resize: function (dimensions) {
+      //this.currentDimensions = dimensions;
+      /*
+        * .photoport
+        * .photoport-content
+      */
+      var targets = this.sequence.map(function (contentDescriptor) {
+        return contentDescriptor.el;
+      }).concat([
+        this.dom.root,
+        this.dom.port
+      ]).forEach(function (el) {
+        el.style.width  = dimensions.width + 'px';
+        el.style.height = dimensions.height + 'px';
+      });
+
+      this.dom.content.style.width = (this.sequence.length * this.portRect().width) + 'px';
+      this.dom.content.style.left = -1 * this.position * this.portRect().width + 'px';
     }
   };
 

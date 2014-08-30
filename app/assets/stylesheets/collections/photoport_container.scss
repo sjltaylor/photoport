@@ -1,8 +1,13 @@
 .photoport-container {
   padding-top: 50px;
-  position: relative;
-  top: 0;
-  left: 0;
+  position: absolute;
+  top: 15px;
+  left: 80px;
+  margin: 0px;
+  /* debugging */
+  width: 900px;
+  height: 600px;
+  /* end debugging */
 
   .save-prompt {
     width: 125px;

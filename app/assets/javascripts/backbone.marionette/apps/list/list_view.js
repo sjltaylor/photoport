@@ -96,8 +96,8 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
         this.ui.createPrompt.show();
       }
     },
-    updateGeometry: function (parentBounds) {
-      this.$el.width(parentBounds.width).height(parentBounds.height);
+    onResize: function (dimensions) {
+      this.$el.width(dimensions.width).height(dimensions.height);
       var viewportBounds = this.el.getBoundingClientRect();
       var promptBounds = this.ui.createPrompt[0].getBoundingClientRect();
 

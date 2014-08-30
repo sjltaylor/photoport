@@ -6,6 +6,12 @@ Collections.PageRegion = Backbone.Marionette.Region.extend({});
 _.extend(Collections.PageRegion.prototype, {
   initialize: function () {
     this.views = [];
+    $(window).on('resize', this.fitCurrentViewToWindow.bind(this));
+  },
+  fitCurrentViewToWindow: function () {
+    if(this.currentView) {
+      this.currentView.resize({ width: window.innerWidth, height: window.innerHeight });
+    }
   },
   /*
     shows the view without removed the previous view(s) from the dom
@@ -26,6 +32,8 @@ _.extend(Collections.PageRegion.prototype, {
     this.currentView = view;
     Marionette.triggerMethod.call(this, "show", view);
     Marionette.triggerMethod.call(view, "show");
+
+    this.fitCurrentViewToWindow();
     return this;
   },
   /*

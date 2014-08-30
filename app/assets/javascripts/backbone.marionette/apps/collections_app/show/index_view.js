@@ -17,19 +17,12 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
     onRender: function () {
       this.identityStatusRegion.show(this.identityStatusView);
       this.listContainerRegion.show(this.listView);
-      this.resize();
-      $(window).on('resize', this.resize.bind(this));
     },
     onShow: function () {
-      this.resize();
       this.listView.repositionChildren();
     },
-    resize: function () {
-      var width =  window.innerWidth,
-          height = window.innerHeight;
-
-      this.listView.$el.add(this.listContainerRegion.$el).width(width).height(height);
-      this.listView.updateGeometry({ width: width, height: height });
+    onResize: function (dimensions) {
+      this.listView.resize(dimensions);
     }
   });
 });
