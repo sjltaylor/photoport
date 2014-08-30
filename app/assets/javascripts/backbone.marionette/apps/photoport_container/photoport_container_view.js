@@ -14,7 +14,8 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
       _.extend(this, this.options);
 
       this.photoport = new Photoport({
-        container: this.el
+        container: this.el,
+        keyboardNavigation: true
       });
       this.photoport.append(this.uploadPanel.photoportContentDescriptor);
 
@@ -83,6 +84,7 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
     },
     //onResize: function (dimensions) {
     resize: function (dimensions) {
+      console.warn('wip')
       //this.photoport.resize(dimensions)
       this.photoport.resize({width: 900, height: 600})
     }

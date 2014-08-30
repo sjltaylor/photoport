@@ -61,6 +61,7 @@ Photoport = (function () {
 
   function Photoport (options) {
     checkOptions(options);
+
     this.container = options.container;
     this.dom = build();
     this.container.appendChild(this.dom.root);
@@ -74,11 +75,14 @@ Photoport = (function () {
       this.dom.keyframes.innerHTML = '';
     }.bind(this));
 
+    if (options.keyboardNavigation) {
+      this.setupKeyboardNavigation();
+    }
+
     Photoport.instances.push(this);
-    window.P = this;
   }
 
-  Photoport.instances = [];
+  Photoport.instances = [ ];
 
   Photoport.prototype = {
     destroy: function () {
@@ -90,8 +94,8 @@ Photoport = (function () {
 
       var bounds = this.portRect();
 
-      el.style.width    = bounds.width  + 'px';
-      el.style.height   = bounds.height + 'px';
+      el.style.width  = bounds.width  + 'px';
+      el.style.height = bounds.height + 'px';
 
       return this;
     },
@@ -382,6 +386,13 @@ Photoport = (function () {
       this.dom.keyframes.innerHTML = createBounceKeyframes(name, start, -1);
       this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
+    setupKeyboardNavigation: function () {
+      window.addEventListener('keydown', function (event) {
+        if (event.altKey || event.ctrlKey || event.shiftKey || event.metaKey) return;
+        if (event.keyCode === 39) this.next();
+        else if (event.keyCode === 37) this.previous();
+      }.bind(this));
+    },
     setupMouseInteraction: function (contentDescriptor) {
       var photoport = this;
       contentDescriptor.mousedownHandler = function (e) {
@@ -477,6 +488,37 @@ Photoport = (function () {
       }
       return this;
     }
+  };
+
+  Photoport.touchevents = function touchevents (el, timeout) {
+
+    // var timeout = setTimeout(function () {
+    //   el.removeEventListener('mouseup', mouseupHandler);
+    //
+    //   el.dispatchEvent(new CustomEvent('hold', {
+    //     bubbles: true,
+    //     detail: {
+    //       startEvent: startEvent
+    //     }
+    //   }));
+    // }, timeout || 350);
+    //
+    // var mouseupHandler = function (e) {
+    //   e.preventDefault();
+    //   e.stopPropagation();
+    //
+    //   el.removeEventListener('mouseup', mouseupHandler);
+    //   clearTimeout(timeout);
+    //
+    //   el.dispatchEvent(new CustomEvent('tap', {
+    //     bubbles: true,
+    //     detail: {
+    //       startEvent: startEvent
+    //     }
+    //   }));
+    // };
+    //
+    // el.addEventListener('mouseup', mouseupHandler);
   };
 
   return Photoport;
