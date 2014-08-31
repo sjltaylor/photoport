@@ -1,3 +1,7 @@
+//= require_self
+//= require photoport/photoport.deferred
+//= require photoport/photoport.touch
+
 Photoport = (function () {
 
   function checkOptions (options) {
@@ -74,6 +78,8 @@ Photoport = (function () {
       this.dom.content.style.webkitAnimation = '';
       this.dom.keyframes.innerHTML = '';
     }.bind(this));
+
+    this.setupTouchInteraction();
 
     if (options.keyboardNavigation) {
       this.setupKeyboardNavigation();
@@ -190,7 +196,27 @@ Photoport = (function () {
 
       this.fitContent();
 
-      this.setupMouseInteraction(contentDescriptor);
+      Photoport.touch(contentDescriptor.el);
+
+      contentDescriptor.el.addEventListener('hold', function (event) {
+        this.el().dispatchEvent(new CustomEvent('photoport-content-hold', {
+          bubbles: true,
+          detail: {
+            content: contentDescriptor
+          }
+        }));
+      }.bind(this));
+
+      contentDescriptor.el.addEventListener('tap', function (event) {
+        this.el().dispatchEvent(new CustomEvent('photoport-content-action', {
+          bubbles: true,
+          detail: {
+            content: contentDescriptor
+          }
+        }));
+      }.bind(this));
+
+
 
       var deferred = new Photoport.Deferred();
 
@@ -274,8 +300,14 @@ Photoport = (function () {
 
       return this.seek(this.position);
     },
+    hasPrevious: function () {
+      return this.position > 0;
+    },
     previous: function () {
       return this.seek(this.position - 1);
+    },
+    hasNext: function () {
+      return this.position < this.count();
     },
     next: function () {
       return this.seek(this.position + 1);
@@ -393,42 +425,67 @@ Photoport = (function () {
         else if (event.keyCode === 37) this.previous();
       }.bind(this));
     },
-    setupMouseInteraction: function (contentDescriptor) {
-      var photoport = this;
-      contentDescriptor.mousedownHandler = function (e) {
+    setupTouchInteraction: function () {
+      var content = this.dom.content;
 
-        var timeout = setTimeout(function () {
-          contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
+      content.addEventListener('mousedown', function (event) {
+        var shiftThreshold = 0.5;
+        var width = this.portRect().width;
+        var finished = false;
 
-          photoport.el().dispatchEvent(new CustomEvent('photoport-content-hold', {
-            bubbles: true,
-            detail: {
-              content: contentDescriptor
-            }
-          }));
-        }, 350);
+        var originX, contentLeft, initialPosition;
 
-        var mouseupHandler = function (e) {
-          e.preventDefault();
-          e.stopPropagation();
+        var start = function (event) {
+          originX = event.pageX;
+          contentLeft = parseInt(content.style.left, 10);
+          initialPosition = this.position;
+        }.bind(this);
 
-          contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
-          clearTimeout(timeout);
+        start(event);
 
-          photoport.el().dispatchEvent(new CustomEvent('photoport-content-action', {
-            bubbles: true,
-            detail: {
-              content: contentDescriptor
-            }
-          }));
-        };
+        var finish = function () {
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('mouseup', finish);
+          finished = true;
+        }.bind(this);
 
-        contentDescriptor.el.addEventListener('mouseup', mouseupHandler);
-      };
+        var finishAndReturn = function () {
+          finish();
+          if (this.position === initialPosition) {
+            this.dom.content.style.left = (-1 * this.position * this.portRect().width) + 'px';
+          }
+        }.bind(this);
 
-      contentDescriptor.el.addEventListener('mousedown', contentDescriptor.mousedownHandler);
+        var onMouseMove = function (event) {
+          var linearMovementX = event.pageX - originX;
+          var nonLinearMovementX = Math.round(0.68 * linearMovementX);
+          content.style.left = (contentLeft + nonLinearMovementX) + 'px';
+          var shift = linearMovementX / width;
+
+          if (this.hasNext() && shift < -shiftThreshold) {
+            window.removeEventListener('mousemove', onMouseMove);
+            this.next().done(function () {
+              setTimeout(function () {
+                start(event);
+                if (!finished) window.addEventListener('mousemove', onMouseMove);
+              }, 80);
+            });
+          } else if (this.hasPrevious() && shift > shiftThreshold) {
+            window.removeEventListener('mousemove', onMouseMove);
+            this.previous().done(function () {
+              setTimeout(function () {
+                start(event);
+                if (!finished) window.addEventListener('mousemove', onMouseMove);
+              }, 80);
+            });
+          }
+        }.bind(this);
+
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', finishAndReturn);
+      }.bind(this));
     },
-    indexForNamedPosition: function (position) {
+        indexForNamedPosition: function (position) {
       switch(position) {
         case 'last':
           return this.sequence.length - 1;
@@ -457,68 +514,6 @@ Photoport = (function () {
       this.dom.content.style.width = (this.sequence.length * this.portRect().width) + 'px';
       this.dom.content.style.left = -1 * this.position * this.portRect().width + 'px';
     }
-  };
-
-  Photoport.Deferred = function Deferred () {
-    this.isResolved = false;
-    this.queues = {
-      done: []
-    };
-  };
-
-  Photoport.Deferred.prototype = {
-    resolve: function () {
-      if (this.isResolved) return this;
-
-      this.isResolved = true;
-
-      this.queues.done.forEach(function (cb) {
-        cb();
-      });
-
-      this.queues.done = null;
-
-      return this;
-    },
-    done: function (cb) {
-      if (this.isResolved) {
-        setTimeout(cb, 0);
-      } else {
-        this.queues.done.push(cb);
-      }
-      return this;
-    }
-  };
-
-  Photoport.touchevents = function touchevents (el, timeout) {
-
-    // var timeout = setTimeout(function () {
-    //   el.removeEventListener('mouseup', mouseupHandler);
-    //
-    //   el.dispatchEvent(new CustomEvent('hold', {
-    //     bubbles: true,
-    //     detail: {
-    //       startEvent: startEvent
-    //     }
-    //   }));
-    // }, timeout || 350);
-    //
-    // var mouseupHandler = function (e) {
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    //
-    //   el.removeEventListener('mouseup', mouseupHandler);
-    //   clearTimeout(timeout);
-    //
-    //   el.dispatchEvent(new CustomEvent('tap', {
-    //     bubbles: true,
-    //     detail: {
-    //       startEvent: startEvent
-    //     }
-    //   }));
-    // };
-    //
-    // el.addEventListener('mouseup', mouseupHandler);
   };
 
   return Photoport;
