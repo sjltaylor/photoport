@@ -65,6 +65,7 @@ Photoport = (function () {
 
   function Photoport (options) {
     checkOptions(options);
+    this.options = options;
 
     this.container = options.container;
     this.dom = build();
@@ -79,11 +80,9 @@ Photoport = (function () {
       this.dom.keyframes.innerHTML = '';
     }.bind(this));
 
+    this.setupKeyboardNavigation();
     this.setupTouchInteraction();
-
-    if (options.keyboardNavigation) {
-      this.setupKeyboardNavigation();
-    }
+    this.__keyboardEventListener__ = this.__keyboardEventListener__.bind(this);
 
     Photoport.instances.push(this);
   }
@@ -94,6 +93,8 @@ Photoport = (function () {
     destroy: function () {
       Photoport.instances.splice(Photoport.instances.indexOf(this), 1);
       this.dom.root.remove();
+      window.removeEventListener('keydown', this.__keyboardEventListener__);
+      window.removeEventListener('mousedown', this.__mouseDownEventListener__);
     },
     fit: function (content) {
       el = content.el || this.current.el;
@@ -418,27 +419,33 @@ Photoport = (function () {
       this.dom.keyframes.innerHTML = createBounceKeyframes(name, start, -1);
       this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
-    setupKeyboardNavigation: function () {
-      window.addEventListener('keydown', function (event) {
+    __keyboardEventListener__: function (event) {
+      if (this.options.keyboardNavigation) {
         if (event.altKey || event.ctrlKey || event.shiftKey || event.metaKey) return;
         if (event.keyCode === 39) this.next();
         else if (event.keyCode === 37) this.previous();
-      }.bind(this));
+      }
+    },
+    setupKeyboardNavigation: function () {
+      this.__keyboardEventListener__ = this.__keyboardEventListener__.bind(this);
+      window.addEventListener('keydown', this.__keyboardEventListener__);
     },
     setupTouchInteraction: function () {
       var content = this.dom.content;
 
-      content.addEventListener('mousedown', function (event) {
-        var shiftThreshold = 0.5;
+      this.__mouseDownEventListener__ = function (event) {
+        window.removeEventListener('keydown', this.__keyboardEventListener__);
+        var positionDelta = 0;
+        var shiftThreshold = 0.4;
         var width = this.portRect().width;
         var finished = false;
 
-        var originX, contentLeft, initialPosition;
+        var dragReferenceX, contentLeft, currentPosition;
 
         var start = function (event) {
-          originX = event.pageX;
+          dragReferenceX = event.pageX;
           contentLeft = parseInt(content.style.left, 10);
-          initialPosition = this.position;
+          currentPosition = this.position;
         }.bind(this);
 
         start(event);
@@ -447,22 +454,30 @@ Photoport = (function () {
           window.removeEventListener('mousemove', onMouseMove);
           window.removeEventListener('mouseup', finish);
           finished = true;
-        }.bind(this);
-
-        var finishAndReturn = function () {
-          finish();
-          if (this.position === initialPosition) {
-            this.dom.content.style.left = (-1 * this.position * this.portRect().width) + 'px';
+          if (this.position === currentPosition) {
+            var left = (-1 * this.position * width);
+            this.dom.content.style.left = left + 'px';
           }
+          this.setupKeyboardNavigation();
         }.bind(this);
 
         var onMouseMove = function (event) {
-          var linearMovementX = event.pageX - originX;
+          var linearMovementX = event.pageX - dragReferenceX;
           var nonLinearMovementX = Math.round(0.68 * linearMovementX);
-          content.style.left = (contentLeft + nonLinearMovementX) + 'px';
+          var newLeft = contentLeft + nonLinearMovementX;
+
+          if (positionDelta < 1 && nonLinearMovementX < 0) {
+            content.style.left = newLeft + 'px';
+          }
+
+          if (positionDelta > -1 && nonLinearMovementX > 0) {
+            content.style.left = newLeft + 'px';
+          }
+
           var shift = linearMovementX / width;
 
-          if (this.hasNext() && shift < -shiftThreshold) {
+          if (this.hasNext() && positionDelta < 1 && shift < -shiftThreshold) {
+            positionDelta++;
             window.removeEventListener('mousemove', onMouseMove);
             this.next().done(function () {
               setTimeout(function () {
@@ -470,7 +485,8 @@ Photoport = (function () {
                 if (!finished) window.addEventListener('mousemove', onMouseMove);
               }, 80);
             });
-          } else if (this.hasPrevious() && shift > shiftThreshold) {
+          } else if (this.hasPrevious() && positionDelta > -1 && shift > shiftThreshold) {
+            positionDelta--;
             window.removeEventListener('mousemove', onMouseMove);
             this.previous().done(function () {
               setTimeout(function () {
@@ -482,10 +498,12 @@ Photoport = (function () {
         }.bind(this);
 
         window.addEventListener('mousemove', onMouseMove);
-        window.addEventListener('mouseup', finishAndReturn);
-      }.bind(this));
+        window.addEventListener('mouseup', finish);
+      }.bind(this);
+
+      content.addEventListener('mousedown', this.__mouseDownEventListener__);
     },
-        indexForNamedPosition: function (position) {
+    indexForNamedPosition: function (position) {
       switch(position) {
         case 'last':
           return this.sequence.length - 1;

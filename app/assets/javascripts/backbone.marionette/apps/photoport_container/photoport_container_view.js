@@ -86,7 +86,7 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
     resize: function (dimensions) {
       console.warn('wip')
       //this.photoport.resize(dimensions)
-      this.photoport.resize({width: 900, height: 600})
+      this.photoport.resize({width: 400, height: 275})
     }
   });
 });
