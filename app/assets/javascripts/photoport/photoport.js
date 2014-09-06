@@ -1,3 +1,6 @@
+//= require_self
+//= require 'photoport/photoport.deferred'
+
 Photoport = (function () {
 
   function checkOptions (options) {
@@ -66,6 +69,7 @@ Photoport = (function () {
     this.dom = build();
     this.container.appendChild(this.dom.root);
     this.sequence = [];
+    this.__onDestroy__ = [];
     this.position = null;
     this.state = 'normal';
     this.interludeContent = null;
@@ -88,6 +92,12 @@ Photoport = (function () {
     destroy: function () {
       Photoport.instances.splice(Photoport.instances.indexOf(this), 1);
       this.dom.root.remove();
+      this.__onDestroy__.forEach(function (cb) {
+        cb.bind(this)();
+      });
+    },
+    onDestroy: function (cb) {
+      this.__onDestroy__.push(cb);
     },
     fit: function (content) {
       el = content.el || this.current.el;
@@ -107,8 +117,8 @@ Photoport = (function () {
     },
     fitContent: function () {
       var bounds = this.portRect();
-      this.dom.content.style.width = (this.sequence.length * bounds.width) + 'px';
-      for(var i = this.sequence.length - 1; i >= 0; i--) {
+      this.dom.content.style.width = (this.count() * bounds.width) + 'px';
+      for(var i = this.count() - 1; i >= 0; i--) {
         this.fit(this.sequence[i]);
       }
       if (this.interludeContent) {
@@ -153,17 +163,17 @@ Photoport = (function () {
     },
     insert: function (contentDescriptor, position) {
       if (position === undefined || position === null) {
-        position = this.sequence.length;
+        position = this.count();
       }
 
       if (typeof position === 'string') {
         position = this.indexForNamedPosition(position);
       }
 
-      position = Math.min(position, this.sequence.length);
+      position = Math.min(position, this.count());
 
       if (position < 0) {
-        position = Math.max(position + this.sequence.length, 0);
+        position = Math.max(position + this.count(), 0);
       }
 
       if (this.position !== null && position < this.position) {
@@ -221,7 +231,7 @@ Photoport = (function () {
       if (index < this.position) {
         this.position = decr(this.position);
       } else if (index === this.position) {
-        if (this.sequence.length === 1) {
+        if (this.count() === 1) {
           this.position = null;
         } else {
           if (this.position === 0) {
@@ -281,7 +291,7 @@ Photoport = (function () {
       return this.seek(this.position + 1);
     },
     seek: function (newPosition) {
-      if (this.sequence.length === 0) {
+      if (this.count() === 0) {
         throw new Error('Nothing added to Photoport');
       }
 
@@ -292,9 +302,9 @@ Photoport = (function () {
       var direction = newPosition > this.position ? 'Right' : 'Left';
       var bounce = false;
 
-      if (newPosition >= this.sequence.length) {
+      if (newPosition >= this.count()) {
         bounce = true;
-        newPosition = this.sequence.length - 1;
+        newPosition = this.count() - 1;
       } else if (newPosition < 0) {
         bounce = true;
         newPosition = 0;
@@ -387,11 +397,54 @@ Photoport = (function () {
       this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
     setupKeyboardNavigation: function () {
-      window.addEventListener('keydown', function (event) {
+      var disableKeydown = function () {
+        window.removeEventListener('keydown', keydown);
+        window.addEventListener('keyup', keyup);
+      };
+
+      var enableKeydown = function () {
+        window.removeEventListener('keyup', keyup);
+        window.addEventListener('keydown', keydown);
+      };
+
+      var throttleTimeoutId;
+
+      var throttle = function () {
+        if (throttleTimeoutId) clearTimeout(throttleTimeoutId);
+        throttleTimeoutId = setTimeout(function () {
+          enableKeydown();
+        }, 500);
+      }
+
+      var keydown = function (event) {
+        disableKeydown();
+        throttle();
         if (event.altKey || event.ctrlKey || event.shiftKey || event.metaKey) return;
-        if (event.keyCode === 39) this.next();
-        else if (event.keyCode === 37) this.previous();
-      }.bind(this));
+
+        if (event.keyCode === 39) {
+          this.next();
+        } else if (event.keyCode === 37) {
+          this.previous();
+        }
+      }.bind(this);
+
+      var keyup = function (event) {
+        if (throttleTimeoutId) clearTimeout(throttleTimeoutId);
+        enableKeydown();
+      }
+
+      var removeKeyEventListeners = function () {
+        window.removeEventListener('keydown', keydown);
+        window.removeEventListener('keyup', keyup);
+      }
+
+      var addKeyEventListeners = function () {
+        window.addEventListener('keydown', keydown);
+        window.addEventListener('keyup', keyup);
+      }
+
+      addKeyEventListeners();
+      this.onDestroy(removeKeyEventListeners);
     },
     setupMouseInteraction: function (contentDescriptor) {
       var photoport = this;
@@ -431,7 +484,7 @@ Photoport = (function () {
     indexForNamedPosition: function (position) {
       switch(position) {
         case 'last':
-          return this.sequence.length - 1;
+          return this.count() - 1;
         case 'first':
           return 0;
         default:
@@ -439,11 +492,6 @@ Photoport = (function () {
       }
     },
     resize: function (dimensions) {
-      //this.currentDimensions = dimensions;
-      /*
-        * .photoport
-        * .photoport-content
-      */
       var targets = this.sequence.map(function (contentDescriptor) {
         return contentDescriptor.el;
       }).concat([
@@ -454,71 +502,9 @@ Photoport = (function () {
         el.style.height = dimensions.height + 'px';
       });
 
-      this.dom.content.style.width = (this.sequence.length * this.portRect().width) + 'px';
+      this.dom.content.style.width = (this.count() * this.portRect().width) + 'px';
       this.dom.content.style.left = -1 * this.position * this.portRect().width + 'px';
     }
-  };
-
-  Photoport.Deferred = function Deferred () {
-    this.isResolved = false;
-    this.queues = {
-      done: []
-    };
-  };
-
-  Photoport.Deferred.prototype = {
-    resolve: function () {
-      if (this.isResolved) return this;
-
-      this.isResolved = true;
-
-      this.queues.done.forEach(function (cb) {
-        cb();
-      });
-
-      this.queues.done = null;
-
-      return this;
-    },
-    done: function (cb) {
-      if (this.isResolved) {
-        setTimeout(cb, 0);
-      } else {
-        this.queues.done.push(cb);
-      }
-      return this;
-    }
-  };
-
-  Photoport.touchevents = function touchevents (el, timeout) {
-
-    // var timeout = setTimeout(function () {
-    //   el.removeEventListener('mouseup', mouseupHandler);
-    //
-    //   el.dispatchEvent(new CustomEvent('hold', {
-    //     bubbles: true,
-    //     detail: {
-    //       startEvent: startEvent
-    //     }
-    //   }));
-    // }, timeout || 350);
-    //
-    // var mouseupHandler = function (e) {
-    //   e.preventDefault();
-    //   e.stopPropagation();
-    //
-    //   el.removeEventListener('mouseup', mouseupHandler);
-    //   clearTimeout(timeout);
-    //
-    //   el.dispatchEvent(new CustomEvent('tap', {
-    //     bubbles: true,
-    //     detail: {
-    //       startEvent: startEvent
-    //     }
-    //   }));
-    // };
-    //
-    // el.addEventListener('mouseup', mouseupHandler);
   };
 
   return Photoport;
