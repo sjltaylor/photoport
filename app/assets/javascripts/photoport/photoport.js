@@ -23,11 +23,11 @@ Photoport = (function () {
 
   function build () {
     var dom = {
-      root              : div('photoport'),
-      port              : div('photoport-port'),
-      content           : div('photoport-content'),
-      interlude         : div('photoport-interlude'),
-      keyframes         : document.createElement('STYLE')
+      root      : div('photoport'),
+      port      : div('photoport-port'),
+      content   : div('photoport-content'),
+      interlude : div('photoport-interlude'),
+      keyframes : document.createElement('STYLE')
     };
 
     dom.root.appendChild(dom.port);
@@ -144,6 +144,8 @@ Photoport = (function () {
         contentDescriptor.el.classList.add('photoport-element');
       }
 
+      contentDescriptor.loadDeferred = new Photoport.Deferred();
+
       if ((typeof contentDescriptor.backgroundImage) === 'string') {
         if (!contentDescriptor.el.classList.contains('photoport-photo')) {
           contentDescriptor.el.classList.add('photoport-photo');
@@ -151,7 +153,20 @@ Photoport = (function () {
 
         contentDescriptor.el.style.backgroundImage = "url(" + contentDescriptor.backgroundImage + ")";
         contentDescriptor.el.style.backgroundRepeat = "no-repeat";
+        contentDescriptor.el.style.backgroundPosition = "center, 0 0";
+
+        contentDescriptor.image = new Image();
+        contentDescriptor.image.src = contentDescriptor.backgroundImage;
+
+        var onLoad = function () {
+          contentDescriptor.image.removeEventListener('load', onLoad);
+          contentDescriptor.loadDeferred.resolve();
+        }.bind(this);
+
+        contentDescriptor.image.addEventListener('load', onLoad);
       }
+
+      this.resizeContent(contentDescriptor);
 
       return this;
     },
@@ -504,6 +519,28 @@ Photoport = (function () {
 
       this.dom.content.style.width = (this.count() * this.portRect().width) + 'px';
       this.dom.content.style.left = -1 * this.position * this.portRect().width + 'px';
+
+      this.sequence.forEach(this.resizeContent.bind(this));
+    },
+    resizeContent: function (contentDescriptor) {
+      if (!contentDescriptor.el.classList.contains('photo')) return;
+
+      contentDescriptor.loadDeferred.done(function () {
+        var image = contentDescriptor.image;
+        var imageAspectRatio = image.width / image.height;
+        var portRect = this.portRect();
+        var portAspectRatio = portRect.width / portRect.height;
+
+        if (imageAspectRatio >= portAspectRatio) {
+          var imageHeight = portRect.height;
+          var imageWidth = imageAspectRatio * imageHeight;
+        } else {
+          var imageWidth = portRect.width;
+          var imageHeight = imageWidth / imageAspectRatio;
+        }
+
+        contentDescriptor.el.style.backgroundSize = imageWidth + "px " + imageHeight + "px";
+      }.bind(this));
     }
   };
 
