@@ -20,16 +20,16 @@ Collections.addInitializer(function () {
   this.library = new Collections.Library();
 
   // views
-  this.identifyView = Collections.Identify.Controller.makeView({
-    identity: this.identity,
-    template: 'identify'
-  });
-  this.signInView = Collections.Identify.Controller.makeView({
-    identity: this.identity
-  });
-  this.identityStatusView = Collections.IdentityStatus.Controller.makeView({
-    identity: this.identity
-  });
+  // this.identifyView = Collections.Identify.Controller.makeView({
+  //   identity: this.identity,
+  //   template: 'identify'
+  // });
+  // this.signInView = Collections.Identify.Controller.makeView({
+  //   identity: this.identity
+  // });
+  // this.identityStatusView = Collections.IdentityStatus.Controller.makeView({
+  //   identity: this.identity
+  // });
   this.indexView = new Collections.Show.Controller.makeIndexView({
     identityStatusView: this.identityStatusView,
     library: this.library

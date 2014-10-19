@@ -1,19 +1,7 @@
 //= require templates/list_view
-//= require templates/list_item_view
+//= require ./list_item_view
 
 Collections.module('List', function (List, Collections, Backbone, Marionette, $, _) {
-
-  ListEntryView = Marionette.ItemView.extend({
-    template: 'list_item_view',
-    tagName: 'li',
-    ui: {
-      name: 'a'
-    },
-    onRender: function () {
-      this.ui.name.text(this.model.get('name'));
-      this.ui.name.attr('href', this.model.get('show'));
-    }
-  });
 
   function touchhold (el, startEvent, timeout) {
 
@@ -50,7 +38,7 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
     template: 'list_view',
     className: 'list-view',
     childViewContainer: 'ul',
-    childView: ListEntryView,
+    childView: ListItemView,
     ui: {
       createPrompt: '.create-prompt'
     },

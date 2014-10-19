@@ -20,12 +20,6 @@ $silver: #BDC3C7;
 $concrete: #95A5A6;
 $asbestos: #7F8C8D;
 
-// simple mappings
-// $green: @emerald
-// $grey: @clouds;
-// $black: @midnight-blue;
-// $red: @alizarin;
-
 @mixin user-select-none() {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -41,4 +35,10 @@ $asbestos: #7F8C8D;
   -webkit-border-radius: $radius;
   -moz-border-radius: $radius;
   -o-border-radius: $radius;
+}
+
+@mixin transition-color() {
+  transition-property: color;
+  transition-duration: 250ms;
+  transition-timing-function: ease;
 }
