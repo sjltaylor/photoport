@@ -12,11 +12,11 @@
     position: absolute;
     bottom: 0;
     left: 10%;
-    color: #cccccc;
+    color: $silver;
     @include user-select-none;
 
     .drop-prompt {
-      color: $green;
+      color: $emerald;
       margin: 15px 0;
       font-size: 3.25em;
     }

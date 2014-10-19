@@ -1,5 +1,4 @@
-//= require bootstrap/css/bootstrap
-//= require css/flat-ui
+//= require css/flat-ui-pro
 
 @import "mixins";
 @import "photoport";
@@ -22,30 +21,6 @@ body {
 .page-controls {
   font-size: 0.85em;
   a, a:focus, a:hover, a:visited {
-    color: $black;
-  }
-}
-
-.slider-view {
-  position: relative;
-  left: 0;
-  top: 0;
-
-  .slider-view-viewport {
-    overflow: scroll;
-  }
-
-  .slider-view-destination {
-    position: relative;
-    top: 0;
-    left: 0;
-  }
-
-  #index_region {
-    border-bottom: solid 1px #eee;
-  }
-
-  #photoport_region {
-    box-shadow: 0 3px 8px rgba(0,0,0,0.05) inset;
+    color: $wet-asphalt;
   }
 }
