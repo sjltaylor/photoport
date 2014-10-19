@@ -1,5 +1,4 @@
 Collections.module('List', function (List, Collections, Backbone, Marionette, $, _) {
-
   List.Controller = {
     makeView: function (opts) {
       var library = opts.library,
@@ -11,11 +10,14 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
       });
 
       list.on('new-collection', function (geometry) {
-        this.startNewCollection(geometry);
+        var collection = new Collections.Collection({
+          geometry: geometry
+        });
 
-        Collections.host.create(library, geometry).done(function (collection) {
-          collections.add(collection);
-          list.endNewCollection();
+        collections.add(collection);
+
+        Collections.host.create(library, geometry).done(function (collectionAttributes) {
+          collection.set(collectionAttributes);
         });
       });
 

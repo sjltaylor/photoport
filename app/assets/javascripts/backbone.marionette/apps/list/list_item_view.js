@@ -8,15 +8,15 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
     ui: {
       name: '.js-collection-name'
     },
-    events: {
-      mousedown: 'onClick'
-    },
-    onClick: function (e) {
-      e.preventDefault();
+    modelEvents: {
+      "change": "update"
     },
     onRender: function () {
+      this.update();
+    },
+    update: function () {
       this.ui.name.text(this.model.get('name'));
-      //this.ui.name.attr('href', this.model.get('show'));
+      this.trigger('update');
     }
   });
 });

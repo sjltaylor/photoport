@@ -1,37 +1,13 @@
 //= require templates/list_view
 //= require ./list_item_view
+//= require ./touch_handler
+//= require ./geometry
 
 Collections.module('List', function (List, Collections, Backbone, Marionette, $, _) {
 
-  function touchhold (el, startEvent, timeout) {
-
-    var timeout = setTimeout(function () {
-      el.removeEventListener('mouseup', mouseupHandler);
-
-      el.dispatchEvent(new CustomEvent('hold', {
-        bubbles: true,
-        detail: {
-          startEvent: startEvent
-        }
-      }));
-    }, timeout || 350);
-
-    var mouseupHandler = function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-
-      el.removeEventListener('mouseup', mouseupHandler);
-      clearTimeout(timeout);
-
-      el.dispatchEvent(new CustomEvent('tap', {
-        bubbles: true,
-        detail: {
-          startEvent: startEvent
-        }
-      }));
-    };
-
-    el.addEventListener('mouseup', mouseupHandler);
+  var states = {
+    'idle': 'idle',
+    'move': 'move'
   };
 
   List.View = Marionette.CompositeView.extend({
@@ -43,13 +19,20 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
       createPrompt: '.create-prompt'
     },
     events: {
-      'mousedown': 'onClickDown',
-      'hold': 'onNewCollection'
+      'hold:plane': 'onHoldPlane'
+    },
+    collectionEvents: {
+      "change":"update"
     },
     initialize: function () {
-      this.state = 'idle';
+      this.state = states.idle;
+      this.touchHandler = new List.TouchHandler(this);
     },
-    onNewCollection: function (event) {
+    onRender: function () {
+      this.touchHandler.start();
+      this.update();
+    },
+    onHoldPlane: function (event) {
       var startEvent = event.originalEvent.detail.startEvent;
       var bounds = this.el.getBoundingClientRect();
 
@@ -62,23 +45,8 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
 
       this.trigger('new-collection', geometry);
     },
-    onClickDown: function (e) {
-      touchhold(this.el, e);
-    },
-    onRender: function () {
-      this.updatePrompt();
-    },
-    startNewCollection: function (geometry) {
-      this.state = 'new-collection-in-progress';
-      this.ui.createPrompt.hide();
-      this.updatePrompt();
-    },
-    endNewCollection: function () {
-      this.state = 'idle';
-      this.updatePrompt();
-    },
-    updatePrompt: function () {
-      if (this.state === 'new-collection-in-progress' || this.collection.length) {
+    update: function () {
+      if (this.collection.length > 0) {
         this.ui.createPrompt.hide();
       } else {
         this.ui.createPrompt.show();
@@ -125,7 +93,30 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
     addChild: function(child, ChildView, index){
       var view = Backbone.Marionette.CollectionView.prototype.addChild.apply(this, arguments);
       this.positionChild(view);
+      view.on("update", this.positionChild.bind(this, view));
       return view;
+    },
+    moveChild: function (view, event) {
+      event.preventDefault();
+
+      var model = view.model;
+      var geometry = model.get('geometry');
+
+      var mousemove = function (e) {
+        geometry.cx =
+        $(this.el).css({
+          left: e.pageX + 'px',
+          top: e.pageY + 'px'
+        })
+      }.bind(this);
+
+      var mouseup = function () {
+        $(this.el).unbind('mousemove', mousemove);
+        $(this.el).unbind('mouseup', mouseup);
+      }.bind(this);
+
+      $(this.el).mousemove(mousemove);
+      $(this.el).mouseup(mouseup);
     }
   });
 });
