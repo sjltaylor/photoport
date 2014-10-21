@@ -9,14 +9,18 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
       name: '.js-collection-name'
     },
     modelEvents: {
-      "change": "update"
+      "change:name": "updateName"
     },
     onRender: function () {
-      this.update();
+      this.updateName();
     },
-    update: function () {
+    updateName: function () {
       this.ui.name.text(this.model.get('name'));
-      this.trigger('update');
+      var r = this.el.getBoundingClientRect();
+      this.model.set({
+        width: r.width,
+        height: r.height
+      });
     }
   });
 });

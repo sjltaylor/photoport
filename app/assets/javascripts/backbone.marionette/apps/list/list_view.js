@@ -5,11 +5,6 @@
 
 Collections.module('List', function (List, Collections, Backbone, Marionette, $, _) {
 
-  var states = {
-    'idle': 'idle',
-    'move': 'move'
-  };
-
   List.View = Marionette.CompositeView.extend({
     template: 'list_view',
     className: 'list-view',
@@ -19,13 +14,15 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
       createPrompt: '.create-prompt'
     },
     events: {
-      'hold:plane': 'onHoldPlane'
+      'hold:plane': 'onHoldPlane',
+      'hold:object': 'onHoldObject',
+      'drag:object': 'onDragObject',
+      'release:object': 'onReleaseObject'
     },
     collectionEvents: {
       "change":"update"
     },
     initialize: function () {
-      this.state = states.idle;
       this.touchHandler = new List.TouchHandler(this);
     },
     onRender: function () {
@@ -33,17 +30,35 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
       this.update();
     },
     onHoldPlane: function (event) {
-      var startEvent = event.originalEvent.detail.startEvent;
+      var mouseEvent = event.originalEvent.detail.mouseEvent;
       var bounds = this.el.getBoundingClientRect();
 
       var geometry = {
-        cx: startEvent.clientX,
-        cy: startEvent.clientY,
+        cx: mouseEvent.clientX,
+        cy: mouseEvent.clientY,
         width: bounds.width,
         height: bounds.height
       };
 
       this.trigger('new-collection', geometry);
+    },
+    onHoldObject: function (event) {
+      var mouseEvent = event.originalEvent.detail.mouseEvent;
+      var view = event.originalEvent.detail.view;
+      var model = view.model;
+      model.beginDrag(mouseEvent.clientX, mouseEvent.clientY);
+    },
+    onDragObject: function () {
+      var mouseEvent = event.originalEvent.detail.mouseEvent;
+      var view = event.originalEvent.detail.view;
+      var model = view.model;
+      model.move()
+    },
+    onReleaseObject: function () {
+      var mouseEvent = event.originalEvent.detail.mouseEvent;
+      var view = event.originalEvent.detail.view;
+      var model = view.model;
+      model.endDrag(mouseEvent.clientX, mouseEvent.clientY)
     },
     update: function () {
       if (this.collection.length > 0) {
@@ -92,31 +107,10 @@ Collections.module('List', function (List, Collections, Backbone, Marionette, $,
     },
     addChild: function(child, ChildView, index){
       var view = Backbone.Marionette.CollectionView.prototype.addChild.apply(this, arguments);
+      this.touchHandler.listenToObject(view);
       this.positionChild(view);
       view.on("update", this.positionChild.bind(this, view));
       return view;
-    },
-    moveChild: function (view, event) {
-      event.preventDefault();
-
-      var model = view.model;
-      var geometry = model.get('geometry');
-
-      var mousemove = function (e) {
-        geometry.cx =
-        $(this.el).css({
-          left: e.pageX + 'px',
-          top: e.pageY + 'px'
-        })
-      }.bind(this);
-
-      var mouseup = function () {
-        $(this.el).unbind('mousemove', mousemove);
-        $(this.el).unbind('mouseup', mouseup);
-      }.bind(this);
-
-      $(this.el).mousemove(mousemove);
-      $(this.el).mouseup(mouseup);
     }
   });
 });
