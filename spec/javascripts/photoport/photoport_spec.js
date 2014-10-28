@@ -1,4 +1,5 @@
 //= require photoport/photoport
+//= require photoport/photoport.deferred
 
 describe('photoport', function () {
   var container, photoport, testContent;
@@ -40,8 +41,8 @@ describe('photoport', function () {
 
   function deferredSpy () {
     var deferred = jasmine.createSpyObj('deferred', ['resolve', 'done']);
-    spyOn(Photoport, 'Deferred').andReturn(deferred);
-    spyOn(deferred.resolve, 'bind').andReturn(deferred.resolve);
+    spyOn(Photoport, 'Deferred').and.returnValue(deferred);
+    spyOn(deferred.resolve, 'bind').and.returnValue(deferred.resolve);
     return deferred;
   }
 
@@ -64,26 +65,12 @@ describe('photoport', function () {
       expect(container.querySelector('.photoport style.photoport-bounce-keyframes')).not.toBeNull();
     });
 
-    it('renders a shadow element', function () {
-      expect(container.querySelector('.photoport .photoport-shadow')).not.toBeNull();
-    });
-
-    it('renders handles', function () {
-      expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left')).not.toBeNull();
-      expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right')).not.toBeNull();
-    });
-
     it('sets the initial state to "normal"', function () {
       expect(photoport.state).toBe('normal');
     });
 
     it('sets the interludeContent to null', function () {
       expect(photoport.interludeContent).toBeNull();
-    });
-
-    it('renders handle glyphs', function () {
-      expect(container.querySelector('.photoport .photoport-handle.photoport-handle-left .photoport-handle-glyph')).not.toBeNull();
-      expect(container.querySelector('.photoport .photoport-handle.photoport-handle-right .photoport-handle-glyph')).not.toBeNull();
     });
 
     it('initialize an initial empty sequence', function () {
@@ -130,7 +117,7 @@ describe('photoport', function () {
   describe('portRect()', function () {
     it('returns the bounding client rectangle of the element representing the viewport for the content', function () {
       var portDomFake = {
-        getBoundingClientRect: jasmine.createSpy('getBoundingClientRect').andReturn({
+        getBoundingClientRect: jasmine.createSpy('getBoundingClientRect').and.returnValue({
           width: 400,
           height: 200
         })
@@ -154,7 +141,7 @@ describe('photoport', function () {
     });
 
     it('sets the dimensions of the element to those of the photoport viewing viewport', function () {
-      spyOn(photoport, 'portRect').andReturn({
+      spyOn(photoport, 'portRect').and.returnValue({
         width: 400,
         height: 200
       });
@@ -221,7 +208,7 @@ describe('photoport', function () {
       });
     });
     it('resizes the content area', function () {
-      spyOn(photoport, 'portRect').andReturn({
+      spyOn(photoport, 'portRect').and.returnValue({
         width: 123
       });
       photoport.start();
@@ -242,7 +229,7 @@ describe('photoport', function () {
 
     beforeEach(function () {
       rtn = {};
-      spyOn(photoport, 'seek').andReturn(rtn);
+      spyOn(photoport, 'seek').and.returnValue(rtn);
       addSomeContentToPhotoport();
     });
 
@@ -275,7 +262,7 @@ describe('photoport', function () {
       addSomeContentToPhotoport();
       photoport.start();
       rtn = {};
-      spyOn(photoport, 'seek').andReturn(rtn);
+      spyOn(photoport, 'seek').and.returnValue(rtn);
     });
     it('calls seek() with the next position', function () {
       photoport.seek(0);
@@ -294,12 +281,12 @@ describe('photoport', function () {
     });
     it('calls seek() with the previous position', function () {
       photoport.seek(3);
-      spyOn(photoport, 'seek').andReturn(rtn);
+      spyOn(photoport, 'seek').and.returnValue(rtn);
       photoport.previous();
       expect(photoport.seek).toHaveBeenCalledWith(2);
     });
     it('returns the result from seek', function () {
-      spyOn(photoport, 'seek').andReturn(rtn);
+      spyOn(photoport, 'seek').and.returnValue(rtn);
       expect(photoport.previous()).toBe(rtn);
     });
   });
@@ -410,7 +397,7 @@ describe('photoport', function () {
       });
       describe('when the position is a string', function () {
         it('resolves the position as if it were a named position', function () {
-          spyOn(photoport, 'indexForNamedPosition').andCallThrough();
+          spyOn(photoport, 'indexForNamedPosition').and.callThrough();
           photoport.seek('first');
           expect(photoport.indexForNamedPosition).toHaveBeenCalledWith('first');
         });
@@ -510,7 +497,7 @@ describe('photoport', function () {
     });
     describe('when the position is a string', function () {
       it('resolves the position as if it were a named position', function () {
-        spyOn(photoport, 'indexForNamedPosition').andCallThrough();
+        spyOn(photoport, 'indexForNamedPosition').and.callThrough();
         photoport.insert(createContent(), 'first');
         expect(photoport.indexForNamedPosition).toHaveBeenCalledWith('first');
       });
@@ -780,7 +767,7 @@ describe('photoport', function () {
         });
         it('returns the deferred from the seek operation', function () {
           var seekDeferred = jasmine.createSpyObj('seek deferred', ['resolve', 'done']);
-          spyOn(photoport, 'seek').andReturn(seekDeferred);
+          spyOn(photoport, 'seek').and.returnValue(seekDeferred);
           expect(photoport.remove(content)).toBe(seekDeferred);
         });
         describe('when the content is the only item in the sequence', function () {
@@ -805,42 +792,6 @@ describe('photoport', function () {
             photoport.remove(content);
             expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
           });
-        });
-      });
-    });
-  });
-  describe('showHandles()', function () {
-    it('makes left and right handles visible', function () {
-      photoport.showHandles();
-      expect(photoport.dom.leftHandle.style.display).toBe('table');
-      expect(photoport.dom.leftHandleGlyph.classList.contains('fui-triangle-left-large')).toBeTruthy();
-      expect(photoport.dom.rightHandle.style.display).toBe('table');
-      expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
-    });
-  });
-  describe('hideHandles()', function () {
-    it('makes left and right handles hidden', function () {
-      photoport.hideHandles();
-      expect(photoport.dom.leftHandle.style.display).toBe('none');
-      expect(photoport.dom.leftHandleGlyph.classList.contains('fui-triangle-left-large')).toBeTruthy();
-      expect(photoport.dom.rightHandle.style.display).toBe('none');
-      expect(photoport.dom.rightHandleGlyph.classList.contains('fui-triangle-right-large')).toBeTruthy();
-    });
-  });
-  describe('navigation', function () {
-    describe('clicking', function () {
-      describe('right', function () {
-        it('calls next', function () {
-          spyOn(photoport, 'next');
-          photoport.dom.rightHandle.dispatchEvent(new Event('click'));
-          expect(photoport.next).toHaveBeenCalled();
-        });
-      });
-      describe('left', function () {
-        it('calls previous', function () {
-          spyOn(photoport, 'previous');
-          photoport.dom.leftHandle.dispatchEvent(new Event('click'));
-          expect(photoport.previous).toHaveBeenCalled();
         });
       });
     });
@@ -882,11 +833,6 @@ describe('photoport', function () {
       photoport.interlude(content);
       expect(photoport.state).toBe("interlude");
     });
-    it('hides the handles', function () {
-      spyOn(photoport, 'hideHandles');
-      photoport.interlude(content);
-      expect(photoport.hideHandles).toHaveBeenCalled();
-    });
     it('sets the interludeContent', function () {
       photoport.interlude(content);
       expect(photoport.interludeContent).toBe(content);
@@ -911,11 +857,6 @@ describe('photoport', function () {
       photoport.resume();
       expect(photoport.state).toBe("normal");
     });
-    it('shows the handles', function () {
-      spyOn(photoport, 'showHandles');
-      photoport.resume();
-      expect(photoport.showHandles).toHaveBeenCalled();
-    });
     it('clears the interludeContent', function () {
       photoport.resume();
       expect(photoport.interludeContent).toBeNull();
@@ -937,13 +878,13 @@ describe('photoport', function () {
     beforeEach(function () {
       contentDescriptor = createContent();
 
-      actionListener = jasmine.createSpy().andCallFake(function (e) {
+      actionListener = jasmine.createSpy().and.callFake(function (e) {
         actionListenerArgs = e;
       });
       actionArgs = null;
       photoport.el().addEventListener('photoport-content-action', actionListener);
 
-      holdListener = jasmine.createSpy().andCallFake(function (e) {
+      holdListener = jasmine.createSpy().and.callFake(function (e) {
         holdListenerArgs = e;
       });
       holdArgs = null;
@@ -954,26 +895,16 @@ describe('photoport', function () {
       contentDescriptor.el.dispatchEvent(new MouseEvent(name));
     }
 
-    function simulatesActionEvent () {
-      runs(function () {
-        dispatch('mousedown');
-        dispatch('mouseup');
-      });
-      waitsFor(function () {
-        return actionListener.wasCalled;
-      }, 'action listener to be called', 2);
+    function simulateActionEvent () {
+      dispatch('mousedown');
+      dispatch('mouseup');
     }
 
-    function simulatesHoldEvent () {
-      runs(function () {
-        dispatch('mousedown');
-        setTimeout(function () {
-          dispatch('mouseup');
-        }, 351);
-      });
-      waitsFor(function () {
-        return holdListener.wasCalled;
-      }, 'hold event to be emitted', 400);
+    function simulateHoldEvent () {
+      dispatch('mousedown');
+      setTimeout(function () {
+        dispatch('mouseup');
+      }, 351);
     }
 
     it('adds a mousedownHandler to the element', function () {
@@ -982,47 +913,48 @@ describe('photoport', function () {
       expect(contentDescriptor.mousedownHandler).not.toBeNull();
       expect(contentDescriptor.el.addEventListener).toHaveBeenCalledWith('mousedown', contentDescriptor.mousedownHandler);
     });
-    it('fires a photoport-content-action event with the content if a mouseup event is received within 350ms', function () {
-      runs(function () {
-        photoport.insert(contentDescriptor);
-      });
+    it('fires a photoport-content-action event with the content if a mouseup event is received within 350ms', function (done) {
+      photoport.insert(contentDescriptor);
 
-      simulatesActionEvent();
+      simulateActionEvent();
 
-      runs(function () {
+      setTimeout(function () {
+        expect(actionListener.calls.count() > 0).toBe(true);
         expect(actionListener).toHaveBeenCalled();
         expect(actionListenerArgs.detail.content).toBe(contentDescriptor);
         expect(actionListenerArgs.bubbles).toBe(true);
-      });
+        done();
+      }, 400);
     });
-    it('fires a photoport-content-hold event if the mouse is down for >= 350ms', function () {
-      runs(function () {
-        photoport.insert(contentDescriptor);
-      });
+    it('fires a photoport-content-hold event if the mouse is down for >= 350ms', function (done) {
+      photoport.insert(contentDescriptor);
 
-      simulatesHoldEvent();
+      simulateHoldEvent();
 
-      runs(function () {
+      setTimeout(function () {
+        expect(holdListener.calls.count() > 0).toBe(true);
         expect(holdListenerArgs.detail.content).toBe(contentDescriptor);
         expect(holdListenerArgs.bubbles).toBe(true);
-      });
+        done();
+      }, 400);
     });
     describe('multiple events', function () {
       beforeEach(function () {
         photoport.insert(contentDescriptor);
       });
 
-      it('does not emit an action event if the hold event has been emitted', function () {
-        var initialActionCallListenerCallCount = actionListener.callCount;
+      it('does not emit an action event if the hold event has been emitted', function (done) {
+        var initialActionCallListenerCallCount = actionListener.calls.count();
 
-        simulatesHoldEvent();
+        simulateHoldEvent();
 
-        runs(function () {
-          expect(actionListener.callCount).toBe(initialActionCallListenerCallCount);
-        });
+        setTimeout(function () {
+          expect(actionListener.calls.count()).toBe(initialActionCallListenerCallCount);
+          done();
+        }, 400);
       });
-      it('does not emit a hold event if an action event has been emitted', function () {
-        simulatesActionEvent();
+      it('does not emit a hold event if an action event has been emitted', function (done) {
+        simulateActionEvent();
 
         var holdEventWouldHaveFired = false;
 
@@ -1030,44 +962,11 @@ describe('photoport', function () {
           holdEventWouldHaveFired = true;
         }, 375);
 
-        waitsFor(function () {
-          return holdEventWouldHaveFired;
-        }, 'hold event would have fired set to true', 400);
-
-        runs(function () {
+        setTimeout(function () {
+          expect(holdEventWouldHaveFired).toBe(true);
           expect(holdListener).not.toHaveBeenCalled();
-        });
-      });
-      it('does not emit too many hold events', function () {
-        runs(function () {
-          dispatch('mousedown');
-        });
-        waitsFor(function () {
-          return holdListener.callCount == 1;
-        });
-        runs(function () {
-          dispatch('mousedown');
-        });
-        waitsFor(function () {
-          return holdListener.callCount == 2;
-        });
-        runs(function () {
-          dispatch('mousedown');
-        });
-        waitsFor(function () {
-          return holdListener.callCount == 3;
-        });
-        runs(function () {
-          expect(holdListener.callCount).toBe(3);
-        });
-      });
-      it('does not emit too many action events', function () {
-        simulatesActionEvent();
-        simulatesActionEvent();
-        simulatesActionEvent();
-        runs(function () {
-          expect(actionListener.callCount).toBe(3);
-        });
+          done();
+        }, 400);
       });
     });
   });
@@ -1143,8 +1042,8 @@ describe('photoport', function () {
           });
 
           it('does not call callbacks', function () {
-            expect(callback1.callCount).toBe(1);
-            expect(callback2.callCount).toBe(1);
+            expect(callback1.calls.count()).toBe(1);
+            expect(callback2.calls.count()).toBe(1);
           });
           it('returns the deferred', function () {
              expect(rtn).toBe(deferred);
