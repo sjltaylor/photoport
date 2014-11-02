@@ -1,1 +1,0 @@
-# the example on amazon shows policies, encoded policies and signatures that do not correspond

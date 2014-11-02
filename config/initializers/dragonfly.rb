@@ -9,7 +9,7 @@ Dragonfly.app(:photoport_cms).configure do
 
   url_format '/photos/:job/:name.:format'
 
-  datastore(:s3, AWS_CONFIG.photos.to_hash.slice(:bucket_name, :access_key_id, :secret_access_key, :region))
+  datastore(:s3, AWS_CONFIG.to_hash.slice(:bucket_name, :access_key_id, :secret_access_key, :region))
 end
 
 # Logger

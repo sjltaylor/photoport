@@ -26,6 +26,7 @@ gem 'aasm'
 gem 'better_errors'
 gem 'bcrypt'
 gem 'blobject', '>= 0.5.0'
+gem 'aws-sdk'
 
 group :test do
   gem 'shoulda'

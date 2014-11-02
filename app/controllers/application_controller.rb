@@ -31,7 +31,9 @@ class ApplicationController < ActionController::Base
   end
 
   def presenters
-    @presenters ||= Services.from('app/presenters').resolve(url_helper: self)
+    @presenters ||= Services.from('app/presenters').resolve(
+      url_helper: self,
+      aws_config: AWS_CONFIG)
   end
 
   def application
