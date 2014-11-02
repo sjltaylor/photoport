@@ -45,7 +45,6 @@
       position: absolute;
       top: 0;
       left: 0;
-      background-image: url('bg-dots.png');
 
       .loading-indicator.new {
         margin: 0 auto;
@@ -64,24 +63,24 @@
 
       ul {
         position: absolute;
+        display: inline-block;
         top: 0;
         left: 0;
         padding: 0;
-        width: 100%;
-        height: 100%;
         margin: 0;
-        padding: 0;
+        min-width: 500px;
         list-style-type: none;
+        line-height: 0;
 
         li {
-          position: absolute;
-          padding: 3px 15px;
           @include user-select-none();
+          display: inline-block;
           white-space: nowrap;
           margin: 0;
           padding: 0;
-          border-radius: 6px;
-          box-shadow: 0 0 5px rgba(0,0,0,0.2);
+          width: 500px;
+          height: 312px;
+          border: dashed 1px red;
 
           a {
             @include transition-color;

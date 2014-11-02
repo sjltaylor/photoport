@@ -21,9 +21,6 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
       //this.identityStatusRegion.show(this.identityStatusView);
       this.listContainerRegion.show(this.listView);
     },
-    onShow: function () {
-      this.listView.repositionChildren();
-    },
     onResize: function (dimensions) {
       this.listView.resize({
         width: dimensions.width,
