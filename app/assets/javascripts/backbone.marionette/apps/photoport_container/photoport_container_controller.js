@@ -1,18 +1,6 @@
 Collections.module('PhotoportContainer', function (PhotoportContainer, Collections, Backbone, Marionette, $, _) {
 
   PhotoportContainer.Controller = {
-    contentDescriptorFor: function (photo) {
-      if (photo.contentDescriptor === undefined) {
-        var contentDescriptor = {
-          backgroundImage: photo.get('download'),
-          photo: photo
-        };
-
-        photo.contentDescriptor = contentDescriptor;
-      }
-
-      return photo.contentDescriptor;
-    },
     makeView: function (opts) {
       var collection = opts.collection;
 

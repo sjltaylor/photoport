@@ -30,7 +30,7 @@ Collections.addInitializer(function () {
   // this.identityStatusView = Collections.IdentityStatus.Controller.makeView({
   //   identity: this.identity
   // });
-  this.indexView = new Collections.Show.Controller.makeIndexView({
+  this.indexView = new Collections.Index.Controller.makeIndexView({
     identityStatusView: this.identityStatusView,
     library: this.library
   });
@@ -52,7 +52,7 @@ Collections.addInitializer(function () {
   }.bind(this)).error(console.error);
 }.bind(Collections));
 
-Collections.on('start', function(){
+Collections.on('start', function () {
   if (Backbone.history) {
     Backbone.history.start({ pushState: true });
     $(document).on('click', 'a[data-push-state]', function (evt) {

@@ -30,12 +30,12 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
         this.photoport.seek(0);
       }, this);
 
-      this.listenTo(this.identity, 'change:status', this.__update__);
+      //this.listenTo(this.identity, 'change:status', this.__update__);
     },
     onRender: function () {
       this.uploadPanel.render();
       this.$el.append(this.photoport.container);
-      this.update = this.__update__;
+      //this.update = this.__update__;
     },
     onShow: function () {
       this.photoport.start();
@@ -72,13 +72,13 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
     update: function () {
       // noop
     },
-    __update__: function () {
-      if (this.collection.photos.length && !this.identity.isIdentified()) {
-        this.ui.savePrompt.show();
-      } else {
-        this.ui.savePrompt.hide();
-      }
-    },
+    // __update__: function () {
+    //   if (this.collection.photos.length && !this.identity.isIdentified()) {
+    //     this.ui.savePrompt.show();
+    //   } else {
+    //     this.ui.savePrompt.hide();
+    //   }
+    // },
     resume: function () {
       this.photoport.resume();
     },

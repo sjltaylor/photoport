@@ -1,24 +1,7 @@
 .photoport-container {
-  padding-top: 50px;
-  position: absolute;
+  padding: 0;
+  top: 0;
+  left: 0;
+  position: relative;
   margin: 0px;
-
-  .save-prompt {
-    width: 125px;
-    position: absolute;
-    top: 135px;
-    right: -180px;
-    margin: 60px auto;
-    text-align: left;
-    display: none;
-
-    p {
-      font-size: 14px;
-
-      .btn.save {
-        margin: 10px 0;
-        width: 65px;
-      }
-    }
-  }
 }

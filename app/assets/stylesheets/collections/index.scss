@@ -1,97 +1,22 @@
 .index-view {
   position: relative;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
 
-  .c-controls {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 52px;
-    background-color: $clouds;
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    background-color: red;
 
-    .c-btn {
-      font-size: 35px;
-      color: white;
-      position: absolute;
-      cursor: pointer;
-      @include transition-color;
-
-      &:hover {
-        color: $peter-river;
-      }
-    }
-
-    .c-btn.c-app-user-btn {
-      right: 5px;
-      bottom: -5px;
-    }
-
-    .c-btn.c-app-menu-btn {
-      left: 8px;
-      bottom: -5px;
-    }
-  }
-
-  #list_container {
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    .list-view {
-      position: absolute;
-      top: 0;
-      left: 0;
-
-      .loading-indicator.new {
-        margin: 0 auto;
-        width: 18px;
-        height: 18px;
-        display: none;
-      }
-
-      .create-prompt {
-        position: absolute;
-        text-align: center;
-        display: inline-block;
-        @include user-select-none;
-        color: $silver;
-      }
-
-      ul {
-        position: absolute;
-        display: inline-block;
-        top: 0;
-        left: 0;
-        padding: 0;
-        margin: 0;
-        min-width: 500px;
-        list-style-type: none;
-        line-height: 0;
-
-        li {
-          @include user-select-none();
-          display: inline-block;
-          white-space: nowrap;
-          margin: 0;
-          padding: 0;
-          width: 500px;
-          height: 312px;
-          border: dashed 1px red;
-
-          a {
-            @include transition-color;
-            color: $clouds;
-            &:hover {
-              color: $peter-river;
-            }
-          }
-        }
+    li {
+      @include user-select-none();
+      position: relative;
+      display: block;
+      .photo-view {
+        width: 100px;
+        height: 70px;
+        background-color: red;
       }
     }
   }
-
 }
