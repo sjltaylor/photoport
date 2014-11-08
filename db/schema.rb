@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(version: 20140817184323) do
 
   create_table "photos", force: true do |t|
     t.integer  "collection_id"
-    t.string   "file_key"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "photo_uid"
