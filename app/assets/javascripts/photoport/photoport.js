@@ -65,6 +65,10 @@ Photoport = (function () {
   function Photoport (options) {
     checkOptions(options);
 
+    this.options = {
+      keyboardNavigationEnabled: !!options.keyboardNavigationEnabled
+    }
+
     this.container = options.container;
     this.dom = build();
     this.container.appendChild(this.dom.root);
@@ -79,9 +83,7 @@ Photoport = (function () {
       this.dom.keyframes.innerHTML = '';
     }.bind(this));
 
-    if (options.keyboardNavigation) {
-      this.setupKeyboardNavigation();
-    }
+    this.setupKeyboardNavigation();
 
     Photoport.instances.push(this);
   }
@@ -411,6 +413,13 @@ Photoport = (function () {
       this.dom.keyframes.innerHTML = createBounceKeyframes(name, start, -1);
       this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
+    keyboardNavigation: function (options) {
+      if (options) {
+        this.options.keyboardNavigationEnabled = options.enabled;
+      }
+
+      return this.options.keyboardNavigationEnabled;
+    },
     setupKeyboardNavigation: function () {
       var disableKeydown = function () {
         window.removeEventListener('keydown', keydown);
@@ -432,6 +441,8 @@ Photoport = (function () {
       }
 
       var keydown = function (event) {
+        if (!this.options.keyboardNavigationEnabled) return;
+
         disableKeydown();
         throttle();
         if (event.altKey || event.ctrlKey || event.shiftKey || event.metaKey) return;
@@ -444,9 +455,10 @@ Photoport = (function () {
       }.bind(this);
 
       var keyup = function (event) {
+        if (!this.options.keyboardNavigationEnabled) return;
         if (throttleTimeoutId) clearTimeout(throttleTimeoutId);
         enableKeydown();
-      }
+      }.bind(this)
 
       var removeKeyEventListeners = function () {
         window.removeEventListener('keydown', keydown);
