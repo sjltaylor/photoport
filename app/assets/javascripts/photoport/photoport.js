@@ -537,7 +537,7 @@ Photoport = (function () {
       }
     },
     resize: function (dimensions) {
-      var targets = this.sequence.map(function (contentDescriptor) {
+      this.sequence.map(function (contentDescriptor) {
         return contentDescriptor.el;
       }).concat([
         this.dom.root,

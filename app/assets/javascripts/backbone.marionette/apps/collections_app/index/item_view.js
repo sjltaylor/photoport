@@ -3,7 +3,8 @@
 Collections.module('Index', function (Index, Collections, Backbone, Marionette, $, _) {
   Index.ItemView = Marionette.ItemView.extend({
     template: 'index/item_view',
-    tagName: 'li',
+    className: 'item-view',
+    tagName: 'div',
     ui: {
       container: '.photoport-container'
     },
@@ -18,22 +19,33 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
 
       //this.listenTo(this.identity, 'change:status', this.__update__);
     },
-    __add__: function (photo) {
-      var content = photo.contentDescriptor();
-      var penultimatePosition = this.photoport.count() - 1;
-      this.photoport.insert(content, penultimatePosition);
+    contentDescriptor: function (photo) {
+      return {
+        backgroundImage: photo.get('download'),
+        photo: photo
+      };
     },
-    __remove__: function (photo) {
-      var content = photo.contentDescriptor();
-      this.photoport.remove(content);
+    activate: function () {
+      this.photoport.keyboardNavigation({enabled: true});
+    },
+    deactivate: function () {
+      this.photoport.keyboardNavigation({enabled: false});
+    },
+    __add__: function (e) {
+      var contentDescriptor = this.contentDescriptor(e);
+      e.contentDescriptor = contentDescriptor;
+      var penultimatePosition = this.photoport.count() - 1;
+      this.photoport.insert(contentDescriptor, penultimatePosition);
+    },
+    __remove__: function (e) {
+      this.photoport.remove(e.contentDescriptor);
+      delete e.contentDescriptor;
     },
     onRender: function () {
       this.photoport = new Photoport({
-        container: this.ui.container[0],
+        container: this.el,
         direction: 'horizontal'
       });
-
-      this.photoport.keyboardNavigation({enabled: true});
 
       this.collection.photos.each(function (photo) {
         this.__add__(photo);
