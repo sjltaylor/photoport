@@ -19,7 +19,7 @@ class Samples
       obj.write(file: file)
     end
 
-    10.times do
+    4.times do
       collection = services.create_collection(identity: identity)
       keys.each do |key|
         services.add_photo(identity: identity, collection: collection, file_key: key)
