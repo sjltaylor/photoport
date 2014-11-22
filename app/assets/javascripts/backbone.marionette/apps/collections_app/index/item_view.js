@@ -29,7 +29,8 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     },
     onRender: function () {
       this.photoport = new Photoport({
-        container: this.ui.container[0]
+        container: this.ui.container[0],
+        direction: 'horizontal'
       });
 
       this.photoport.keyboardNavigation({enabled: true});

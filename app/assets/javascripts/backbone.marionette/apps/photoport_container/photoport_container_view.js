@@ -15,7 +15,8 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
 
       this.photoport = new Photoport({
         container: this.el,
-        keyboardNavigation: true
+        keyboardNavigation: true,
+        direction: 'vertical'
       });
       this.photoport.append(this.uploadPanel.photoportContentDescriptor);
 

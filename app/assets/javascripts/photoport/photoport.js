@@ -46,27 +46,12 @@ Photoport = (function () {
     return Math.max(p - 1, 0);
   }
 
-  function createBounceKeyframes(name, start, direction) {
-    var stops = [[0,0], [25,35], [50,50], [75,35], [100,0]];
-
-    var keyframes = '@-webkit-keyframes ' + name + ' {';
-
-    for (var i = 0; i < stops.length; i++) {
-      var percentage = stops[i][0];
-      var left = start + (direction * stops[i][1]);
-      keyframes = keyframes + percentage + '%{ left: ' + left + 'px;}';
-    }
-
-    keyframes = keyframes + '}';
-
-    return keyframes;
-  }
-
   function Photoport (options) {
     checkOptions(options);
 
     this.options = {
-      keyboardNavigationEnabled: !!options.keyboardNavigationEnabled
+      keyboardNavigationEnabled: !!options.keyboardNavigationEnabled,
+      direction: options.direction
     }
 
     this.container = options.container;
@@ -82,6 +67,22 @@ Photoport = (function () {
       this.dom.content.style.webkitAnimation = '';
       this.dom.keyframes.innerHTML = '';
     }.bind(this));
+
+    if (this.options.direction === 'vertical') {
+      this.navigation = {
+        coordinate: 'top',
+        dimension: 'height',
+        nextKeyCode: 40,
+        previousKeyCode: 38
+      };
+    } else {
+      this.navigation = {
+        coordinate: 'left',
+        dimension: 'width',
+        nextKeyCode: 39,
+        previousKeyCode: 37
+      };
+    }
 
     this.setupKeyboardNavigation();
 
@@ -119,7 +120,8 @@ Photoport = (function () {
     },
     fitContent: function () {
       var bounds = this.portRect();
-      this.dom.content.style.width = (this.count() * bounds.width) + 'px';
+      var dimension = this.navigation.dimension;
+      this.dom.content.style[dimension] = (this.count() * bounds[dimension]) + 'px';
       for(var i = this.count() - 1; i >= 0; i--) {
         this.fit(this.sequence[i]);
       }
@@ -196,7 +198,7 @@ Photoport = (function () {
       if (this.position !== null && position < this.position) {
         this.position++;
         this.dom.content.style.transitionDuration = 0;
-        this.dom.content.style.left = -1 * this.position * this.portRect().width + 'px';
+        this.dom.content.style[this.navigation.coordinate] = -1 * this.position * this.portRect()[this.navigation.dimension] + 'px';
         setTimeout(function () { this.dom.content.style.transitionDuration = ''; }.bind(this), 0);
         // we want the transitionDuration to be restored on the next tick; allow the dom to be updated
       }
@@ -271,7 +273,7 @@ Photoport = (function () {
       deferred.done(function () {
         if(removedFirstItem) {
           this.dom.content.style.transitionDuration = 0;
-          this.dom.content.style.left = 0;
+          this.dom.content.style[this.navigation.coordinate] = 0;
           this.dom.content.removeChild(contentToRemove.el);
           // we want the transitionDuration to be restored on the next tick; allow the dom to be updated
           setTimeout(function () { this.dom.content.style.transitionDuration = ''; }.bind(this), 0);
@@ -316,7 +318,7 @@ Photoport = (function () {
         newPosition = this.indexForNamedPosition(newPosition);
       }
 
-      var direction = newPosition > this.position ? 'Right' : 'Left';
+      var direction = newPosition > this.position ? 'Forwards' : 'Backwards';
       var bounce = false;
 
       if (newPosition >= this.count()) {
@@ -342,8 +344,8 @@ Photoport = (function () {
         this.dom.content.addEventListener('webkitTransitionEnd', onAnimationEnd);
       }
 
-      var newLeft = -1 * newPosition * this.portRect().width;
-      this.dom.content.style.left = newLeft + 'px';
+      var newCoordinate = -1 * newPosition * this.portRect()[this.navigation.dimension];
+      this.dom.content.style[this.navigation.coordinate] = newCoordinate + 'px';
 
       var previousPosition = this.position;
       this.position = newPosition;
@@ -402,15 +404,31 @@ Photoport = (function () {
     count: function () {
       return this.sequence.length;
     },
-    bounceLeft: function () {
-      var name = 'photoportBounceLeft-' + (new Date().valueOf());
-      this.dom.keyframes.innerHTML = createBounceKeyframes(name, 0, 1);
+    createBounceKeyframes: function (name, start, direction) {
+      var stops = [[0,0], [25,35], [50,50], [75,35], [100,0]];
+
+      var keyframes = '@-webkit-keyframes ' + name + ' {';
+      var coordinate = this.navigation.coordinate;
+
+      for (var i = 0; i < stops.length; i++) {
+        var percentage = stops[i][0];
+        var v = start + (direction * stops[i][1]);
+        keyframes = keyframes + percentage + '%{ ' + coordinate + ': ' + v + 'px;}';
+      }
+
+      keyframes = keyframes + '}';
+
+      return keyframes;
+    },
+    bounceBackwards: function () {
+      var name = 'photoportBounceBackwards-' + (new Date().valueOf());
+      this.dom.keyframes.innerHTML = this.createBounceKeyframes(name, 0, 1);
       this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
-    bounceRight: function () {
-      var name = 'photoportBounceRight-' + (new Date().valueOf());
-      var start = parseInt(this.dom.content.style.left, 10);
-      this.dom.keyframes.innerHTML = createBounceKeyframes(name, start, -1);
+    bounceForwards: function () {
+      var name = 'photoportBounceForwards-' + (new Date().valueOf());
+      var start = parseInt(this.dom.content.style[this.navigation.coordinate], 10);
+      this.dom.keyframes.innerHTML = this.createBounceKeyframes(name, start, -1);
       this.dom.content.style.webkitAnimation = name + ' 250ms linear';
     },
     keyboardNavigation: function (options) {
@@ -447,9 +465,9 @@ Photoport = (function () {
         throttle();
         if (event.altKey || event.ctrlKey || event.shiftKey || event.metaKey) return;
 
-        if (event.keyCode === 39) {
+        if (event.keyCode === this.navigation.nextKeyCode) {
           this.next();
-        } else if (event.keyCode === 37) {
+        } else if (event.keyCode === this.navigation.previousKeyCode) {
           this.previous();
         }
       }.bind(this);
@@ -529,8 +547,10 @@ Photoport = (function () {
         el.style.height = dimensions.height + 'px';
       });
 
-      this.dom.content.style.width = (this.count() * this.portRect().width) + 'px';
-      this.dom.content.style.left = -1 * this.position * this.portRect().width + 'px';
+      var dimension = this.navigation.dimension;
+
+      this.dom.content.style[dimension] = (this.count() * this.portRect()[dimension]) + 'px';
+      this.dom.content.style[this.navigation.coordinate] = -1 * this.position * this.portRect()[dimension] + 'px';
 
       this.sequence.forEach(this.resizeContent.bind(this));
     },
