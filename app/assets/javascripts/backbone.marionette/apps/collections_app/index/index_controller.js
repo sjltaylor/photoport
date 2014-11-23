@@ -34,6 +34,11 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       //   });
       // });
 
+      indexView.on('navigate', function (collection) {
+        console.warn('router')
+        Collections.trigger('collection-index-navigate', collection);
+      });
+
       return indexView;
     }
   };

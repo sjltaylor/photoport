@@ -45,6 +45,7 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
           c.contentDescriptor.view.deactivate();
         });
         this.photoport.current.view.activate();
+        this.trigger('navigate', this.photoport.current.collection);
       }.bind(this));
 
       this.collection.each(function (c) {
@@ -62,6 +63,17 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       this.collection.each(function (collection) {
         collection.contentDescriptor.view.resize(dimensions);
       });
+    },
+    show: function (id) {
+      var ids = this.collection.map(function (c) {
+        return c.get('id').toString();
+      });
+
+      var idx = ids.indexOf(id);
+
+      if (idx >= 0) {
+        this.photoport.seek(idx);
+      }
     }
   });
 });
