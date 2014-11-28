@@ -1,5 +1,20 @@
 Collections.module('Index', function (Index, Collections, Backbone, Marionette, $, _) {
   Index.Controller = {
+    makeCollectionView: function (opts) {
+      var collection = opts.collection;
+
+      var uploadPanel =  Collections.UploadPanel.Controller.makeView({
+        collection: collection,
+        uploadPanelConfig: opts.uploadPanelConfig
+      });
+
+      var collectionView = new Index.CollectionView({
+        model: collection,
+        uploadPanel: uploadPanel
+      });
+
+      return collectionView;
+    },
     makeIndexView: function (opts) {
       var library = opts.library,
           collections = library.collections();
@@ -18,8 +33,13 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       // });
 
       var indexView = new Index.View({
-        identityStatusView: opts.identityStatusView,
-        collection: collections
+        collection: collections,
+        collectionViewDelegate: function (collection) {
+          return Index.Controller.makeCollectionView({
+            collection: collection,
+            uploadPanelConfig: library.get('uploadPanelConfig')
+          });
+        }
       });
 
       // list.on('new-collection', function (geometry) {
@@ -35,7 +55,6 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       // });
 
       indexView.on('navigate', function (collection) {
-        console.warn('router')
         Collections.trigger('collection-index-navigate', collection);
       });
 

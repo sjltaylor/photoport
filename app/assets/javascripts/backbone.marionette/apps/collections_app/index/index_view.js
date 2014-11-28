@@ -1,5 +1,5 @@
 //= require templates/index/view
-//= require ./item_view
+//= require ./collection_view
 
 Collections.module('Index', function (Index, Collections, Backbone, Marionette, $, _) {
   Index.View = Marionette.ItemView.extend({
@@ -10,9 +10,7 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       _.extend(this, this.options);
     },
     contentDescriptor: function (collection) {
-      var view = new Index.ItemView({
-        model: collection
-      });
+      var view = this.collectionViewDelegate(collection);
 
       view.render();
 

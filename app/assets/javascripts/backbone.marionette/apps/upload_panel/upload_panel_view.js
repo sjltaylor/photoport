@@ -12,16 +12,16 @@ Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, 
       'dragexit  .js-dropzone'    : 'noopHandler',
       'dragover  .js-dropzone'    : 'noopHandler'
     },
-    initialize: function () {
-      this.photoportContentDescriptor = {
-        el: this.el
-      };
-    },
     handleFileInputChange: function (e) {
       e.stopPropagation();
       e.preventDefault();
 
       this.triggerFilesSelected(e.target.files);
+    },
+    contentDescriptor: function () {
+      return {
+        el: this.el
+      };
     },
     handleChooseFilesClick: function () {
       var clickEvent = new MouseEvent('click', {

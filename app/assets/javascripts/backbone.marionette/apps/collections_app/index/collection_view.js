@@ -1,23 +1,13 @@
-//= require templates/index/item_view
+//= require templates/index/collection_view
 
 Collections.module('Index', function (Index, Collections, Backbone, Marionette, $, _) {
-  Index.ItemView = Marionette.ItemView.extend({
-    template: 'index/item_view',
-    className: 'item-view',
+  Index.CollectionView = Marionette.ItemView.extend({
+    template: 'index/collection_view',
+    className: 'collection-view',
     tagName: 'div',
-    ui: {
-      container: '.photoport-container'
-    },
     initialize: function () {
       _.extend(this, this.options);
-
       this.collection = this.model;
-
-      // this.once('show', function () {
-      //   this.photoport.seek(0);
-      // }, this);
-
-      //this.listenTo(this.identity, 'change:status', this.__update__);
     },
     contentDescriptor: function (photo) {
       return {
@@ -36,6 +26,7 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       e.contentDescriptor = contentDescriptor;
       var penultimatePosition = this.photoport.count() - 1;
       this.photoport.insert(contentDescriptor, penultimatePosition);
+      this.photoport.seek(penultimatePosition);
     },
     __remove__: function (e) {
       this.photoport.remove(e.contentDescriptor);
@@ -46,6 +37,10 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
         container: this.el,
         direction: 'horizontal'
       });
+
+      this.uploadPanel.render();
+
+      this.photoport.append(this.uploadPanel.contentDescriptor());
 
       this.collection.photos.each(function (photo) {
         this.__add__(photo);
