@@ -1,38 +1,47 @@
 @import "mixins";
 
 .photoport-cms-upload-panel {
-
-  background-color: white;
   position: relative;
+  @include user-select-none;
 
   .container {
-    width: 80%;
-    margin: 0 auto;
+    display: block;
+    position: relative;
+    width: 60%;
+    margin: 50px auto;
+  }
+
+  h1 {
     text-align: center;
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    color: $silver;
-    @include user-select-none;
+  }
 
-    .drop-prompt {
-      color: $emerald;
-      margin: 15px 0;
-      font-size: 3.25em;
-    }
+  .dropzone {
+    background-color: #030303;
+    position: relative;
+    margin: 0 auto;
+    min-width: 200px;
+    max-width: 400px;
+    min-height: 240px;
+    max-height: 480px;
+    line-height: 100%;
 
-    .joining-text {
-      font-weight: 200;
-      font-size: 3.0em;
-    }
+    display: -webkit-flex;
+    -webkit-flex-direction: row;
+    -webkit-flex-wrap: nowrap;
+    -webkit-justify-content: center;
+    -webkit-align-content: stretch;
+    -webkit-align-items: center;
 
-    .btn.choose-files {
-      margin: 50px 0;
-      width: 50%;
+    .prompt {
+      -webkit-order: 0;
+      -webkit-flex: 0 1 auto;
+      -webkit-align-self: auto;
     }
   }
 
-  input[type="file"] {
-    display: none;
+  .file-upload {
+    text-align: center;
+    display: block;
+    padding: 30px;
   }
 }
