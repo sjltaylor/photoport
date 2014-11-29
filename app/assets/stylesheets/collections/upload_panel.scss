@@ -1,47 +1,69 @@
 @import "mixins";
 
 .photoport-cms-upload-panel {
-  position: relative;
-  @include user-select-none;
+  // position: relative;
+  // @include user-select-none;
 
   .container {
-    display: block;
-    position: relative;
-    width: 60%;
-    margin: 50px auto;
-  }
+    /* basic styling */
+    width: 100%;
+    height: 100%;
 
-  h1 {
-    text-align: center;
-  }
 
-  .dropzone {
-    background-color: #030303;
-    position: relative;
-    margin: 0 auto;
-    min-width: 200px;
-    max-width: 400px;
-    min-height: 240px;
-    max-height: 480px;
-    line-height: 100%;
-
+    /* flexbox setup */
     display: -webkit-flex;
-    -webkit-flex-direction: row;
-    -webkit-flex-wrap: nowrap;
-    -webkit-justify-content: center;
-    -webkit-align-content: stretch;
+    -webkit-flex-direction: column;
     -webkit-align-items: center;
+    -webkit-justify-content: center;
 
-    .prompt {
-      -webkit-order: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    .flex-item {
+      margin: 20px;
       -webkit-flex: 0 1 auto;
-      -webkit-align-self: auto;
+      flex: 0 1 auto;
     }
-  }
 
-  .file-upload {
-    text-align: center;
-    display: block;
-    padding: 30px;
+    .file-upload {
+      display: none;
+    }
+
+    .choose-files {
+      background-color: $primary;
+      -webkit-box-sizing: border-box;
+      width: 420px;
+      font-size: 1.85em;
+    }
+
+    .sentence-flow {
+      color: $text-dim;
+      margin: 8px;
+    }
+
+    .dropzone {
+      background-color: #030303;
+      width: 420px;
+      height: 285px;
+
+      display: -webkit-flex;
+      -webkit-justify-content: center;
+      -webkit-align-items: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .prompt {
+        -webkit-order: 0;
+        -webkit-flex: 0 1 auto;
+        -webkit-align-self: auto;
+        order: 0;
+        flex: 0 1 auto;
+        align-self: auto;
+        font-size: 1.85em;
+      }
+    }
   }
 }

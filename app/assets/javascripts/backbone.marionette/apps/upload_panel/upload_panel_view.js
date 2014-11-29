@@ -6,6 +6,7 @@ Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, 
     className: 'photoport-cms-upload-panel',
     events: {
       'change    .js-file-input'  : 'handleFileInputChange',
+      'click     .js-choose-files': 'handleChooseFilesClick',
       'drop      .js-dropzone'    : 'handleDrop',
       'dragenter .js-dropzone'    : 'noopHandler',
       'dragexit  .js-dropzone'    : 'noopHandler',
@@ -21,6 +22,13 @@ Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, 
       return {
         el: this.el
       };
+    },
+    handleChooseFilesClick: function () {
+      var clickEvent = new MouseEvent('click', {
+        bubbles: false,
+        cancellable: false
+      });
+      this.el.querySelector('.js-file-input').dispatchEvent(clickEvent);
     },
     handleDrop: function (e) {
       e.stopPropagation();

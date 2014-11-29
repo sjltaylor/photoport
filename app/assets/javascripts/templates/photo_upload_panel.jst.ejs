@@ -1,9 +1,10 @@
 <div class="container">
-  <h1>Add an Image</h1>
-  <div class="js-dropzone dropzone">
+  <div class="js-dropzone dropzone flex-item">
     <div class="prompt">Drop images here</div>
   </div>
-  <form class="file-upload" method="POST" encoding="utf-8" enctype="multipart/form-data">
-    <input class="js-file-input" type="file" name="file" multiple />
-  </form>
+  <span class="sentence-flow flex-item">or</span>
+  <a class="button primary flex-item choose-files js-choose-files">Choose Files</a>
 </div>
+<form class="file-upload" method="POST" encoding="utf-8" enctype="multipart/form-data">
+  <input class="js-file-input" type="file" name="file" multiple />
+</form>
