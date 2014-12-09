@@ -9,3 +9,10 @@ Backbone.Marionette.View.prototype.resize = function (dimensions) {
   this.$el.width(w).height(h);
   Marionette.triggerMethod.call(this, 'resize', dimensions);
 }
+
+Backbone.Marionette.View.prototype.size = function (dimensions) {
+  return {
+    width: this.$el.width(),
+    height: this.$el.height()
+  }
+}

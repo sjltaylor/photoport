@@ -19,21 +19,13 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       var library = opts.library,
           collections = library.collections();
 
-      // var attachItemView = function (collection) {
-      //   collection.indexPhotoportContainer = Show.Controller.makePhotoportView({
-      //     collection: collection
-      //   });
-      // }
-
-      // collections.each(attachItemView);
-      // collections.on('add', attachItemView);
-      // collections.on('remove', function (collection) {
-      //   collection.view.destroy()
-      //   delete collection.view;
-      // });
+      var newCollectionPanel = Collections.NewCollectionPanel.Controller.makeView({
+        library: library
+      });
 
       var indexView = new Index.View({
         collection: collections,
+        newCollectionPanel: newCollectionPanel,
         collectionViewDelegate: function (collection) {
           return Index.Controller.makeCollectionView({
             collection: collection,
@@ -41,18 +33,6 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
           });
         }
       });
-
-      // list.on('new-collection', function (geometry) {
-      //   var collection = new Collections.Collection({
-      //     geometry: geometry
-      //   });
-      //
-      //   collections.add(collection);
-      //
-      //   Collections.host.create(library, geometry).done(function (collectionAttributes) {
-      //     collection.set(collectionAttributes);
-      //   });
-      // });
 
       indexView.on('navigate', function (collection) {
         Collections.trigger('collection-index-navigate', collection);

@@ -5,6 +5,7 @@
 @import "collections/identity_status";
 @import "collections/photoport_container";
 @import "collections/upload_panel";
+@import "collections/new_collection_panel";
 @import "collections/index";
 
 body {
@@ -31,19 +32,30 @@ h1 {
 }
 
 .button {
+  text-decoration: none;
   text-align: center;
   font-family: "Helvetica Neue", helvetica, arial;
-  font-size: 1.25em;
+  font-size: 1.5em;
   font-weight: 100;
   letter-spacing: 0.025em;
   border: none;
   color: $text-main;
   padding: 0.5em 1.0em;
+  cursor: pointer;
 
   &.primary {
     background-color: $primary;
     &:hover, &:active {
+      text-decoration: none;
       background-color: $primary-lit;
+    }
+  }
+
+  &.secondary {
+    background-color: $secondary;
+    &:hover, &:active {
+      text-decoration: none;
+      background-color: $secondary-lit;
     }
   }
 }

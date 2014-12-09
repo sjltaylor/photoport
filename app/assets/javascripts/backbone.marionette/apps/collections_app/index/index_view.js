@@ -22,8 +22,10 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     },
     __add__: function (e) {
       var contentDescriptor = this.contentDescriptor(e);
+      contentDescriptor.view.resize(this.size());
       e.contentDescriptor = contentDescriptor;
-      this.photoport.append(contentDescriptor);
+      var penultimatePosition = this.photoport.count() - 1;
+      this.photoport.insert(contentDescriptor, penultimatePosition);
     },
     __remove__: function (e) {
       e.contentDescriptor.view.destroy();
@@ -35,6 +37,10 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
         container: this.el,
         direction: 'vertical'
       });
+
+      this.newCollectionPanel.render();
+
+      this.photoport.append(this.newCollectionPanel.contentDescriptor());
 
       this.photoport.keyboardNavigation({enabled: true});
 
