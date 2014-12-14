@@ -6,7 +6,6 @@ Collections.Controller = {
     });
   },
   'new': function () {
-    debugger
     Collections.landing.done(function (app) {
       app.page.show(app.indexView);
       app.indexView.new();

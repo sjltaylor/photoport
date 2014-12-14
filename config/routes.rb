@@ -1,6 +1,6 @@
 Photoport::Application.routes.draw do
 
-  root :to => 'collections#new'
+  root :to => 'collections#root'
   get 'status' => 'status#index'
 
   get 'start' => 'collections#start'

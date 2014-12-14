@@ -2,8 +2,8 @@ Collections.Router = Marionette.AppRouter.extend({
   appRoutes: {
     '': 'collections',
     'sign_in': 'signIn',
-    'collections/:id': 'show',
-    'collections/new': 'new'
+    'collections/new': 'new',
+    'collections/:id': 'show'
   }
 });
 

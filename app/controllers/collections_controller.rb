@@ -1,4 +1,10 @@
 class CollectionsController < ApplicationController
+  def root
+    collections = services.show_default_data(identity: request_identity)[:collections]
+    redirect_to(action: :new) if collections.empty?
+    redirect_to collections.first
+  end
+
   def start
     respond_to do |format|
       format.json do
