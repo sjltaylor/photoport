@@ -2,9 +2,11 @@ Collections.module('NewCollectionPanel', function (NewCollectionPanel, Collectio
 
   NewCollectionPanel.Controller = {
     makeView: function (opts) {
-      var newCollection = new Collections.Collection({}),
-          library = opts.library,
-          collections = library.collections();
+      var library = opts.library,
+          collections = library.collections(),
+          newCollection = new Collections.Collection({
+            show: library.get('new')
+          });
 
       var view = new NewCollectionPanel.View({
         model: newCollection

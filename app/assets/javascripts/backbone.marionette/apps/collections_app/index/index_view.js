@@ -68,6 +68,9 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
         collection.contentDescriptor.view.resize(dimensions);
       });
     },
+    'new': function () {
+      this.photoport.seek(this.photoport.count() - 1);
+    },
     show: function (id) {
       var ids = this.collection.map(function (c) {
         return c.get('id').toString();

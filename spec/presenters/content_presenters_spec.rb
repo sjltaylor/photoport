@@ -5,13 +5,11 @@ describe ContentPresenters do
   let(:url_helper) { double(:url_helper) }
   let(:aws_s3_upload_panel_config) { double(:aws_s3_upload_panel_config) }
   let(:presenters) { Class.new.include(described_class).resolve(url_helper: url_helper, aws_s3_upload_panel_config: aws_s3_upload_panel_config) }
-  let(:index_geometry) { double(:index_geometry) }
   let(:collection) do
     double(:collection,
       id: 16329,
       name: name,
-      photos: (1..10).map{|i| double("photo_#{i}")},
-      index_geometry: index_geometry)
+      photos: (1..10).map{|i| double("photo_#{i}")})
   end
 
   describe '#collection(collection)' do
@@ -28,9 +26,6 @@ describe ContentPresenters do
     end
     it 'includes photos' do
       expect(collection_presentation[:photos]).to(eq(collection.photos.map{:photo_presentation}))
-    end
-    it 'includes the index geometry' do
-      expect(collection_presentation[:geometry]).to be index_geometry
     end
     it 'includes a url to add a new photo' do
       expect(collection_presentation[:add]).to be add_photo_url
@@ -83,6 +78,7 @@ describe ContentPresenters do
     let(:identity_presentation) { double(:identity_presentation) }
     let(:root_path) { double(:root_path) }
     let(:collections_path) { double(:collections_path) }
+    let(:new_collection_path) { double(:new_collection_path) }
     before(:each) { allow(presenters).to receive(:aws_s3_upload_panel_config).with(identity: identity, session_id: session_id).and_return(aws_s3_upload_panel_config) }
     before(:each) { allow(presenters).to receive(:identity).with(identity).and_return(identity_presentation) }
     before(:each) do
@@ -93,6 +89,7 @@ describe ContentPresenters do
     before(:each) do
       allow(url_helper).to receive(:root_path).and_return(root_path)
       allow(url_helper).to receive(:collections_path).with(format: :json).and_return(collections_path)
+      allow(url_helper).to receive(:new_collection_path).with(no_args).and_return(new_collection_path)
     end
 
     def landing
@@ -101,6 +98,9 @@ describe ContentPresenters do
 
     it 'returns the add url for collections' do
       expect(landing[:add]).to be collections_path
+    end
+    it 'returns the new url for collections' do
+      expect(landing[:new]).to be new_collection_path
     end
     it 'includes the upload panel configuration' do
       expect(landing[:upload_panel_config]).to be aws_s3_upload_panel_config

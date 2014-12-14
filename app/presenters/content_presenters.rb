@@ -28,6 +28,7 @@ module ContentPresenters
       identity:            self.identity(identity),
       index:               url_helper.root_path,
       add:                 url_helper.collections_path(format: :json),
+      new:                 url_helper.new_collection_path,
       upload_panel_config: aws_s3_upload_panel_config(identity: identity, session_id: session_id)
     }
   end

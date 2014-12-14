@@ -30,10 +30,6 @@ Collections.addInitializer(function () {
   // this.identityStatusView = Collections.IdentityStatus.Controller.makeView({
   //   identity: this.identity
   // });
-  this.indexView = new Collections.Index.Controller.makeIndexView({
-    identityStatusView: this.identityStatusView,
-    library: this.library
-  });
 
   var landingDeferred = new $.Deferred();
   this.landing = landingDeferred.promise();
@@ -43,9 +39,16 @@ Collections.addInitializer(function () {
     this.library.set({
       index: landing.index,
       add: landing.add,
+      new: landing.new,
       uploadPanelConfig: landing['upload_panel_config']
     });
+
     this.library.collections().set(landing.collections);
+
+    this.indexView = new Collections.Index.Controller.makeIndexView({
+      identityStatusView: this.identityStatusView,
+      library: this.library
+    });
 
     landingDeferred.resolve(this);
 

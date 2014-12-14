@@ -5,6 +5,13 @@ Collections.Controller = {
       app.indexView.show(id);
     });
   },
+  'new': function () {
+    debugger
+    Collections.landing.done(function (app) {
+      app.page.show(app.indexView);
+      app.indexView.new();
+    });
+  },
   collections: function () {
     Collections.landing.done(function (app) {
       app.page.show(app.indexView);
