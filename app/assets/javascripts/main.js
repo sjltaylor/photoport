@@ -43,7 +43,7 @@ Collections.addInitializer(function () {
       uploadPanelConfig: landing['upload_panel_config']
     });
 
-    this.library.collections().set(landing.collections);
+    this.library.collections().add(landing.collections);
 
     this.indexView = new Collections.Index.Controller.makeIndexView({
       identityStatusView: this.identityStatusView,

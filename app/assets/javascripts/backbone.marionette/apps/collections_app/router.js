@@ -6,7 +6,3 @@ Collections.Router = Marionette.AppRouter.extend({
     'collections/:id': 'show'
   }
 });
-
-Collections.on('collection-index-navigate', function (collection) {
-  Backbone.history.navigate(collection.get('show'), { trigger: false });
-});

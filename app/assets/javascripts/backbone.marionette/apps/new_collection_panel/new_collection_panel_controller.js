@@ -4,19 +4,16 @@ Collections.module('NewCollectionPanel', function (NewCollectionPanel, Collectio
     makeView: function (opts) {
       var library = opts.library,
           collections = library.collections(),
-          newCollection = new Collections.Collection({
-            show: library.get('new')
-          });
+          newCollection = library.new();
 
       var view = new NewCollectionPanel.View({
         model: newCollection
       });
 
       view.on('new-collection', function () {
-        collections.add(newCollection);
-
         Collections.host.create(library).done(function (collectionAttributes) {
-          newCollection.set(collectionAttributes);
+          var c = new Collections.Collection(collectionAttributes);
+          collections.add(c);
         }).error(console.error);
       });
 

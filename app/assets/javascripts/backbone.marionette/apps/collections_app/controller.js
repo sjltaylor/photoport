@@ -8,7 +8,7 @@ Collections.Controller = {
   'new': function () {
     Collections.landing.done(function (app) {
       app.page.show(app.indexView);
-      app.indexView.new();
+      app.indexView.show('new');
     });
   },
   collections: function () {

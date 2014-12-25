@@ -5,6 +5,9 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     template: 'index/collection_view',
     className: 'collection-view',
     tagName: 'div',
+    modelEvents: {
+      change: 'update'
+    },
     initialize: function () {
       _.extend(this, this.options);
       this.collection = this.model;
@@ -15,11 +18,8 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
         photo: photo
       };
     },
-    activate: function () {
-      this.photoport.keyboardNavigation({enabled: true});
-    },
-    deactivate: function () {
-      this.photoport.keyboardNavigation({enabled: false});
+    update: function () {
+      this.photoport.keyboardNavigation({enabled: this.collection.isOpen()});
     },
     __add__: function (e) {
       var contentDescriptor = this.contentDescriptor(e);

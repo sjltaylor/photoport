@@ -198,11 +198,11 @@ describe('photoport', function () {
   describe('fitContent()', function () {
     beforeEach(function () {
       addSomeContentToPhotoport();
-      photoport.start();
+
     });
     it('calls fit() for all content in the sequence', function () {
       spyOn(photoport, 'fit');
-      photoport.start();
+      photoport.fitContent();
       photoport.sequence.forEach(function (e) {
         expect(photoport.fit).toHaveBeenCalledWith(e);
       });
@@ -211,8 +211,8 @@ describe('photoport', function () {
       spyOn(photoport, 'portRect').and.returnValue({
         width: 123
       });
-      photoport.start();
       var expectedWidth = photoport.sequence.length * 123;
+      photoport.fitContent();
       expect(photoport.portRect).toHaveBeenCalled();
       expect(photoport.dom.content.style.width).toBe(expectedWidth + 'px');
     });
@@ -220,7 +220,7 @@ describe('photoport', function () {
       var interlude = createContent();
       spyOn(photoport, 'fit');
       photoport.interlude(interlude);
-      photoport.start();
+      photoport.fitContent();
       expect(photoport.fit).toHaveBeenCalledWith(interlude);
     });
   });
@@ -235,24 +235,22 @@ describe('photoport', function () {
 
     describe('when the position has not been set', function () {
       it('returns the result of seek(0)', function () {
-        expect(photoport.start()).toBe(rtn);
         expect(photoport.seek).toHaveBeenCalledWith(0);
       });
       it('does not set this.position', // because that is the responsibility of seek()
                                        function () {
-        photoport.start();
         expect(photoport.position).toBeNull();
       });
     });
 
     it('returns the result of seek(this.position)', function () {
       photoport.position = 2;
-      expect(photoport.start()).toBe(rtn);
+      photoport.start();
       expect(photoport.seek).toHaveBeenCalledWith(2);
     });
     it('calls fitContent()', function () {
       spyOn(photoport, 'fitContent');
-      photoport.start();
+      photoport.start()
       expect(photoport.fitContent).toHaveBeenCalled();
     });
   });
@@ -260,7 +258,6 @@ describe('photoport', function () {
     var rtn;
     beforeEach(function () {
       addSomeContentToPhotoport();
-      photoport.start();
       rtn = {};
       spyOn(photoport, 'seek').and.returnValue(rtn);
     });
@@ -277,7 +274,6 @@ describe('photoport', function () {
     var rtn = {};
     beforeEach(function () {
       addSomeContentToPhotoport();
-      photoport.start();
     });
     it('calls seek() with the previous position', function () {
       photoport.seek(3);
@@ -302,7 +298,6 @@ describe('photoport', function () {
       beforeEach(function () {
         deferred = deferredSpy();
         addSomeContentToPhotoport();
-        photoport.start();
         expect(photoport.count()).toBe(5);
       });
 
@@ -360,10 +355,10 @@ describe('photoport', function () {
             expect(photoport.position).toBe(p);
           });
           it('bounces left', function () {
-            spyOn(photoport, 'bounceLeft');
+            spyOn(photoport, 'bounceBackwards');
             photoport.seek('first');
             photoport.previous();
-            expect(photoport.bounceLeft).toHaveBeenCalled();
+            expect(photoport.bounceBackwards).toHaveBeenCalled();
           });
           it('calls resolve on the deferred when the animation ends', function () {
             photoport.previous();
@@ -383,10 +378,10 @@ describe('photoport', function () {
             expect(photoport.position).toBe(p);
           });
           it('bounces right', function () {
-            spyOn(photoport, 'bounceRight');
+            spyOn(photoport, 'bounceForwards');
             photoport.seek('last');
             photoport.next();
-            expect(photoport.bounceRight).toHaveBeenCalled();
+            expect(photoport.bounceForwards).toHaveBeenCalled();
           });
           it('calls resolve on the deferred when the animation ends', function () {
             photoport.next();
@@ -416,7 +411,6 @@ describe('photoport', function () {
           };
 
           addSomeContentToPhotoport();
-          photoport.start();
           photoport.seek(1);
           previousPosition = photoport.position;
           photoport.el().addEventListener('photoport-navigate', listenerFn);
@@ -451,7 +445,6 @@ describe('photoport', function () {
     describe('when no content has been added', function () {
       it('throws an exception', function () {
         expect(function () {
-          photoport.start();
           photoport.next();
         }).toThrow();
       });
@@ -463,7 +456,6 @@ describe('photoport', function () {
     beforeEach(function () {
       deferred = deferredSpy();
       addSomeContentToPhotoport();
-      photoport.start();
     });
 
     it('defaults the position to the end of the sequence', function () {
@@ -502,7 +494,7 @@ describe('photoport', function () {
         expect(photoport.indexForNamedPosition).toHaveBeenCalledWith('first');
       });
     });
-    describe('photoport-content-insert event', function () {
+    describe('photoport-insert event', function () {
       var content;
       var eventListener;
       var eventListenerCalled;
@@ -516,11 +508,11 @@ describe('photoport', function () {
           eventArgs = e;
           eventListenerCalled = true;
         };
-        photoport.el().addEventListener('photoport-content-insert', eventListener);
+        photoport.el().addEventListener('photoport-insert', eventListener);
         photoport.insert(content, 1);
       });
 
-      it('emits a photoport-content-insert event', function () {
+      it('emits a photoport-insert event', function () {
         expect(eventListenerCalled).toBeTruthy();
       });
       it('includes the content that was inserted in the event args', function () {
@@ -542,33 +534,21 @@ describe('photoport', function () {
         photoport.insert(testContent[0]);
         expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
       });
-      describe('when the photoport has been started', function () {
-        it('incremements the position', function () {
-          photoport.next();
-          expect(photoport.position).toBe(1);
-          photoport.insert(testContent[0], 0);
-          expect(photoport.position).toBe(2);
-        });
-        it('sets the left position of the content to allow for the new content', function () {
-          document.body.appendChild(photoport.dom.root);
-          expect(photoport.sequence.length).toBeGreaterThan(3);
-          photoport.seek(1);
-          var left = parseInt(photoport.dom.content.style.left, 10);
-          var width = photoport.portRect().width;
-          photoport.insert(createContent(), 0);
-          var newLeft = parseInt(photoport.dom.content.style.left, 10);
-          expect(left - width).toEqual(newLeft);
-        });
+      it('incremements the position', function () {
+        photoport.next();
+        expect(photoport.position).toBe(1);
+        photoport.insert(testContent[0], 0);
+        expect(photoport.position).toBe(2);
       });
-      describe('when the photoport has not been started', function () {
-        beforeEach(function () {
-          resetPhotoport();
-        });
-        it('does not incremement the position', function () {
-          expect(photoport.position).toBe(null);
-          photoport.insert(testContent[0], 0);
-          expect(photoport.position).toBe(null);
-        });
+      it('sets the left position of the content to allow for the new content', function () {
+        document.body.appendChild(photoport.dom.root);
+        expect(photoport.sequence.length).toBeGreaterThan(3);
+        photoport.seek(1);
+        var left = parseInt(photoport.dom.content.style.left, 10);
+        var width = photoport.portRect().width;
+        photoport.insert(createContent(), 0);
+        var newLeft = parseInt(photoport.dom.content.style.left, 10);
+        expect(left - width).toEqual(newLeft);
       });
     });
     describe('when the element is inserted after the current position', function () {
@@ -581,22 +561,11 @@ describe('photoport', function () {
       });
     });
     describe('when the element is inserted at the current position', function () {
-      describe('when the photoport has been started', function () {
-        it('does not change the position', function () {
-          expect(photoport.position).toBe(0);
-          photoport.insert(testContent[0], 0);
-          expect(photoport.position).toBe(0);
-        });
-      });
-      describe('when the photoport has not been started', function () {
-        beforeEach(function () {
-          resetPhotoport();
-        });
-        it('does not incremement the position', function () {
-          expect(photoport.position).toBe(null);
-          photoport.insert(testContent[0], 0);
-          expect(photoport.position).toBe(null);
-        });
+      it('does not change the position', function () {
+        photoport.seek(0);
+        expect(photoport.position).toBe(0);
+        photoport.insert(testContent[0], 0);
+        expect(photoport.position).toBe(0);
       });
     });
     describe('when a negative position is passed', function () {
@@ -652,6 +621,18 @@ describe('photoport', function () {
         });
       });
     });
+    describe('when the photoport is not started', function() {
+      beforeEach(function () {
+        photoport.isStarted = function () {
+          return false;
+        }
+      });
+      it('calls start()', function () {
+        spyOn(photoport, 'start');
+        photoport.insert(createContent());
+        expect(photoport.start).toHaveBeenCalled();
+      });
+    });
   });
   describe('remove(content)', function () {
     var content;
@@ -662,7 +643,6 @@ describe('photoport', function () {
 
     beforeEach(function () {
       addSomeContentToPhotoport();
-      photoport.start();
       eventListenerCalled = false;
       eventArgs = null;
       deferred = deferredSpy();
@@ -670,7 +650,7 @@ describe('photoport', function () {
         eventArgs = e;
         eventListenerCalled = true;
       };
-      photoport.el().addEventListener('photoport-content-remove', eventListener);
+      photoport.el().addEventListener('photoport-remove', eventListener);
     });
 
     describe('when the content is not in the sequence', function () {
@@ -685,7 +665,7 @@ describe('photoport', function () {
         photoport.remove(content);
         expect(setTimeout).toHaveBeenCalledWith(deferred.resolve, 0);
       });
-      it('does not emit a photoport-content-remove', function () {
+      it('does not emit a photoport-remove', function () {
         photoport.remove(content);
         expect(eventListenerCalled).toBe(false);
       });
@@ -713,8 +693,8 @@ describe('photoport', function () {
         photoport.remove(content);
         expect(content.el.removeEventListener).toHaveBeenCalledWith('mousedown', content.mousedownHandler);
       });
-      describe('photoport-content-remove event', function () {
-        it('emits a photoport-content-remove event', function () {
+      describe('photoport-remove event', function () {
+        it('emits a photoport-remove event', function () {
           photoport.remove(content);
           expect(eventListenerCalled).toBe(true);
         });
@@ -775,7 +755,6 @@ describe('photoport', function () {
             resetPhotoport();
             addSomeContentToPhotoport(1);
             content = testContent[0];
-            photoport.start();
             photoport.seek(0);
           });
           it('sets the position to null', function () {
@@ -882,13 +861,13 @@ describe('photoport', function () {
         actionListenerArgs = e;
       });
       actionArgs = null;
-      photoport.el().addEventListener('photoport-content-action', actionListener);
+      photoport.el().addEventListener('photoport-action', actionListener);
 
       holdListener = jasmine.createSpy().and.callFake(function (e) {
         holdListenerArgs = e;
       });
       holdArgs = null;
-      photoport.el().addEventListener('photoport-content-hold', holdListener);
+      photoport.el().addEventListener('photoport-hold', holdListener);
     });
 
     function dispatch(name) {
@@ -913,7 +892,7 @@ describe('photoport', function () {
       expect(contentDescriptor.mousedownHandler).not.toBeNull();
       expect(contentDescriptor.el.addEventListener).toHaveBeenCalledWith('mousedown', contentDescriptor.mousedownHandler);
     });
-    it('fires a photoport-content-action event with the content if a mouseup event is received within 350ms', function (done) {
+    it('fires a photoport-action event with the content if a mouseup event is received within 350ms', function (done) {
       photoport.insert(contentDescriptor);
 
       simulateActionEvent();
@@ -926,7 +905,7 @@ describe('photoport', function () {
         done();
       }, 400);
     });
-    it('fires a photoport-content-hold event if the mouse is down for >= 350ms', function (done) {
+    it('fires a photoport-hold event if the mouse is down for >= 350ms', function (done) {
       photoport.insert(contentDescriptor);
 
       simulateHoldEvent();

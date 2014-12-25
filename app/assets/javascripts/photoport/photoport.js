@@ -103,7 +103,7 @@ Photoport = (function () {
       this.__onDestroy__.push(cb);
     },
     fit: function (content) {
-      el = content.el || this.current.el;
+      el = content.el || this.current().el;
 
       var bounds = this.portRect();
 
@@ -117,6 +117,9 @@ Photoport = (function () {
     },
     el: function () {
       return this.dom.root;
+    },
+    current: function () {
+      return this.sequence[this.position];
     },
     fitContent: function () {
       var bounds = this.portRect();
@@ -221,11 +224,15 @@ Photoport = (function () {
 
       this.setupMouseInteraction(contentDescriptor);
 
+      if (!this.isStarted()) {
+        this.start();
+      }
+
       var deferred = new Photoport.Deferred();
 
       setTimeout(deferred.resolve.bind(deferred), 0);
 
-      this.el().dispatchEvent(new CustomEvent('photoport-content-insert', {
+      this.el().dispatchEvent(new CustomEvent('photoport-insert', {
         bubbles: true,
         detail: {
           content: contentDescriptor,
@@ -284,7 +291,7 @@ Photoport = (function () {
         this.fitContent();
       }.bind(this));
 
-      this.el().dispatchEvent(new CustomEvent('photoport-content-remove', {
+      this.el().dispatchEvent(new CustomEvent('photoport-remove', {
         bubbles: true,
         detail: {
           content: contentToRemove,
@@ -302,6 +309,9 @@ Photoport = (function () {
       }
 
       return this.seek(this.position);
+    },
+    isStarted: function () {
+      return this.position !== null;
     },
     previous: function () {
       return this.seek(this.position - 1);
@@ -348,17 +358,19 @@ Photoport = (function () {
       this.dom.content.style[this.navigation.coordinate] = newCoordinate + 'px';
 
       var previousPosition = this.position;
+      var previousCurrent  = this.current();
+
       this.position = newPosition;
 
       if (newPosition === previousPosition) {
         setTimeout(deferred.resolve.bind(deferred), 0);
       }
 
-      if ('current' in this) {
-        this.current.el.classList.remove('current');
+      if (previousCurrent) {
+        previousCurrent.el.classList.remove('current');
       }
-      this.current = this.sequence[this.position];
-      this.current.el.classList.add('current');
+
+      this.current().el.classList.add('current');
 
       this.el().dispatchEvent(new CustomEvent('photoport-navigate', {
         bubbles: true,
@@ -498,7 +510,7 @@ Photoport = (function () {
         var timeout = setTimeout(function () {
           contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
 
-          photoport.el().dispatchEvent(new CustomEvent('photoport-content-hold', {
+          photoport.el().dispatchEvent(new CustomEvent('photoport-hold', {
             bubbles: true,
             detail: {
               content: contentDescriptor
@@ -513,7 +525,7 @@ Photoport = (function () {
           contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
           clearTimeout(timeout);
 
-          photoport.el().dispatchEvent(new CustomEvent('photoport-content-action', {
+          photoport.el().dispatchEvent(new CustomEvent('photoport-action', {
             bubbles: true,
             detail: {
               content: contentDescriptor

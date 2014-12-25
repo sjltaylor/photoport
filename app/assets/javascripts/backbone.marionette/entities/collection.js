@@ -5,6 +5,9 @@ Collections.Collection = Backbone.Model.extend({
     this.photos = new Backbone.Collection(photos, {
       model: Collections.Photo
     });
+  },
+  isOpen: function () {
+    return !!this.get('open');
   }
 });
 
