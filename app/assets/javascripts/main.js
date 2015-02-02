@@ -19,41 +19,45 @@ Collections.addInitializer(function () {
 
   this.library = new Collections.Library();
 
-  // views
-  // this.identifyView = Collections.Identify.Controller.makeView({
-  //   identity: this.identity,
-  //   template: 'identify'
-  // });
-  // this.signInView = Collections.Identify.Controller.makeView({
-  //   identity: this.identity
-  // });
-  // this.identityStatusView = Collections.IdentityStatus.Controller.makeView({
-  //   identity: this.identity
-  // });
+  this.identifyView = Collections.Identify.Controller.makeView({
+    identity: this.identity
+  });
 
-  var landingDeferred = new $.Deferred();
-  this.landing = landingDeferred.promise();
+  this.indexView = new Collections.Index.Controller.makeIndexView({
+    library: this.library
+  });
 
-  this.host.landing().done(function (landing) {
-    this.identity.set(landing.identity);
-    this.library.set({
+  this.identity.on('change:status', function () {
+    console.warn('change-status', arguments);
+    if (this.identity.isIdentified()) {
+      this.fetchLanding();
+    }
+  }.bind(this));
+
+  this.fetchLanding();
+
+}.bind(Collections));
+
+Collections.fetchLanding = function () {
+  var app = Collections;
+
+  app.landing = new $.Deferred();
+
+  app.host.landing().done(function (landing) {
+    app.identity.set(landing.identity);
+    app.library.set({
       index: landing.index,
       add: landing.add,
       new: landing.new,
       uploadPanelConfig: landing['upload_panel_config']
     });
 
-    this.library.collections().add(landing.collections);
+    app.library.collections().reset(landing.collections);
 
-    this.indexView = new Collections.Index.Controller.makeIndexView({
-      identityStatusView: this.identityStatusView,
-      library: this.library
-    });
+    app.landing.resolve(app);
 
-    landingDeferred.resolve(this);
-
-  }.bind(this)).error(console.error);
-}.bind(Collections));
+  }).error(console.error);
+};
 
 Collections.on('start', function () {
   if (Backbone.history) {

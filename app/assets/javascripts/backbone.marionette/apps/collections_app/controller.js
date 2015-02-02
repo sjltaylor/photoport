@@ -16,9 +16,9 @@ Collections.Controller = {
       app.page.show(app.indexView);
     });
   },
-  signIn: function () {
+  identify: function () {
     Collections.landing.done(function (app) {
-      app.page.show(app.signInView);
+      app.page.show(Collections.identifyView);
     });
   }
 };

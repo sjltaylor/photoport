@@ -17,6 +17,10 @@ class Identity < ActiveRecord::Base
     super
   end
 
+  def stranger?
+    new_record?
+  end
+
   def self.find_by_email_address(email_address)
     where("lower(email_address) = lower(?)", email_address).first
   end

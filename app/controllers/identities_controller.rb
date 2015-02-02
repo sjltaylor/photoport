@@ -1,9 +1,11 @@
 class IdentitiesController < ApplicationController
+  skip_before_filter :authenticate
+
   def identify
     respond_to do |format|
       format.json do
 
-        identification_attempt = services.identify(identity: request_identity, credentials: params[:credentials].symbolize_keys)
+        identification_attempt = services.identify(identity: self.identity, credentials: params[:credentials].symbolize_keys)
 
         identity = identification_attempt[:identity]
 
@@ -25,13 +27,13 @@ class IdentitiesController < ApplicationController
     end
   end
 
-  def sign_in
+  def hello
     respond_to do |format|
       format.html { application }
     end
   end
 
-  def sign_out
+  def goodbye
     session.delete :identity_id
     respond_to do |format|
       format.html { redirect_to :root }

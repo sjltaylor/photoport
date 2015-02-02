@@ -11,6 +11,34 @@ describe IdentificationServices do
     end
   end
 
+  describe '#lookup_identity' do
+    let(:lookup_identity) { services.lookup_identity(id: identity_id) }
+    let(:identity) { nil }
+    before(:each) do
+      expect(Identity).to receive(:find_by_id).with(identity_id).and_return(identity)
+    end
+
+    context 'when the id is nil' do
+      let(:identity_id) { nil }
+      it 'returns a stranger' do
+        expect(lookup_identity).to be_a_stranger
+      end
+    end
+    context 'when the id is not stored' do
+      let(:identity_id) { 111 }
+      it 'returns a stranger' do
+        expect(lookup_identity).to be_a_stranger
+      end
+    end
+    context 'when the id is stored' do
+      let(:identity_id) { 134 }
+      let(:identity) { double(:stranger, :stranger? => false) }
+      it 'returns the identity' do
+        expect(lookup_identity).not_to be_a_stranger
+      end
+    end
+  end
+
   describe '#identify(identity: identity, credentials: credentials)' do
     let(:credentials) { { email_address: 'email@address.net', password: 'plaintext' } }
     let(:barely_secure_password) { true }

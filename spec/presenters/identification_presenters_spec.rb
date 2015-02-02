@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe IdentificationPresenters do
   let(:identify_url) { 'identify-url' }
-  let(:sign_out_url) { 'sign-out-url' }
+  let(:goodbye_url) { 'sign-out-url' }
   let(:url_helper) { double(:url_helper) }
   let(:identity_presenter) { Class.new.include(described_class).resolve(url_helper: url_helper) }
   let(:identity) { double(:identity, status: 'anonymous', identified?: false) }
 
   before(:each) { allow(url_helper).to receive(:identify_url).with(format: :json).and_return(identify_url) }
-  before(:each) { allow(url_helper).to receive(:sign_out_url).with(format: :json).and_return(sign_out_url) }
+  before(:each) { allow(url_helper).to receive(:goodbye_url).with(format: :json).and_return(goodbye_url) }
 
   describe '#identity' do
     let(:identity_presentation) { identity_presenter.identity(identity) }
@@ -19,8 +19,8 @@ describe IdentificationPresenters do
     it 'includes an identify url' do
       expect(identity_presentation[:identify]).to eq identify_url
     end
-    it 'includes a sign_out url' do
-      expect(identity_presentation[:sign_out]).to eq sign_out_url
+    it 'includes a goodbye url' do
+      expect(identity_presentation[:goodbye]).to eq goodbye_url
     end
 
     context 'when the identity is anonymous' do

@@ -53,7 +53,6 @@ describe CmsServices do
     end
   end
   describe '#show_default_data' do
-    let(:identity) { double(:identity) }
     let(:context) { { identity: identity } }
     let(:collections) { [double(:collection)] }
 
@@ -61,18 +60,30 @@ describe CmsServices do
       services.show_default_data(identity: identity)
     end
 
-    before(:each) do
-      allow(identity).to receive(:collections).and_return(collections)
+    context 'when the identity represents a stranger' do
+      let(:identity) { double(:identity, stranger?: true) }
+
+      it 'returns only the identity' do
+        expect(show_default_data.keys).to eql [:identity]
+      end
     end
 
-    it 'returns the identity' do
-      expect(show_default_data[:identity]).to be identity
-    end
+    context 'when the identity does not represent a stranger' do
+      let(:identity) { double(:identity, stranger?: false) }
 
-    context 'when the identity has collections' do
-      let(:collections) { ['first', 'second'] }
-      it 'returns all collections' do
-        expect(show_default_data[:collections]).to be collections
+      before(:each) do
+        allow(identity).to receive(:collections).and_return(collections)
+      end
+
+      it 'returns the identity' do
+        expect(show_default_data[:identity]).to be identity
+      end
+
+      context 'when the identity has collections' do
+        let(:collections) { ['first', 'second'] }
+        it 'returns all collections' do
+          expect(show_default_data[:collections]).to be collections
+        end
       end
     end
   end

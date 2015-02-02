@@ -1,18 +1,13 @@
 //= require templates/identify
-//= require templates/sign_in
 
 Collections.module('Identify', function (Identify, Collections, Backbone, Marionette, $, _) {
   Identify.View = Marionette.ItemView.extend({
-    template: 'sign_in',
+    template: 'identify',
     className: 'identify-view',
     events: {
-      'click .js-back': 'onBack',
-      'click .js-cancel': 'onCancel',
-      'submit form': 'onIdentify',
-      'click .js-save': 'onSave'
+      'submit form': 'onIdentify'
     },
     ui: {
-      prompts: '.prompt',
       form: 'form',
       emailField: 'form input[name="email"]',
       passwordField: 'form input[name="password"]',
@@ -20,9 +15,6 @@ Collections.module('Identify', function (Identify, Collections, Backbone, Marion
     },
     initialize: function () {
       this.template = this.options.template || this.template;
-    },
-    onBack: function () {
-      history.back();
     },
     onCancel: function () {
       this.trigger('cancel');
@@ -39,13 +31,7 @@ Collections.module('Identify', function (Identify, Collections, Backbone, Marion
       });
     },
     showError: function (error, message) {
-      this.ui.prompts.hide();
       this.ui.errorFlash.show().text(message);
-    },
-    onSave: function () {
-      e.preventDefault();
-      e.stopPropagation();
-      this.trigger('save');
     }
   });
 });

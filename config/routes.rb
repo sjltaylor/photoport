@@ -1,9 +1,9 @@
 Photoport::Application.routes.draw do
 
-  root :to => 'collections#root'
+  root :to => 'landing#index'
   get 'status' => 'status#index'
 
-  get 'start' => 'collections#start'
+  get 'start' => 'landing#index'
 
   mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
 
@@ -13,8 +13,8 @@ Photoport::Application.routes.draw do
 
   post 'identify' => 'identities#identify'
 
-  get 'sign_in'  => 'identities#sign_in'
-  get 'sign_out' => 'identities#sign_out'
+  get 'who_are_you'  => 'identities#hello', as: :hello
+  get 'seeya' => 'identities#goodbye', as: :goodbye
 
   if Rails.env.test? || Rails.env.development?
     namespace :test_hooks do

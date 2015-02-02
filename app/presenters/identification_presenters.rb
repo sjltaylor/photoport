@@ -5,7 +5,7 @@ module IdentificationPresenters
     p = {
       status: identity.status,
       identify: url_helper.identify_url(format: :json),
-      sign_out: url_helper.sign_out_url(format: :json)
+      goodbye: url_helper.goodbye_url(format: :json)
     }
 
     p[:email_address] = identity.email_address if identity.identified?

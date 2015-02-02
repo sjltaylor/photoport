@@ -1,9 +1,8 @@
 module ApplicationHelper
-  include RequestIdentity
 
-  def request_identity
-    request_identity = super
-    presenters.identity(request_identity)
+  def identity
+    identity = super
+    presenters.identity(identity)
   end
 
   def templates *args

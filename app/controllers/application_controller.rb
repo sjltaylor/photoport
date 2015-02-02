@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
+  before_filter :authenticate
+  
   protect_from_forgery
-
-  include RequestIdentity
 
   rescue_from ActionController::RoutingError, :with => :render_404 unless Rails.env.development?
   rescue_from ActiveRecord::RecordNotFound  , :with => :render_404
@@ -25,6 +25,19 @@ class ApplicationController < ActionController::Base
   end
 
   protected
+
+  def identity
+    @identity ||= services.lookup_identity(id: session[:identity_id])
+  end
+
+  def authenticate
+    if identity.stranger?
+      respond_to do |format|
+        format.html { redirect_to hello_path  }
+        format.json { render nothing: true, status: 401  }
+      end
+    end
+  end
 
   def services
     @services ||= Sentry.new(

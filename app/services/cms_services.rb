@@ -8,10 +8,13 @@ module CmsServices
   end
 
   def show_default_data(identity:)
-    {
-      collections: identity.collections,
+    stranger_data = {
       identity: identity
     }
+
+    return stranger_data if identity.stranger?
+
+      stranger_data.merge(collections: identity.collections)
   end
 
   def remove_photo(identity:, photo:)

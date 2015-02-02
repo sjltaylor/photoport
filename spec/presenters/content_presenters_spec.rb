@@ -71,10 +71,11 @@ describe ContentPresenters do
   end
 
   describe '#landing(identity:, collections:, session_id:)' do
+    let(:stranger?) { false }
     let(:aws_s3_upload_panel_config) { double(:aws_s3_upload_panel_config) }
     let(:session_id) { double(:session_id) }
     let(:collections) { [double(:collection_1), double(:collections_2)] }
-    let(:identity) { double(:identity) }
+    let(:identity) { double(:identity, stranger?: stranger?) }
     let(:identity_presentation) { double(:identity_presentation) }
     let(:root_path) { double(:root_path) }
     let(:collections_path) { double(:collections_path) }
@@ -96,27 +97,48 @@ describe ContentPresenters do
       presenters.landing(collections: collections, identity: identity, session_id: session_id)
     end
 
-    it 'returns the add url for collections' do
-      expect(landing[:add]).to be collections_path
-    end
-    it 'returns the new url for collections' do
-      expect(landing[:new]).to be new_collection_path
-    end
-    it 'includes the upload panel configuration' do
-      expect(landing[:upload_panel_config]).to be aws_s3_upload_panel_config
-    end
-    it 'includes the collections mapped to collection presentations' do
-      expect(landing[:collections]).to eq collections
-      expect(presenters).to have_received(:collection).with(collections[0])
-      expect(presenters).to have_received(:collection).with(collections[1])
-    end
     it 'includes the identity presentation of the identity' do
       expect(landing[:identity]).to be identity_presentation
       expect(presenters).to have_received(:identity).with(identity)
     end
+
     it 'includes the index path' do
       expect(landing[:index]).to be root_path
-      expect(url_helper).to have_received(:root_path).with(no_args)
+      expect(url_helper).to have_received(:root_path).with(format: :json)
+    end
+
+    context 'when the identity represents a stranger' do
+      let(:stranger?) { true }
+
+      it 'returns no add url for collections' do
+        expect(landing).not_to have_key(:add)
+      end
+      it 'returns no new url for collections' do
+        expect(landing).not_to have_key(:new)
+      end
+      it 'includes no upload panel configuration' do
+        expect(landing).not_to have_key(:upload_panel_config)
+      end
+      it 'includes no collections' do
+        expect(landing).not_to have_key(:collections)
+      end
+    end
+
+    context 'when the identity does not represent a stranger' do
+      it 'returns the add url for collections' do
+        expect(landing[:add]).to be collections_path
+      end
+      it 'returns the new url for collections' do
+        expect(landing[:new]).to be new_collection_path
+      end
+      it 'includes the upload panel configuration' do
+        expect(landing[:upload_panel_config]).to be aws_s3_upload_panel_config
+      end
+      it 'includes the collections mapped to collection presentations' do
+        expect(landing[:collections]).to eq collections
+        expect(presenters).to have_received(:collection).with(collections[0])
+        expect(presenters).to have_received(:collection).with(collections[1])
+      end
     end
   end
 end

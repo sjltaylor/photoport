@@ -6,6 +6,10 @@ module IdentificationServices
     Identity.create
   end
 
+  def lookup_identity(id:)
+    Identity.find_by_id(id) || Identity.new
+  end
+
   def identify(identity:, credentials:)
     password      = credentials[:password]
     email_address = credentials[:email_address]

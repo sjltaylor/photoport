@@ -22,14 +22,19 @@ module ContentPresenters
     }
   end
 
-  def landing(collections:, identity:, session_id:)
-    {
-      collections:         collections.map{|collection| self.collection(collection)},
+  def landing(collections: [], identity:, session_id:)
+    presentation = {
       identity:            self.identity(identity),
-      index:               url_helper.root_path,
+      index:               url_helper.root_path(format: :json)
+    }
+
+    return presentation if identity.stranger?
+
+    presentation.merge({
+      collections:         collections.map{|collection| self.collection(collection)},
       add:                 url_helper.collections_path(format: :json),
       new:                 url_helper.new_collection_path,
       upload_panel_config: aws_s3_upload_panel_config(identity: identity, session_id: session_id)
-    }
+    })
   end
 end

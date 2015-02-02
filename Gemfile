@@ -27,6 +27,7 @@ gem 'better_errors'
 gem 'bcrypt'
 gem 'blobject', '>= 0.5.0'
 gem 'aws-sdk'
+gem 'responders', '~> 2.0'
 
 group :test do
   gem 'shoulda'
