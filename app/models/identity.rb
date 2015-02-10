@@ -8,7 +8,7 @@ class Identity < ActiveRecord::Base
     state :identified
 
     event :identify do
-      transitions from: :anonymous, to: :identified
+      transitions from: [:anonymous, :identified], to: :identified
     end
   end
 

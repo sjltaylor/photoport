@@ -16,14 +16,14 @@ ActiveRecord::Schema.define(version: 20131020175108) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "collections", force: true do |t|
+  create_table "collections", force: :cascade do |t|
     t.integer  "creator_id"
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "identities", force: true do |t|
+  create_table "identities", force: :cascade do |t|
     t.string   "email_address"
     t.string   "password_hash"
     t.datetime "created_at"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(version: 20131020175108) do
 
   add_index "identities", ["email_address"], name: "index_identities_on_email_address", unique: true, using: :btree
 
-  create_table "photos", force: true do |t|
+  create_table "photos", force: :cascade do |t|
     t.integer  "collection_id"
     t.string   "photo_uid"
     t.datetime "created_at"
@@ -42,7 +42,7 @@ ActiveRecord::Schema.define(version: 20131020175108) do
 
   add_index "photos", ["collection_id"], name: "index_photos_on_collection_id", using: :btree
 
-  create_table "sessions", force: true do |t|
+  create_table "sessions", force: :cascade do |t|
     t.string   "session_id", null: false
     t.text     "data"
     t.datetime "created_at"

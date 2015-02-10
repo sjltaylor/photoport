@@ -6,13 +6,16 @@ Collections.Library = Backbone.Model.extend({
       show: this.get('new')
     });
 
-    this.collections().add(this.__new__);
+    this.resetCollections([]);
 
     this.on('change:new', function () {
       this.__new__.set({
         show: this.get('new')
       });
     });
+  },
+  resetCollections: function (collections) {
+    this.collections().reset(collections.concat([this.__new__]));
   },
   collections: function () {
     return Collections.Collection.all;

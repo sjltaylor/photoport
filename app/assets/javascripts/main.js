@@ -23,36 +23,40 @@ Collections.addInitializer(function () {
     identity: this.identity
   });
 
-  this.indexView = new Collections.Index.Controller.makeIndexView({
-    library: this.library
-  });
-
-  this.identity.on('change:status', function () {
-    console.warn('change-status', arguments);
-    if (this.identity.isIdentified()) {
-      this.fetchLanding();
-    }
-  }.bind(this));
-
-  this.fetchLanding();
+  this.repopulate();
 
 }.bind(Collections));
 
-Collections.fetchLanding = function () {
+Collections.repopulate = function () {
   var app = Collections;
 
   app.landing = new $.Deferred();
 
   app.host.landing().done(function (landing) {
     app.identity.set(landing.identity);
-    app.library.set({
-      index: landing.index,
-      add: landing.add,
-      new: landing.new,
-      uploadPanelConfig: landing['upload_panel_config']
-    });
 
-    app.library.collections().reset(landing.collections);
+    if (app.identity.isIdentified()) {
+      if (app.indexView) {
+        app.indexView.destroy()
+      }
+
+      app.indexView = new Collections.Index.Controller.makeIndexView({
+        library: app.library
+      });
+    }
+
+    var libraryAttributes = {
+      index: landing.index
+    };
+
+    if (app.identity.isIdentified()) {
+      libraryAttributes.add = landing.add;
+      libraryAttributes.new = landing.new;
+      libraryAttributes.uploadPanelConfig = landing['upload_panel_config'];
+    }
+
+    app.library.resetCollections(landing.collections || []);
+    app.library.set(libraryAttributes);
 
     app.landing.resolve(app);
 
