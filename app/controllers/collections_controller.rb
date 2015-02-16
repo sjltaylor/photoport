@@ -1,4 +1,4 @@
-class CollectionsController < ApplicationController  
+class CollectionsController < ApplicationController
   def create
     respond_to do |format|
       format.json do
@@ -12,7 +12,7 @@ class CollectionsController < ApplicationController
     application
   end
 
-  def new
+  def index
     application
   end
 end

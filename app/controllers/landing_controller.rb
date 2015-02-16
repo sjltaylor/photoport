@@ -5,9 +5,7 @@ class LandingController < ApplicationController
     respond_to do |format|
 
       format.html do
-        collections = services.show_default_data(identity: identity)[:collections]
-        redirect_to(controller: :collections, action: :new) and return if collections.blank?
-        redirect_to collections.first
+        redirect_to(controller: :collections, action: :index)
       end
 
       format.json do

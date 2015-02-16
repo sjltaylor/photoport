@@ -5,12 +5,6 @@ Collections.Controller = {
       app.indexView.show(id);
     });
   },
-  'new': function () {
-    Collections.landing.done(function (app) {
-      app.page.show(app.indexView);
-      app.indexView.show('new');
-    });
-  },
   collections: function () {
     Collections.landing.done(function (app) {
       app.page.show(app.indexView);
@@ -18,7 +12,7 @@ Collections.Controller = {
   },
   identify: function () {
     Collections.landing.done(function (app) {
-      app.page.show(Collections.identifyView);
+      app.page.show(app.identifyView);
     });
   }
 };
