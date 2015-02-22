@@ -1,25 +1,16 @@
 Photoport::Application.routes.draw do
+  mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
 
   root :to => 'landing#index'
   get 'status' => 'status#index'
-
   get 'start' => 'landing#start', format: :json
-
-  mount JasmineRails::Engine => '/jasmine' if defined?(JasmineRails)
-
-  resources :collections, only: [:show, :create] do
-    resources :photos, only: [:create, :show, :destroy]
-  end
-
-  post 'identify' => 'identities#identify'
 
   get 'who_are_you'  => 'identities#hello', as: :hello
   get 'seeya' => 'identities#goodbye', as: :goodbye
+  post 'identify' => 'identities#identify'
 
-  if Rails.env.test? || Rails.env.development?
-    namespace :test_hooks do
-      get ':action'
-    end
+  resources :collections, only: [:show, :create] do
+    resources :photos, only: [:create, :show, :destroy]
   end
 
   # resources :collections, only: [] do
