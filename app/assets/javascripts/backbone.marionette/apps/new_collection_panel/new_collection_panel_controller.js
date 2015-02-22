@@ -10,13 +10,6 @@ Collections.module('NewCollectionPanel', function (NewCollectionPanel, Collectio
         model: newCollection
       });
 
-      view.on('new-collection', function () {
-        Collections.host.create(library).done(function (collectionAttributes) {
-          var c = new Collections.Collection(collectionAttributes);
-          collections.add(c);
-        }).error(console.error);
-      });
-
       return view;
     }
   };

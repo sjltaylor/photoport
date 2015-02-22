@@ -40,7 +40,7 @@ Collections.repopulate = function () {
         app.indexView.destroy()
       }
 
-      app.indexView = new Collections.Index.Controller.makeIndexView({
+      app.indexView = new Collections.Index.Controller.makeView({
         library: app.library
       });
     }

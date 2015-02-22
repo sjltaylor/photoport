@@ -1,8 +1,14 @@
 Collections.Controller = {
   show: function (id) {
     Collections.landing.done(function (app) {
-      app.page.show(app.indexView);
-      app.indexView.show(id);
+      var collection = app.library.collections().find(id);
+      if (collection) {
+        collection.__view__ = collection.__view__ || Collections.Show.Controller.makeView({
+          collection: collection,
+          uploadPanelConfig: app.library.get('uploadPanelConfig')
+        });
+        app.page.show(collection.__view__);
+      }
     });
   },
   index: function () {

@@ -1,7 +1,7 @@
 //= require templates/index/collection_view
 
-Collections.module('Index', function (Index, Collections, Backbone, Marionette, $, _) {
-  Index.CollectionView = Marionette.ItemView.extend({
+Collections.module('Show', function (Show, Collections, Backbone, Marionette, $, _) {
+  Show.CollectionView = Marionette.ItemView.extend({
     template: 'index/collection_view',
     className: 'collection-view',
     tagName: 'div',

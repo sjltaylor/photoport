@@ -1,27 +1,19 @@
 Collections.module('Index', function (Index, Collections, Backbone, Marionette, $, _) {
   Index.Controller = {
-    makeCollectionView: function (opts) {
-      var collection = opts.collection;
-
-      var uploadPanel =  Collections.UploadPanel.Controller.makeView({
-        collection: collection,
-        uploadPanelConfig: opts.uploadPanelConfig
-      });
-
-      var collectionView = new Index.CollectionView({
-        model: collection,
-        uploadPanel: uploadPanel
-      });
-
-      return collectionView;
-    },
-    makeIndexView: function (opts) {
+    makeView: function (opts) {
       var library = opts.library,
           collections = library.collections();
 
       var indexView = new Index.View({
         collection: collections,
         library: library
+      });
+
+      indexView.on('childview:new-collection', function () {
+        Collections.host.create(library).done(function (collectionAttributes) {
+          var c = new Collections.Collection(collectionAttributes);
+          collections.add(c);
+        }).error(console.error);
       });
 
       return indexView;
