@@ -14,8 +14,9 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     events: {
       'click': 'handleShowCollection'
     },
-    handleShowCollection: function () {
-
+    handleShowCollection: function (e) {
+      e.preventDefault();
+      this.trigger('open-collection', this.model);
     },
     onRender: function () {
       this.ui.showCollection.attr({ href: this.model.get('show') });

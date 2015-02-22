@@ -1,8 +1,8 @@
-//= require templates/index/collection_view
+//= require templates/collection_view
 
 Collections.module('Show', function (Show, Collections, Backbone, Marionette, $, _) {
   Show.CollectionView = Marionette.ItemView.extend({
-    template: 'index/collection_view',
+    template: 'collection_view',
     className: 'collection-view',
     tagName: 'div',
     modelEvents: {
@@ -37,6 +37,8 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
         container: this.el,
         direction: 'horizontal'
       });
+
+      this.photoport.keyboardNavigation({enabled: true});
 
       this.uploadPanel.render();
 

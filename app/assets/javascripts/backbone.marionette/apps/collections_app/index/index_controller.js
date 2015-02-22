@@ -16,6 +16,10 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
         }).error(console.error);
       });
 
+      indexView.on('childview:open-collection', function (_, collection) {
+        Collections.router.navigate(collection.get('show'), { trigger: true });
+      });
+
       return indexView;
     }
   };

@@ -22,13 +22,5 @@ Collections.Library = Backbone.Model.extend({
   },
   new: function () {
     return this.__new__;
-  },
-  open: function (collection) {
-    var open = this.opened;
-    if (open) {
-      open.set('open', false);
-    }
-    collection.set('open', true);
-    this.opened = collection;
   }
 });
