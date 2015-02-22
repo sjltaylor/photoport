@@ -8,8 +8,18 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     className: 'index-collection-view',
     template: 'index/collection_view',
     tagName: 'li',
-    initialize: function () {
+    ui: {
+      'showCollection': '.js-show-collection'
+    },
+    events: {
+      'click': 'handleShowCollection'
+    },
+    handleShowCollection: function () {
 
+    },
+    onRender: function () {
+      this.ui.showCollection.attr({ href: this.model.get('show') });
+      this.ui.showCollection.text(this.model.get('name'));
     }
   });
 
