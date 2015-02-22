@@ -198,6 +198,8 @@ GEM
       pry (>= 0.9.10, < 0.11.0)
     puma (2.10.2)
       rack (>= 1.1, < 2.0)
+    quiet_assets (1.1.0)
+      railties (>= 3.1, < 5.0)
     rack (1.6.0)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -296,6 +298,7 @@ DEPENDENCIES
   pry
   pry-nav
   puma
+  quiet_assets
   rack-cache
   rails (~> 4.2.0)
   resolve (>= 0.0.3)!

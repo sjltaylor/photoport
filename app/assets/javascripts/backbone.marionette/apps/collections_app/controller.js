@@ -5,7 +5,7 @@ Collections.Controller = {
       app.indexView.show(id);
     });
   },
-  collections: function () {
+  index: function () {
     Collections.landing.done(function (app) {
       app.page.show(app.indexView);
     });

@@ -9,7 +9,7 @@ Collections.module('Identify', function (Identify, Collections, Backbone, Marion
         Collections.host.users.identify(identity, credentials).done(function (result) {
           identity.set(result.identity);
           Collections.repopulate();
-          Collections.router.navigate('/collections/new', true);
+          Collections.router.navigate('/', true);
         }).fail(function (response) {
           if (response.status === 422 && (typeof response.responseJSON === 'object')) {
             var payload = response.responseJSON

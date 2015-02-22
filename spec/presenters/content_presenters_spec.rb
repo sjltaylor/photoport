@@ -128,9 +128,6 @@ describe ContentPresenters do
       it 'returns the add url for collections' do
         expect(landing[:add]).to be collections_path
       end
-      it 'returns the new url for collections' do
-        expect(landing[:new]).to be new_collection_path
-      end
       it 'includes the upload panel configuration' do
         expect(landing[:upload_panel_config]).to be aws_s3_upload_panel_config
       end

@@ -11,8 +11,4 @@ class CollectionsController < ApplicationController
   def show
     application
   end
-
-  def index
-    application
-  end
 end

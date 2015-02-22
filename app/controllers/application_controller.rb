@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   before_filter :authenticate
-  
+
   protect_from_forgery
 
   rescue_from ActionController::RoutingError, :with => :render_404 unless Rails.env.development?
@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
   def render_404
     respond_to do |format|
       format.html { render status: :not_found, template: '404' }
-      format.any  { render status: :not_found, nothing: true }
+      format.all  { render status: :not_found, nothing: true }
     end
   end
 
