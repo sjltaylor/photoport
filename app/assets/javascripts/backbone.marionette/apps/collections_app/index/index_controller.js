@@ -4,23 +4,30 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       var library = opts.library,
           collections = library.collections();
 
-      var indexView = new Index.View({
+      var list = new Index.List({
         collection: collections,
         library: library
       });
 
-      indexView.on('childview:new-collection', function () {
+      list.on('childview:new-collection', function () {
         Collections.host.create(library).done(function (collectionAttributes) {
           var c = new Collections.Collection(collectionAttributes);
           collections.add(c);
         }).error(console.error);
       });
 
-      indexView.on('childview:open-collection', function (_, collection) {
+      list.on('childview:open-collection', function (_, collection) {
         Collections.router.navigate(collection.get('show'), { trigger: true });
       });
 
-      return indexView;
+      var editPlaceholder = new Index.EditPlaceholder();
+
+      var layout = new Index.Layout({
+        listView: list,
+        editPlaceholder: editPlaceholder
+      });
+
+      return layout;
     }
   };
 });

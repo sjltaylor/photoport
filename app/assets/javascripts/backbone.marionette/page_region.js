@@ -30,8 +30,8 @@ _.extend(Collections.PageRegion.prototype, {
     this.close();
     view.$el.show();
     this.currentView = view;
-    Marionette.triggerMethod.call(this, "show", view);
-    Marionette.triggerMethod.call(view, "show");
+    Marionette.triggerMethod.call(this, 'show', view);
+    Marionette.triggerMethod.call(view, 'show');
 
     this.fitCurrentViewToWindow();
     return this;
@@ -44,7 +44,7 @@ _.extend(Collections.PageRegion.prototype, {
       view.$el.hide();
     });
     if (this.currentView) {
-      Marionette.triggerMethod.call(this, "close", this.currentView);
+      Marionette.triggerMethod.call(this, 'close', this.currentView);
     }
     return this;
   },
