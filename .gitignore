@@ -28,3 +28,6 @@ TODO
 
 # keep your own .env for foreman
 .env
+
+# no dragonfly log
+dragonfly.log
