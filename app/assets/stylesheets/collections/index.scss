@@ -2,14 +2,15 @@
   position: relative;
   overflow: hidden;
 
-  .viewport {
+  .collections-list-container {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 400px;
-    height: 85%;
-    margin: 60px auto;
+    height: 100%;
     overflow-y: scroll;
 
     ul {
-      position: relative;
       list-style-type: none;
       padding: 0;
       margin: 0;
@@ -30,5 +31,13 @@
         }
       }
     }
+  }
+
+  .collections-edit-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ffffaa;
+    height: 100%;
   }
 }

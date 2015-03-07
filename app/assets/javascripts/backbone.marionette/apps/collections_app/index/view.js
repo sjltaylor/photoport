@@ -39,13 +39,20 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
   Index.View = Marionette.CompositeView.extend({
     className: 'index-view',
     template: 'index/view',
-    childViewContainer: 'ul.collections-container',
+    childViewContainer: '.collections-list-container ul',
+    ui: {
+      listContainer: '.collections-list-container',
+      editContainer: '.collections-edit-container'
+    },
     initialize: function () {
       _.extend(this, this.options);
     },
     getChildView: function(collection) {
       if  (collection.isNew()) return Index.NewCollectionView;
       return Index.CollectionView;
+    },
+    onResize: function (size) {
+      this.ui.editContainer.width(size.width - this.ui.listContainer.width());
     }
   });
 });
