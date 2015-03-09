@@ -1,11 +1,12 @@
 @import "mixins";
 @import "photoport";
-@import "collections/edit_panel";
+@import "panels/options";
+@import "panels/photo_upload";
 @import "collections/identify";
 @import "collections/identity_status";
 @import "collections/photoport_container";
-@import "collections/upload_panel";
 @import "collections/index";
+@import "collections/edit";
 
 body {
   overflow: none;

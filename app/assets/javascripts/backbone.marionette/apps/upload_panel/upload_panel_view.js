@@ -1,8 +1,8 @@
-//= require templates/photo_upload_panel
+//= require templates/panels/photo_upload
 
 Collections.module('UploadPanel', function (UploadPanel, Collections, Backbone, Marionette, $, _) {
   UploadPanel.View = Marionette.ItemView.extend({
-    template: "photo_upload_panel",
+    template: "panels/photo_upload",
     className: 'photoport-cms-upload-panel',
     events: {
       'change    .js-file-input'  : 'handleFileInputChange',

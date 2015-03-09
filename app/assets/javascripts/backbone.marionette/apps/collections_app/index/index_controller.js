@@ -16,8 +16,10 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
         }).error(console.error);
       });
 
-      list.on('childview:open-collection', function (_, collection) {
-        Collections.router.navigate(collection.get('show'), { trigger: true });
+      list.on('childview:edit-collection', function (_, collection) {
+        layout.edit.show(Collections.Edit.Controller.makeView({
+          collection: collection
+        }));
       });
 
       var editPlaceholder = new Index.EditPlaceholder();

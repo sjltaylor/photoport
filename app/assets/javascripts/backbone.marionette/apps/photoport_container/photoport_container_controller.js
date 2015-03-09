@@ -12,11 +12,11 @@ Collections.module('PhotoportContainer', function (PhotoportContainer, Collectio
       });
 
       view.on('edit', function (content) {
-        var editPanel = Collections.EditPanel.Controller.makeView({
+        var OptionsPanel = Collections.OptionsPanel.Controller.makeView({
           collection: collection,
           photo: content.photo
         }).render();
-        view.showPanel(editPanel);
+        view.showPanel(OptionsPanel);
       });
 
       return view;

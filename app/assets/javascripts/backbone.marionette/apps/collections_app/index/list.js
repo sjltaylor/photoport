@@ -9,18 +9,18 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     template: 'index/collection_list_entry',
     tagName: 'li',
     ui: {
-      'showCollection': '.js-show-collection'
+      'editCollection': '.js-edit-collection'
     },
     events: {
-      'click': 'handleShowCollection'
+      'click': 'handleEditCollection'
     },
-    handleShowCollection: function (e) {
+    handleEditCollection: function (e) {
       e.preventDefault();
-      this.trigger('open-collection', this.model);
+      this.trigger('edit-collection', this.model);
     },
     onRender: function () {
-      this.ui.showCollection.attr({ href: this.model.get('show') });
-      this.ui.showCollection.text(this.model.get('name'));
+      this.ui.editCollection.attr({ href: this.model.get('show') });
+      this.ui.editCollection.text(this.model.get('name'));
     }
   });
 

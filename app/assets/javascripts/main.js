@@ -16,12 +16,7 @@ Collections.addInitializer(function () {
   });
 
   this.identity = new Collections.Identity();
-
   this.library = new Collections.Library();
-
-  this.identifyView = Collections.Identify.Controller.makeView({
-    identity: this.identity
-  });
 
   this.repopulate();
 
@@ -34,16 +29,6 @@ Collections.repopulate = function () {
 
   app.host.landing().done(function (landing) {
     app.identity.set(landing.identity);
-
-    if (app.identity.isIdentified()) {
-      if (app.indexView) {
-        app.indexView.destroy()
-      }
-
-      app.indexView = new Collections.Index.Controller.makeView({
-        library: app.library
-      });
-    }
 
     var libraryAttributes = {
       index: landing.index

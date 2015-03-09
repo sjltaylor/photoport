@@ -3,22 +3,26 @@ Collections.Controller = {
     Collections.landing.done(function (app) {
       var collection = app.library.collections().get(id);
       if (collection) {
-        collection.__view__ = collection.__view__ || Collections.Show.Controller.makeView({
+        var view = Collections.Show.Controller.makeView({
           collection: collection,
           uploadPanelConfig: app.library.get('uploadPanelConfig')
         });
-        app.page.show(collection.__view__);
+        app.page.show(view);
       }
     });
   },
   index: function () {
     Collections.landing.done(function (app) {
-      app.page.show(app.indexView);
+      app.page.show(Collections.Index.Controller.makeView({
+        library: app.library
+      }));
     });
   },
   identify: function () {
     Collections.landing.done(function (app) {
-      app.page.show(app.identifyView);
+      app.page.show(Collections.Identify.Controller.makeView({
+        identity: this.identity
+      }));
     });
   }
 };

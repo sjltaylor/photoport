@@ -18,7 +18,7 @@
 
       li {
         @include user-select-none();
-        position: relative;;
+        position: relative;
         margin: 0;
 
         .button {
@@ -37,7 +37,12 @@
     position: absolute;
     top: 0;
     right: 0;
-    background-color: #ffffaa;
+    height: 100%;
+  }
+
+  .edit-placeholder {
+    background-color: pink;
+    width: 100%;
     height: 100%;
   }
 }
