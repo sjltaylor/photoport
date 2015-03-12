@@ -145,4 +145,24 @@ describe CmsServices do
       expect(update_collection).to equal(collection)
     end
   end
+  describe '#destroy_collection' do
+    let(:collection) { double(:collection) }
+
+    before(:each) do
+      allow(collection).to receive(:destroy)
+    end
+
+    def destroy_collection
+      services.destroy_collection(identity: identity, collection: collection)
+    end
+
+    it 'destroys the collection' do
+      destroy_collection
+      expect(collection).to have_received(:destroy)
+    end
+
+    it 'returns nil' do
+      expect(destroy_collection).to be_nil
+    end
+  end
 end

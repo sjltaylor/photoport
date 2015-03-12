@@ -6,13 +6,16 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
     className: 'edit-collection',
     template: 'edit/collection',
     ui: {
-      'openCollection': '.js-open-collection',
+      'open': '.js-open',
       'name': '.js-name',
+      'removeConfirm': '.js-remove-confirm',
+      'remove': '.js-remove',
       'photoportContainer': '.photoport-container'
     },
     events: {
-      'click @ui.openCollection': 'handleOpenCollection',
-      'input @ui.name': 'handleNameInput'
+      'click @ui.open': 'handleOpenCollection',
+      'input @ui.name': 'handleNameInput',
+      'click @ui.remove': 'handleRemoveClick'
     },
     handleOpenCollection: function (e) {
       e.preventDefault();
@@ -21,8 +24,12 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
     handleNameInput: function () {
       this.model.set({ name: this.ui.name.val().trim() });
     },
+    handleRemoveClick: function () {
+      if (!!this.ui.removeConfirm.is(':checked')) {
+        this.trigger('remove-collection', this.model);
+      }
+    },
     onRender: function () {
-
       this.photoport = new Photoport({
         container: this.ui.photoportContainer[0],
       });
@@ -30,7 +37,7 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       this.populatePhotoport();
 
       this.ui.name.val(this.model.get('name'));
-      this.ui.openCollection.attr({ href: this.model.get('show') });
+      this.ui.open.attr({ href: this.model.get('show') });
     },
     populatePhotoport: function () {
       this.model.photos.each(function (photo) {

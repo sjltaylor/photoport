@@ -8,8 +8,13 @@ module CmsServices
   end
 
   def update_collection(identity:, collection:, updates:)
-    collection.update(updates.slice(:name))
+    collection.update(updates)
     collection
+  end
+
+  def destroy_collection(identity:, collection:)
+    collection.destroy
+    nil
   end
 
   def show_default_data(identity:)

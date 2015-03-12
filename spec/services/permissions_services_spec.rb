@@ -100,4 +100,28 @@ describe PermissionsServices do
       end
     end
   end
+
+  describe '#allow_destroy_collection?' do
+    let(:collection) { double(:collection, creator: creator) }
+    let(:identity) { double(:identity) }
+
+    def allow_destroy_collection?
+      permissions.allow_destroy_collection?(identity: identity, collection: collection)
+    end
+
+    context 'when the identity is the creator of the collection' do
+      let(:creator) { identity }
+
+      it 'returns true' do
+        expect(allow_destroy_collection?).to be true
+      end
+    end
+    context 'when the identity is not the creator of the collection' do
+      let(:creator) { double(:another_identity) }
+
+      it 'returns false' do
+        expect(allow_destroy_collection?).to be false
+      end
+    end
+  end
 end

@@ -9,6 +9,11 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
         library: library
       });
 
+      var layout = new Index.Layout({
+        listView: list,
+        editPlaceholder: new Index.EditPlaceholder()
+      });
+
       list.on('childview:new-collection', function () {
         Collections.host.create(library).done(function (collectionAttributes) {
           var c = new Collections.Collection(collectionAttributes);
@@ -18,16 +23,15 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
 
       list.on('childview:edit-collection', function (_, collection) {
         layout.edit.show(Collections.Edit.Controller.makeView({
-          collection: collection
+          collection: collection,
+          library: library
         }));
       });
 
-      var editPlaceholder = new Index.EditPlaceholder();
-
-      var layout = new Index.Layout({
-        listView: list,
-        editPlaceholder: editPlaceholder
+      library.collections().on('remove', function (collection) {
+        layout.edit.show(new Index.EditPlaceholder());
       });
+
 
       return layout;
     }

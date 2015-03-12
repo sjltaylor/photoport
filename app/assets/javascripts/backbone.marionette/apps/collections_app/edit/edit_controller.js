@@ -1,7 +1,8 @@
 Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $, _) {
   Edit.Controller = {
     makeView: function (opts) {
-      var collection = opts.collection;
+      var library    = opts.library,
+          collection = opts.collection;
 
       var view = new Edit.View({
         model: collection
@@ -9,6 +10,12 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
 
       view.on('open-collection', function () {
         Collections.router.navigate(collection.get('href'), { trigger: true });
+      });
+
+      view.on('remove-collection', function (collection) {
+        Collections.host.remove(collection).done(function () {
+          library.collections().remove(collection);
+        });
       });
 
       collection.on('change', _.debounce(function () {

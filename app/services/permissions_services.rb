@@ -17,6 +17,10 @@ module PermissionsServices
     identity == collection.creator
   end
 
+  def allow_destroy_collection?(identity:, collection:)
+    identity == collection.creator
+  end
+
   allow :create_identity
   allow :show_default_data
   allow :lookup_identity

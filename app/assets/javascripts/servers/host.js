@@ -47,6 +47,15 @@
         cache: false
       });
     },
+    remove: function (collection) {
+      return $.ajax({
+        type: 'DELETE',
+        url: collection.get('href'),
+        headers: headers(),
+        dataType: 'json',
+        cache: false
+      });
+    },
     landing: function () {
       return $.ajax({
         type: 'GET',
@@ -66,9 +75,6 @@
           dataType: 'json',
           cache: false
         });
-      },
-      signOut: function () {
-        alert('signing out');
       }
     }
   };

@@ -17,6 +17,15 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def destroy
+    respond_to do |format|
+      format.json do
+        services.destroy_collection(identity: identity, collection: collection)
+        render json: {}
+      end
+    end
+  end
+
   def show
     application
   end
