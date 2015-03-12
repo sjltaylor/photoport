@@ -8,7 +8,7 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       });
 
       view.on('open-collection', function () {
-        Collections.router.navigate(collection.get('show'), { trigger: true });
+        Collections.router.navigate(collection.get('href'), { trigger: true });
       });
 
       collection.on('change', _.debounce(function () {

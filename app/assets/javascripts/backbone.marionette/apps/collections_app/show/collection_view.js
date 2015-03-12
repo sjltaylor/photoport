@@ -5,9 +5,6 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
     template: 'collection_view',
     className: 'collection-view',
     tagName: 'div',
-    modelEvents: {
-      change: 'update'
-    },
     initialize: function () {
       _.extend(this, this.options);
       this.collection = this.model;
@@ -17,9 +14,6 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
         backgroundImage: photo.get('download'),
         photo: photo
       };
-    },
-    update: function () {
-      this.photoport.keyboardNavigation({enabled: this.collection.isOpen()});
     },
     __add__: function (e) {
       var contentDescriptor = this.contentDescriptor(e);
@@ -56,6 +50,9 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
     onResize: function (dimensions) {
       this.$el.width(dimensions.width).height(dimensions.height);
       this.photoport.resize(dimensions);
+    },
+    onBeforeDestroy: function () {
+      this.photoport.destroy();
     }
   });
 });
