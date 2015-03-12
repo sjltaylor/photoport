@@ -7,6 +7,11 @@ module CmsServices
     identity.collections.create(name: name)
   end
 
+  def update_collection(identity:, collection:, updates:)
+    collection.update(updates.slice(:name))
+    collection
+  end
+
   def show_default_data(identity:)
     stranger_data = {
       identity: identity

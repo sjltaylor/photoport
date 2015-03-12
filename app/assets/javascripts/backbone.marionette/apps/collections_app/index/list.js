@@ -14,11 +14,17 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     events: {
       'click': 'handleEditCollection'
     },
+    modelEvents: {
+      'change': 'update'
+    },
     handleEditCollection: function (e) {
       e.preventDefault();
       this.trigger('edit-collection', this.model);
     },
     onRender: function () {
+      this.update()
+    },
+    update: function () {
       this.ui.editCollection.attr({ href: this.model.get('show') });
       this.ui.editCollection.text(this.model.get('name'));
     }

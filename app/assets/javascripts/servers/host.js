@@ -30,16 +30,26 @@
     },
     create: function (library) {
       return $.ajax({
-        type: "POST",
+        type: 'POST',
         url: library.get('add'),
         headers: headers(),
         dataType: 'json',
         cache: false
       });
     },
+    update: function (collection) {
+      return $.ajax({
+        type: 'PUT',
+        url: collection.get('href'),
+        headers: headers(),
+        data: collection.toJSON(),
+        dataType: 'json',
+        cache: false
+      });
+    },
     landing: function () {
       return $.ajax({
-        type: "GET",
+        type: 'GET',
         url: '/start.json',
         headers: headers(),
         dataType: 'json',
@@ -49,7 +59,7 @@
     users: {
       identify: function (user, credentials) {
         return $.ajax({
-          type: "POST",
+          type: 'POST',
           url: user.get('identify'),
           headers: headers(),
           data: { credentials: credentials },

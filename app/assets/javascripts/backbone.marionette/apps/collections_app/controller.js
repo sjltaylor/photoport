@@ -21,7 +21,7 @@ Collections.Controller = {
   identify: function () {
     Collections.landing.done(function (app) {
       app.page.show(Collections.Identify.Controller.makeView({
-        identity: this.identity
+        identity: app.identity
       }));
     });
   }

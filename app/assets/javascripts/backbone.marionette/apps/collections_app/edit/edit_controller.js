@@ -11,6 +11,10 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
         Collections.router.navigate(collection.get('show'), { trigger: true });
       });
 
+      collection.on('change', _.debounce(function () {
+        Collections.host.update(collection);
+      }, 800));
+
       return view;
     }
   };

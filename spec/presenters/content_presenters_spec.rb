@@ -30,8 +30,8 @@ describe ContentPresenters do
     it 'includes a url to add a new photo' do
       expect(collection_presentation[:add]).to be add_photo_url
     end
-    it 'includes a url to show the collection' do
-      expect(collection_presentation[:show]).to be show_collection_path
+    it 'includes a url to the collection' do
+      expect(collection_presentation[:href]).to be show_collection_path
     end
     context 'when the collection has a name' do
       it 'includes the collections name' do

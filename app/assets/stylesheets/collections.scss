@@ -49,6 +49,16 @@ h4 {
   margin: 0.25em 0 0.5em;
 }
 
+input {
+  font-weight: 100;
+  font-size: 2.0em;
+
+  &::-webkit-input-placeholder {
+    font-weight: 10;
+    font-size: 0.5em;
+    font-style: italic;
+  }
+}
 
 .button {
   text-decoration: none;

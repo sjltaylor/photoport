@@ -13,6 +13,10 @@ module PermissionsServices
     identity == photo.creator
   end
 
+  def allow_update_collection?(identity:, collection:, updates:)
+    identity == collection.creator
+  end
+
   allow :create_identity
   allow :show_default_data
   allow :lookup_identity

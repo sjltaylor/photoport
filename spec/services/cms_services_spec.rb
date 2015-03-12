@@ -124,4 +124,25 @@ describe CmsServices do
       end
     end
   end
+  describe '#update_collection' do
+    let(:collection) { double(:collection) }
+    let(:updates) { double(:updates) }
+
+    before(:each) do
+      allow(collection).to receive(:update).with(updates)
+    end
+
+    def update_collection
+      services.update_collection(identity: identity, collection: collection, updates: updates)
+    end
+
+    it 'updates the collection' do
+      update_collection
+      expect(collection).to have_received(:update).with(updates)
+    end
+
+    it 'returns the collection' do
+      expect(update_collection).to equal(collection)
+    end
+  end
 end

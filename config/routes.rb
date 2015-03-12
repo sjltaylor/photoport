@@ -9,7 +9,7 @@ Photoport::Application.routes.draw do
   get 'seeya' => 'identities#goodbye', as: :goodbye
   post 'identify' => 'identities#identify'
 
-  resources :collections, only: [:show, :create] do
+  resources :collections, only: [:show, :create, :update] do
     resources :photos, only: [:create, :show, :destroy]
   end
 

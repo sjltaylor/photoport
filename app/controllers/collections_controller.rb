@@ -8,7 +8,22 @@ class CollectionsController < ApplicationController
     end
   end
 
+  def update
+    respond_to do |format|
+      format.json do
+        services.update_collection(identity: identity, collection: collection, updates: params.permit(:name))
+        render json: {}
+      end
+    end
+  end
+
   def show
     application
+  end
+
+  protected
+
+  def collection
+    @collection ||= identity.collections.find(params[:id])
   end
 end
