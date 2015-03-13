@@ -12,4 +12,6 @@
 //
 
 //
+//= require jquery/dist/jquery.min
+//= require photoport/photoport
 //= require show/show
