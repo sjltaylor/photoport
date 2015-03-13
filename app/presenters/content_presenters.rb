@@ -6,12 +6,13 @@ module ContentPresenters
     name = "collection #{collection.id}" if name.blank?
 
     {
-      id:       collection.id,
-      name:     name,
-      photos:   collection.photos.map{|p| photo(p)},
-      add:      url_helper.collection_photos_url(collection, format: :json),
-      href:     url_helper.collection_path(collection),
-      enable_public_access: collection.enable_public_access
+      id:                   collection.id,
+      name:                 name,
+      photos:               collection.photos.map{|p| photo(p)},
+      add:                  url_helper.collection_photos_url(collection, format: :json),
+      href:                 url_helper.collection_path(collection),
+      edit:                 url_helper.edit_collection_path(collection),
+      allow_public_access: collection.allow_public_access
     }
   end
 
@@ -26,7 +27,7 @@ module ContentPresenters
   def landing(collections: [], identity:, session_id:)
     presentation = {
       identity:            self.identity(identity),
-      index:               url_helper.root_path(format: :json)
+      index:               url_helper.collections_path
     }
 
     return presentation if identity.stranger?

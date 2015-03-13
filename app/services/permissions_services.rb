@@ -26,4 +26,5 @@ module PermissionsServices
   allow :lookup_identity
   allow :identify
   allow :create_collection
+  allow :show_collection
 end

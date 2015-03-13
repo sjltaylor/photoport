@@ -8,8 +8,8 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
         model: collection
       });
 
-      view.on('open-collection', function () {
-        Collections.router.navigate(collection.get('href'), { trigger: true });
+      view.on('edit-collection', function () {
+        Collections.router.navigate(collection.get('edit'), { trigger: true });
       });
 
       view.on('remove-collection', function (collection) {

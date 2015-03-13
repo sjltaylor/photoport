@@ -59,7 +59,7 @@
     landing: function () {
       return $.ajax({
         type: 'GET',
-        url: '/start.json',
+        url: '/collections.json',
         headers: headers(),
         dataType: 'json',
         cache: false

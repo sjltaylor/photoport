@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20150312183723) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "enable_public_access"
+    t.boolean  "allow_public_access"
   end
 
   create_table "identities", force: :cascade do |t|

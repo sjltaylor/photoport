@@ -7,6 +7,7 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
     template: 'edit/collection',
     ui: {
       'open': '.js-open',
+      'edit': '.js-edit',
       'name': '.js-name',
       'removeConfirm': '.js-remove-confirm',
       'remove': '.js-remove',
@@ -14,19 +15,19 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       'publicAccess': '.js-public-access'
     },
     events: {
-      'click @ui.open': 'handleOpenCollection',
+      'click @ui.edit': 'handleEditCollection',
       'input @ui.name': 'handleInput',
       'click @ui.remove': 'handleRemoveClick',
       'change @ui.publicAccess': 'handleInput'
     },
-    handleOpenCollection: function (e) {
+    handleEditCollection: function (e) {
       e.preventDefault();
-      this.trigger('open-collection', this.model);
+      this.trigger('edit-collection', this.model);
     },
     handleInput: function () {
       this.model.set({
         name: this.ui.name.val().trim(),
-        enable_public_access: this.ui.publicAccess.is(':checked')
+        allow_public_access: this.ui.publicAccess.is(':checked')
       });
     },
     handleRemoveClick: function () {
@@ -42,9 +43,10 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       this.populatePhotoport();
 
       this.ui.name.val(this.model.get('name'));
-      this.ui.open.attr({ href: this.model.get('show') });
+      this.ui.open.attr({ href: this.model.get('href') });
+      this.ui.edit.attr({ href: this.model.get('edit') });
 
-      if (this.model.get('enable_public_access')) {
+      if (this.model.get('allow_public_access')) {
         this.ui.publicAccess.attr({checked: 'checked'})
       }
     },

@@ -16,9 +16,11 @@ module IdentificationPresenters
   def identification_attempt(identification_attempt_result)
     unless identification_attempt_result[:identity].nil?
       identity = self.identity(identification_attempt_result[:identity])
+      index = url_helper.collections_path
     end
     identification_attempt_result.slice(:error, :message, :new_identity).merge({
-      identity: identity
+      identity: identity,
+      index: index
     })
   end
 end

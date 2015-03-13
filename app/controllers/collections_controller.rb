@@ -1,4 +1,19 @@
 class CollectionsController < ApplicationController
+  skip_filter :authenticate, only: [:show, :index]
+
+  def index
+    respond_to do |format|
+      format.html do
+        redirect_to(hello_path) and return if identity.stranger?
+        application
+      end
+      format.json do
+        payload  = presenters.landing(**services.show_default_data(identity: identity).merge(session_id: session.id))
+        render json: payload
+      end
+    end
+  end
+
   def create
     respond_to do |format|
       format.json do
@@ -11,7 +26,7 @@ class CollectionsController < ApplicationController
   def update
     respond_to do |format|
       format.json do
-        services.update_collection(identity: identity, collection: collection, updates: params.permit(:name))
+        services.update_collection(identity: identity, collection: collection, updates: params.permit(:name, :allow_public_access))
         render json: {}
       end
     end
@@ -26,8 +41,23 @@ class CollectionsController < ApplicationController
     end
   end
 
-  def show
+  def edit
     application
+  end
+
+  def show
+    respond_to do |format|
+      result = services.show_collection(identity: identity, collection: Collection.find(params[:id]))
+
+      format.html do
+        redirect_to(:root) and return if result[:not_permitted]
+      end
+
+      format.json do
+        render(status: result[:not_permitted], json: {}) and return if result[:not_permitted]
+        render json: presenters.collection(result[:collection])
+      end
+    end
   end
 
   protected

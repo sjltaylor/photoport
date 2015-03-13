@@ -3,13 +3,12 @@ Photoport::Application.routes.draw do
 
   root :to => 'landing#index'
   get 'status' => 'status#index'
-  get 'start' => 'landing#start', format: :json
 
   get 'who_are_you'  => 'identities#hello', as: :hello
   get 'seeya' => 'identities#goodbye', as: :goodbye
   post 'identify' => 'identities#identify'
 
-  resources :collections, only: [:show, :create, :update, :destroy] do
+  resources :collections, only: [:index, :show, :edit, :create, :update, :destroy] do
     resources :photos, only: [:create, :show, :destroy]
   end
 

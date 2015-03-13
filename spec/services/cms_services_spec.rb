@@ -106,7 +106,7 @@ describe CmsServices do
       context 'when a name is specified' do
         it 'creates the collection with the specified name' do
           create_collection
-          expect(collections).to have_received(:create).with(name: name, enable_public_access: false)
+          expect(collections).to have_received(:create).with(name: name, allow_public_access: false)
         end
       end
       context 'when a name is not specified' do
@@ -115,7 +115,7 @@ describe CmsServices do
         end
         it 'creates the collection without a name' do
           create_collection
-          expect(collections).to have_received(:create).with(name: nil, enable_public_access: false)
+          expect(collections).to have_received(:create).with(name: nil, allow_public_access: false)
         end
       end
       it 'returns the collection' do
@@ -162,6 +162,54 @@ describe CmsServices do
 
     it 'returns nil' do
       expect(destroy_collection).to be_nil
+    end
+  end
+  describe '#show_collection' do
+    let(:collection) { double(:collection) }
+
+    before(:each) do
+      allow(identity).to receive(:stranger?).and_return(stranger?)
+      allow(collection).to receive(:allow_public_access?).and_return(allow_public_access?)
+    end
+
+    def show_collection
+      services.show_collection(identity: identity, collection: collection)
+    end
+
+    context 'when the identity is known' do
+      let(:stranger?) { false }
+
+      context 'and the collection has public access enabled' do
+        let(:allow_public_access?) { true }
+        it 'returns the collection' do
+          expect(show_collection[:collection]).to be collection
+        end
+      end
+
+      context 'and the collection has public access disabled' do
+        let(:allow_public_access?) { false }
+        it 'returns :forbidden' do
+          expect(show_collection[:not_permitted]).to be :forbidden
+        end
+      end
+    end
+
+    context 'when the identity is not known' do
+      let(:stranger?) { true }
+
+      context 'and the collection has public access enabled' do
+        let(:allow_public_access?) { true }
+        it 'returns the collection' do
+          expect(show_collection[:collection]).to be collection
+        end
+      end
+
+      context 'and the collection has public access disabled' do
+        let(:allow_public_access?) { false }
+        it 'returns :unauthorized' do
+          expect(show_collection[:not_permitted]).to be :unauthorized
+        end
+      end
     end
   end
 end

@@ -50,8 +50,12 @@ describe IdentificationPresenters do
       }
     end
     let(:identity_presentation) { double(:identity_presentation) }
+    let(:collections_path) { 'collections/path' }
 
-    before(:each) { allow(identity_presenter).to receive(:identity).and_return(identity_presentation) }
+    before(:each) do
+      allow(identity_presenter).to receive(:identity).and_return(identity_presentation)
+      allow(url_helper).to receive(:collections_path).and_return(collections_path)
+    end
 
     it 'includes the message' do
       expect(identification_attempt_presentation[:message]).to_not be_nil
@@ -70,6 +74,9 @@ describe IdentificationPresenters do
         expect(identification_attempt_presentation[:identity]).to_not be_nil
         expect(identification_attempt_presentation[:identity]).to be identity_presentation
         expect(identity_presenter).to have_received(:identity).with(identification_attempt_result[:identity])
+      end
+      it 'includes the collections index' do
+        expect(identification_attempt_presentation[:index]).to be collections_path
       end
     end
     describe 'when the identification attempt does not have an identity' do

@@ -10,17 +10,19 @@ describe ContentPresenters do
       id: 16329,
       name: name,
       photos: (1..10).map{|i| double("photo_#{i}")},
-      enable_public_access: true)
+      allow_public_access: true)
   end
 
   describe '#collection(collection)' do
     let(:collection_presentation) { presenters.collection(collection) }
     let(:add_photo_url) { 'add/photo/url' }
     let(:show_collection_path) { 'show/collection/path' }
+    let(:edit_collection_path) { 'edit/collection/path' }
 
     before(:each) { allow(presenters).to receive(:photo).and_return(:photo_presentation) }
     before(:each) { allow(url_helper).to receive(:collection_photos_url).with(collection, format: :json).and_return(add_photo_url) }
     before(:each) { allow(url_helper).to receive(:collection_path).with(collection).and_return(show_collection_path) }
+    before(:each) { allow(url_helper).to receive(:edit_collection_path).with(collection).and_return(edit_collection_path) }
 
     it 'includes the id' do
       expect(collection_presentation[:id]).to be collection.id
@@ -34,8 +36,11 @@ describe ContentPresenters do
     it 'includes a url to the collection' do
       expect(collection_presentation[:href]).to be show_collection_path
     end
-    it 'includes the enable_public_access flag' do
-      expect(collection_presentation[:enable_public_access]).to be true
+    it 'includes an edit url for the collection' do
+      expect(collection_presentation[:edit]).to be edit_collection_path
+    end
+    it 'includes the allow_public_access flag' do
+      expect(collection_presentation[:allow_public_access]).to be true
     end
     context 'when the collection has a name' do
       it 'includes the collections name' do
@@ -81,7 +86,6 @@ describe ContentPresenters do
     let(:collections) { [double(:collection_1), double(:collections_2)] }
     let(:identity) { double(:identity, stranger?: stranger?) }
     let(:identity_presentation) { double(:identity_presentation) }
-    let(:root_path) { double(:root_path) }
     let(:collections_path) { double(:collections_path) }
     let(:new_collection_path) { double(:new_collection_path) }
     before(:each) { allow(presenters).to receive(:aws_s3_upload_panel_config).with(identity: identity, session_id: session_id).and_return(aws_s3_upload_panel_config) }
@@ -92,8 +96,7 @@ describe ContentPresenters do
       end
     end
     before(:each) do
-      allow(url_helper).to receive(:root_path).and_return(root_path)
-      allow(url_helper).to receive(:collections_path).with(format: :json).and_return(collections_path)
+      allow(url_helper).to receive(:collections_path).at_least(1).times.with(any_args).and_return(collections_path)
       allow(url_helper).to receive(:new_collection_path).with(no_args).and_return(new_collection_path)
     end
 
@@ -107,8 +110,8 @@ describe ContentPresenters do
     end
 
     it 'includes the index path' do
-      expect(landing[:index]).to be root_path
-      expect(url_helper).to have_received(:root_path).with(format: :json)
+      expect(landing[:index]).to be collections_path
+      expect(url_helper).to have_received(:collections_path).with(no_args)
     end
 
     context 'when the identity represents a stranger' do
@@ -129,8 +132,14 @@ describe ContentPresenters do
     end
 
     context 'when the identity does not represent a stranger' do
+      let(:add_url) { 'add/url/json' }
+
+      before(:each) do
+        allow(url_helper).to receive(:collections_path).with(format: :json).and_return(add_url)
+      end
+
       it 'returns the add url for collections' do
-        expect(landing[:add]).to be collections_path
+        expect(landing[:add]).to be add_url
       end
       it 'includes the upload panel configuration' do
         expect(landing[:upload_panel_config]).to be aws_s3_upload_panel_config

@@ -4,12 +4,20 @@ module CmsServices
   end
 
   def create_collection(identity:, name: nil)
-    identity.collections.create(name: name, enable_public_access: false)
+    identity.collections.create(name: name, allow_public_access: false)
   end
 
   def update_collection(identity:, collection:, updates:)
     collection.update(updates)
     collection
+  end
+
+  def show_collection(identity:, collection:)
+    unless collection.allow_public_access?
+      return { not_permitted: :unauthorized } if identity.stranger?
+      return { not_permitted: :forbidden }
+    end
+    { collection: collection }
   end
 
   def destroy_collection(identity:, collection:)
