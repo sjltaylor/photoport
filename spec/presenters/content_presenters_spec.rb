@@ -9,7 +9,8 @@ describe ContentPresenters do
     double(:collection,
       id: 16329,
       name: name,
-      photos: (1..10).map{|i| double("photo_#{i}")})
+      photos: (1..10).map{|i| double("photo_#{i}")},
+      enable_public_access: true)
   end
 
   describe '#collection(collection)' do
@@ -32,6 +33,9 @@ describe ContentPresenters do
     end
     it 'includes a url to the collection' do
       expect(collection_presentation[:href]).to be show_collection_path
+    end
+    it 'includes the enable_public_access flag' do
+      expect(collection_presentation[:enable_public_access]).to be true
     end
     context 'when the collection has a name' do
       it 'includes the collections name' do

@@ -18,9 +18,12 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
         });
       });
 
-      collection.on('change', _.debounce(function () {
+      collection.on('change', _.throttle(function () {
         Collections.host.update(collection);
-      }, 800));
+      }, 500, {
+        leading: false,
+        trailing: true
+      }));
 
       return view;
     }

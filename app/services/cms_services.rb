@@ -4,7 +4,7 @@ module CmsServices
   end
 
   def create_collection(identity:, name: nil)
-    identity.collections.create(name: name)
+    identity.collections.create(name: name, enable_public_access: false)
   end
 
   def update_collection(identity:, collection:, updates:)

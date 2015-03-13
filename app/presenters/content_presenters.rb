@@ -10,7 +10,8 @@ module ContentPresenters
       name:     name,
       photos:   collection.photos.map{|p| photo(p)},
       add:      url_helper.collection_photos_url(collection, format: :json),
-      href:     url_helper.collection_path(collection)
+      href:     url_helper.collection_path(collection),
+      enable_public_access: collection.enable_public_access
     }
   end
 

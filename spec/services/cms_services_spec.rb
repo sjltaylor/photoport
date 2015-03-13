@@ -95,7 +95,6 @@ describe CmsServices do
 
     before(:each) do
       allow(identity).to receive(:collections).and_return(collections)
-
       allow(collections).to receive(:create).with(any_args).and_return(collection)
     end
 
@@ -107,7 +106,7 @@ describe CmsServices do
       context 'when a name is specified' do
         it 'creates the collection with the specified name' do
           create_collection
-          expect(collections).to have_received(:create).with(name: name)
+          expect(collections).to have_received(:create).with(name: name, enable_public_access: false)
         end
       end
       context 'when a name is not specified' do
@@ -116,7 +115,7 @@ describe CmsServices do
         end
         it 'creates the collection without a name' do
           create_collection
-          expect(collections).to have_received(:create).with(name: nil)
+          expect(collections).to have_received(:create).with(name: nil, enable_public_access: false)
         end
       end
       it 'returns the collection' do
