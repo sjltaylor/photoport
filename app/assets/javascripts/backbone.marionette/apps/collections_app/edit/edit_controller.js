@@ -18,14 +18,6 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
         });
       });
 
-      view.on('render', function () {
-        collection.set('editing', true);
-      });
-
-      view.on('destroy', function () {
-        collection.set('editing', false);
-      });
-
       collection.on('change', _.throttle(function () {
         Collections.host.update(collection);
       }, 500, {

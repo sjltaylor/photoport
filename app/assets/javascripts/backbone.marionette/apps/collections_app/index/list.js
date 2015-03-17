@@ -26,11 +26,6 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     },
     update: function () {
       this.ui.editCollection.text(this.model.get('name'));
-      if (this.model.get('editing')) {
-        this.ui.editCollection.addClass('selected');
-      } else {
-        this.ui.editCollection.removeClass('selected');
-      }
     }
   });
 

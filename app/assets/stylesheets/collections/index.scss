@@ -20,14 +20,6 @@
         @include user-select-none();
         position: relative;
         margin: 0.65em;
-
-        a.action {
-          &:hover, &.selected {
-            &::after {
-              content: " -";
-            }
-          }
-        }
       }
     }
   }
