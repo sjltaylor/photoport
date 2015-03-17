@@ -25,8 +25,12 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
       this.update()
     },
     update: function () {
-      this.ui.editCollection.attr({ href: this.model.get('show') });
       this.ui.editCollection.text(this.model.get('name'));
+      if (this.model.get('editing')) {
+        this.ui.editCollection.addClass('selected');
+      } else {
+        this.ui.editCollection.removeClass('selected');
+      }
     }
   });
 

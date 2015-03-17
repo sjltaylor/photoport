@@ -1,3 +1,5 @@
+@import "font-awesome-sprockets";
+@import "font-awesome";
 @import "mixins";
 @import "photoport";
 @import "panels/options";
@@ -19,7 +21,6 @@ body {
   margin: 0;
   font-family: "Helvetica Neue", helvetica, arial;
   font-size: 16pt;
-  background-color: $bg;
   color: $text-main;
   font-weight: 100;
   letter-spacing: 0.025em
@@ -60,31 +61,29 @@ input {
   }
 }
 
-.button {
+a.action, button {
   text-decoration: none;
   text-align: center;
   font-family: "Helvetica Neue", helvetica, arial;
-  font-size: 1.5em;
   font-weight: 100;
-  letter-spacing: 0.025em;
   border: none;
+  background-color: white;
   color: $text-main;
-  padding: 0.5em 1.0em;
+  padding: 0;
+  margin: 0;
   cursor: pointer;
 
-  &.primary {
-    background-color: $primary;
-    &:hover, &:active {
-      text-decoration: none;
-      background-color: $primary-lit;
-    }
+  &:hover, &:active {
+    text-decoration: none;
+    cursor: pointer;
   }
+}
 
-  &.secondary {
-    background-color: $secondary;
-    &:hover, &:active {
-      text-decoration: none;
-      background-color: $secondary-lit;
-    }
-  }
+a.action {
+  font-size: 1.5em;
+}
+
+button {
+  font-style: italic;
+  font-size: 1.25em;
 }

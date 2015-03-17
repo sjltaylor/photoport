@@ -21,17 +21,9 @@ $silver: #BDC3C7;
 $concrete: #95A5A6;
 $asbestos: #7F8C8D;
 
-$bg: #222;
-$bg-panel: #030303;
+$panel: #eee;
 
-$primary: $belize-hole;
-$primary-lit: $peter-river;
-
-$secondary: $midnight-blue;
-$secondary-lit: $wet-asphalt;
-
-$text-main: $clouds;
-$text-dim: $concrete;
+$text-main: black;
 
 @mixin user-select-none() {
   -webkit-touch-callout: none;

@@ -19,18 +19,25 @@
       li {
         @include user-select-none();
         position: relative;
-        margin: 0;
+        margin: 0.65em;
 
-        .button {
-          @include user-select-none();
-          display: block;
-        }
-
-        .button.new {
-          width: 100%;
+        a.action {
+          &:hover, &.selected {
+            &::after {
+              content: " -";
+            }
+          }
         }
       }
     }
+  }
+
+  button.new {
+    /*
+     * the italic font and width combination causes the trailing "w"
+     * in the word "new" to be cropped
+     */
+    padding-right: 0.1em;
   }
 
   .collections-edit-container {
