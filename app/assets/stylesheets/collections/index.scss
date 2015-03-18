@@ -4,10 +4,10 @@
 
   .collections-list-container {
     position: absolute;
+    box-sizing: padding-box;
+    padding: 10px;
     top: 0;
     left: 0;
-    width: 400px;
-    height: 100%;
     overflow-y: scroll;
 
     ul {
@@ -19,7 +19,7 @@
       li {
         @include user-select-none();
         position: relative;
-        margin: 0.65em;
+        margin-bottom: 0.65em;
       }
     }
   }
@@ -30,13 +30,18 @@
      * in the word "new" to be cropped
      */
     padding-right: 0.1em;
+
+    .icon {
+      padding-right: 0.2em;
+    }
   }
 
   .collections-edit-container {
+    padding: 10px 30px;
     position: absolute;
+    box-sizing: padding-box;
     top: 0;
     right: 0;
-    height: 100%;
   }
 
   .edit-placeholder {

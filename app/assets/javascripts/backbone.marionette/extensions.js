@@ -4,15 +4,26 @@ Backbone.Marionette.Renderer.render = function (templateName, data) {
   if (templateName) throw 'Template not found: ' + templateName;
 };
 
+
 Backbone.Marionette.View.prototype.resize = function (dimensions) {
   var w = dimensions.width, h = dimensions.height;
   this.$el.width(w).height(h);
   Marionette.triggerMethod.call(this, 'resize', dimensions);
 }
 
-Backbone.Marionette.View.prototype.size = function (dimensions) {
-  return {
-    width: this.$el.width(),
-    height: this.$el.height()
+_.extend(Backbone.Marionette.Region.prototype, {
+  resize: function (dimensions) {
+    Backbone.Marionette.View.prototype.resize.apply(this, arguments);
+
+    if (this.currentView) {
+      this.currentView.resize(dimensions);
+    }
+  },
+  onShow: function (view) {
+    this.currentView = view;
+    this.currentView.resize({
+      width: this.$el.width(),
+      height: this.$el.height()
+    });
   }
-}
+});

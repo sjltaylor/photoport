@@ -7,8 +7,10 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
     template: 'edit/collection',
     ui: {
       'open': '.js-open',
+      'publicAccessUrl': '.js-public-access-url',
       'edit': '.js-edit',
       'name': '.js-name',
+      'close': '.js-close',
       'removeConfirm': '.js-remove-confirm',
       'remove': '.js-remove',
       'photoportContainer': '.photoport-container',
@@ -18,7 +20,11 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       'click @ui.edit': 'handleEditCollection',
       'input @ui.name': 'handleInput',
       'click @ui.remove': 'handleRemoveClick',
-      'change @ui.publicAccess': 'handleInput'
+      'change @ui.publicAccess': 'handleInput',
+      'click @ui.close': 'handleClose'
+    },
+    modelEvents: {
+      change: 'update'
     },
     handleEditCollection: function (e) {
       e.preventDefault();
@@ -35,38 +41,25 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
         this.trigger('remove-collection', this.model);
       }
     },
+    handleClose: function () {
+      this.trigger('user-close');
+    },
     onRender: function () {
-      this.photoport = new Photoport({
-        container: this.ui.photoportContainer[0],
-      });
-
-      this.populatePhotoport();
-
+      this.update();
+    },
+    update: function () {
       this.ui.name.val(this.model.get('name'));
-      this.ui.open.attr({ href: this.model.get('href') });
       this.ui.edit.attr({ href: this.model.get('edit') });
 
+      this.ui.open.attr({ href: this.model.get('href') });
+      this.ui.open.text(this.ui.open.prop('href'));
+
       if (this.model.get('allow_public_access')) {
-        this.ui.publicAccess.attr({checked: 'checked'})
+        this.ui.publicAccess.attr({checked: 'checked'});
+        this.ui.publicAccessUrl.show();
+      } else {
+        this.ui.publicAccessUrl.hide();
       }
-    },
-    populatePhotoport: function () {
-      this.model.photos.each(function (photo) {
-        var contentDescriptor = {
-          backgroundImage: photo.get('download'),
-          photo: photo
-        }
-        this.photoport.append(contentDescriptor);
-      }.bind(this));
-    },
-    onShow: function () {
-      this.photoport.resize({
-        width: this.ui.photoportContainer.width(),
-        height: this.ui.photoportContainer.height()
-      });
-    },
-    onBeforeDestroy: function () {
-      this.photoport.destroy();
     }
   });
 });

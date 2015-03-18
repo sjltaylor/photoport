@@ -21,9 +21,12 @@ $silver: #BDC3C7;
 $concrete: #95A5A6;
 $asbestos: #7F8C8D;
 
-$panel: #eee;
-
+$panel: #fafafa;
+$bg-color: white;
 $text-main: black;
+$text-dim: #aaa;
+$faint-line: rgba(0,0,0,0.1);
+$link-blue: $peter-river;
 
 @mixin user-select-none() {
   -webkit-touch-callout: none;

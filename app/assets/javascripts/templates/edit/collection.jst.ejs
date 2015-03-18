@@ -1,11 +1,13 @@
-<input class="js-name" type="text">
-<div class="photoport-container"></div>
-<a style="display: none" href="javascript:" class="button primary js-edit">edit</a>
-<a style="display: none" href="" target="blank" class="button primary js-open">open</a>
-<div style="display: none" class="remove-control">
-  <input class="js-remove-confirm" type="checkbox" />
-  <button class="button secondary js-remove">remove</button>
+<div class="close control">
+  <button class="js-close"><span class="icon">X</span>close</button>
 </div>
-<div style="display: none" class="public-access-control">
-  public access: <input class="js-public-access" type="checkbox" />
+<div class="open control">
+  <a href="javascript:" class="action button js-edit"><span class="icon">↱</span>open</a>
 </div>
+<div class="public-access control">
+  <label><input class="public-access js-public-access" type="checkbox" />Public Access</label><span class="url js-public-access-url">: <a href="" target="blank" class="js-open"></a></span>
+</div>
+<div class="remove control">
+  To delete this collection, check here <input class="js-remove-confirm" type="checkbox" /> then click: <button class="js-remove"><span class="icon">-</span>delete</button>
+</div>
+<input style="display: none" class="name js-name" type="text">

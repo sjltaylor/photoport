@@ -1,8 +1,52 @@
 .edit-collection {
-  margin: 30px;
 
-  .photoport-container {
-    width: 480px;
-    height: 300px;
+  .control {
+    margin-bottom: 50px;
+  }
+
+  .close.control {
+    button {
+      font-size: 0.85em;
+      color: $text-dim;
+      .icon {
+        font-size: 0.5em;
+        font-style: normal;
+        margin-right: 0.5em;
+      }
+    }
+  }
+
+  .open.control {
+    .icon {
+      padding-right: 0.75em;
+      font-size: 0.6em;
+    }
+  }
+
+  .public-access.control {
+    input {
+      margin-right: 0.25em;
+    }
+
+    .url {
+      font-size: 0.85em;
+    }
+  }
+
+  .remove.control {
+    width: 400px;
+
+    button {
+      margin-left: 0.1em;
+      .icon {
+        margin-right: 0.25em;
+      }
+    }
+  }
+
+  input.name {
+    width: 100%;
+    max-width: 800px;
+    margin-bottom: 30px;
   }
 }

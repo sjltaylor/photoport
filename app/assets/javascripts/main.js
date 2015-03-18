@@ -5,9 +5,17 @@
 
 Collections.addRegions({
   page: {
-    selector: "body",
-    regionClass: Collections.PageRegion
+    selector: "body"
   }
+});
+
+Collections.addInitializer(function () {
+  var resize = function () {
+    Collections.page.resize({ width: window.innerWidth, height: window.innerHeight });
+  }
+
+  $(window).on('resize', resize);
+  resize();
 });
 
 Collections.addInitializer(function () {
