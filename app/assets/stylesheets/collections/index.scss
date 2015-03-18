@@ -20,6 +20,15 @@
         @include user-select-none();
         position: relative;
         margin-bottom: 0.65em;
+
+        .name {
+          display: none;
+        }
+
+        input.name {
+          font-size: 2.5em;
+          border-bottom: solid 1px black;
+        }
       }
     }
   }

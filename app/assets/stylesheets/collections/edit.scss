@@ -1,7 +1,7 @@
 .edit-collection {
 
   .control {
-    margin-bottom: 50px;
+    margin-bottom: 1.5em;
   }
 
   .close.control {
@@ -24,6 +24,10 @@
   }
 
   .public-access.control {
+    label {
+      font-size: 0.85em;
+    }
+
     input {
       margin-right: 0.25em;
     }
@@ -34,19 +38,15 @@
   }
 
   .remove.control {
-    width: 400px;
+    width: 300px;
+    font-size: 0.85em;
 
     button {
+      font-size: 1.5em;
       margin-left: 0.1em;
       .icon {
         margin-right: 0.25em;
       }
     }
-  }
-
-  input.name {
-    width: 100%;
-    max-width: 800px;
-    margin-bottom: 30px;
   }
 }

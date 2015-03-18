@@ -9,7 +9,6 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       'open': '.js-open',
       'publicAccessUrl': '.js-public-access-url',
       'edit': '.js-edit',
-      'name': '.js-name',
       'close': '.js-close',
       'removeConfirm': '.js-remove-confirm',
       'remove': '.js-remove',
@@ -18,21 +17,20 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
     },
     events: {
       'click @ui.edit': 'handleEditCollection',
-      'input @ui.name': 'handleInput',
       'click @ui.remove': 'handleRemoveClick',
-      'change @ui.publicAccess': 'handleInput',
+      'change @ui.publicAccess': 'handlePublicAccessChange',
       'click @ui.close': 'handleClose'
     },
     modelEvents: {
-      change: 'update'
+      'change:allow_public_access': 'updatePublicAccessUrlVisibility'
     },
     handleEditCollection: function (e) {
       e.preventDefault();
+      this.model.set({ editing: true });
       this.trigger('edit-collection', this.model);
     },
-    handleInput: function () {
+    handlePublicAccessChange: function () {
       this.model.set({
-        name: this.ui.name.val().trim(),
         allow_public_access: this.ui.publicAccess.is(':checked')
       });
     },
@@ -45,15 +43,12 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       this.trigger('user-close');
     },
     onRender: function () {
-      this.update();
-    },
-    update: function () {
-      this.ui.name.val(this.model.get('name'));
+      this.updatePublicAccessUrlVisibility();
       this.ui.edit.attr({ href: this.model.get('edit') });
-
       this.ui.open.attr({ href: this.model.get('href') });
       this.ui.open.text(this.ui.open.prop('href'));
-
+    },
+    updatePublicAccessUrlVisibility: function () {
       if (this.model.get('allow_public_access')) {
         this.ui.publicAccess.attr({checked: 'checked'});
         this.ui.publicAccessUrl.show();

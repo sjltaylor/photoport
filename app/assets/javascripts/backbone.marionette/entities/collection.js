@@ -11,6 +11,7 @@ Collections.Collection = Backbone.Model.extend({
 Collections.Collection.all = new Backbone.Collection([], {
   model: Collections.Collection,
   comparator: function (collection) {
-    return collection.isNew() ? 1 : 0;
+    if (collection.isNew()) return 1;
+    return 0;
   }
 });
