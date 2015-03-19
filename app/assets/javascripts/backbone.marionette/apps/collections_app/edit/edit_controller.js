@@ -26,9 +26,17 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
         collection.set({ editing: false });
       });
 
-      collection.on('change', function () {
+      var onChange = function () {
         Collections.host.update(collection);
-      });
+      }
+
+      var onRemove = function () {
+        collection.off('change', onChange);
+        collection.off('remove', onRemove);
+      }
+
+      collection.on('change', onChange);
+      collection.on('remove', onRemove);
 
       return view;
     }

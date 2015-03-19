@@ -1,36 +1,50 @@
 .index {
   position: relative;
   overflow: hidden;
+  display: table;
 
   .collections-list-container {
-    position: absolute;
-    box-sizing: padding-box;
-    padding: 10px;
-    top: 0;
-    left: 0;
-    overflow-y: scroll;
+    width: 40%;
+    display: table-cell;
+    vertical-align: top;
+    text-align: right;
 
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
+    .index-list {
+      overflow-y: scroll;
+      padding-right: 25px;
+      height: 100%;
       width: 100%;
 
-      li {
-        @include user-select-none();
-        position: relative;
-        margin-bottom: 0.65em;
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
 
-        .name {
-          display: none;
-        }
+        li {
+          @include user-select-none();
+          position: relative;
+          margin-bottom: 0.65em;
 
-        input.name {
-          font-size: 2.5em;
-          border-bottom: solid 1px black;
+          &:first-child {
+            margin-top: 30px;
+          }
+
+          .name {
+            display: none;
+          }
+
+          input.name {
+            font-size: 2.5em;
+            text-align: right;
+          }
         }
       }
     }
+  }
+
+  .collections-edit-container {
+    width: 60%;
+    display: inline-block;
   }
 
   button.new {
@@ -43,14 +57,6 @@
     .icon {
       padding-right: 0.2em;
     }
-  }
-
-  .collections-edit-container {
-    padding: 10px 30px;
-    position: absolute;
-    box-sizing: padding-box;
-    top: 0;
-    right: 0;
   }
 
   .edit-placeholder {

@@ -5,7 +5,8 @@
 
 Collections.addRegions({
   page: {
-    selector: "body"
+    selector: 'body',
+    regionClass: Collections.ResizableRegion
   }
 });
 

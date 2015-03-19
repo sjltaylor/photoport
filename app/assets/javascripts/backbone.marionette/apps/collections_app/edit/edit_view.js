@@ -40,7 +40,7 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       }
     },
     handleClose: function () {
-      this.trigger('user-close');
+      this.destroy();
     },
     onRender: function () {
       this.updatePublicAccessUrlVisibility();

@@ -11,7 +11,9 @@ Backbone.Marionette.View.prototype.resize = function (dimensions) {
   Marionette.triggerMethod.call(this, 'resize', dimensions);
 }
 
-_.extend(Backbone.Marionette.Region.prototype, {
+Collections.ResizableRegion = Backbone.Marionette.Region.extend({});
+
+_.extend(Collections.ResizableRegion.prototype, {
   resize: function (dimensions) {
     Backbone.Marionette.View.prototype.resize.apply(this, arguments);
 
