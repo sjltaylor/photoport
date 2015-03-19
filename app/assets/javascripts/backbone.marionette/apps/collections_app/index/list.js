@@ -23,6 +23,6 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     getChildView: function(collection) {
       if  (collection.isNew()) return Index.NewCollectionListEntry;
       return Index.CollectionListEntry;
-    },
+    }
   });
 });
