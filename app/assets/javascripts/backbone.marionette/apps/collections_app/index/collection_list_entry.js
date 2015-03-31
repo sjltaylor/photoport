@@ -45,10 +45,12 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     },
     updateEditingState: function () {
       if (this.model.get('editing')) {
+        this.$el.removeClass('no-editor');
         this.ui.editCollection.hide();
         this.ui.name.show();
         this.ui.name.focus();
       } else {
+        this.$el.addClass('no-editor');
         this.ui.name.blur();
         this.ui.name.hide();
         this.ui.editCollection.show();

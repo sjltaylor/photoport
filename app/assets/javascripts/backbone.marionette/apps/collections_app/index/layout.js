@@ -15,13 +15,6 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
     onRender: function () {
       this.list.show(this.opts.listView);
       this.edit.show(this.opts.editPlaceholder);
-    }//,
-    // onResize: function (size) {
-    //   var listWidth = 0.35 * size.width;
-    //   var editWidth = size.width - listWidth;
-    //
-    //   this.list.resize({ width: listWidth, height: size.height });
-    //   this.edit.resize({ width: editWidth, height: size.height });
-    // }
+    }
   });
 });

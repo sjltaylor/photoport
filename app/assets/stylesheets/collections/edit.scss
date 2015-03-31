@@ -1,8 +1,6 @@
 .edit-collection {
-  margin: 70px 30px;
-
   .control {
-    margin-bottom: 1.5em;
+    margin-bottom: 2em;
   }
 
   .close.control {
@@ -30,7 +28,7 @@
     }
 
     input {
-      margin-right: 0.25em;
+      margin-right: .85em;
     }
 
     .url {
@@ -39,7 +37,7 @@
   }
 
   .remove.control {
-    width: 300px;
+    width: 250px;
     font-size: 0.85em;
 
     button {

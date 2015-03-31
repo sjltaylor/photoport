@@ -66,8 +66,12 @@ input {
 }
 
 a, a:visited, a:active {
-  color: $link-blue;
+  color: $text-main;
   text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 a.action, button {

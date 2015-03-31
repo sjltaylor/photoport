@@ -172,8 +172,6 @@ GEM
     fog-xml (0.1.1)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
-    font-awesome-sass (4.3.2)
-      sass (~> 3.2)
     formatador (0.2.5)
     globalid (0.3.3)
       activesupport (>= 4.1.0)
@@ -317,7 +315,6 @@ DEPENDENCIES
   dragonfly-s3_data_store
   ejs
   fog
-  font-awesome-sass
   jasmine-rails
   pg
   pry

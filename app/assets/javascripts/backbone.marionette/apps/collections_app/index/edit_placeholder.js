@@ -4,6 +4,12 @@ Collections.module('Index', function (Index, Collections, Backbone, Marionette, 
 
   Index.EditPlaceholder = Marionette.ItemView.extend({
     className: 'edit-placeholder',
-    template: 'index/edit_placeholder'
+    template: 'index/edit_placeholder',
+    events: {
+      'click .js-new-collection'  : 'handleNewCollectionClick'
+    },
+    handleNewCollectionClick: function () {
+      this.model.trigger('new-collection');
+    }
   });
 });

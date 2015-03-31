@@ -49,7 +49,7 @@ Collections.repopulate = function () {
       libraryAttributes.uploadPanelConfig = landing['upload_panel_config'];
     }
 
-    app.library.resetCollections(landing.collections || []);
+    app.library.collections().reset(landing.collections || []);
     app.library.set(libraryAttributes);
 
     app.landing.resolve(app);

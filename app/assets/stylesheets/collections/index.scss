@@ -4,6 +4,7 @@
   display: table;
 
   .collections-list-container {
+    padding: 1em 1em;
     width: 40%;
     display: table-cell;
     vertical-align: top;
@@ -25,8 +26,8 @@
           position: relative;
           margin-bottom: 0.65em;
 
-          &:first-child {
-            margin-top: 30px;
+          &.no-editor:first-child {
+            padding-top: 1.575em;
           }
 
           .name {
@@ -43,25 +44,22 @@
   }
 
   .collections-edit-container {
+    padding: 2.65em 1.5em;
     width: 60%;
     display: inline-block;
-  }
-
-  button.new {
-    /*
-     * the italic font and width combination causes the trailing "w"
-     * in the word "new" to be cropped
-     */
-    padding-right: 0.1em;
-
-    .icon {
-      padding-right: 0.2em;
-    }
   }
 
   .edit-placeholder {
     width: 100%;
     height: 100%;
+
+    .new {
+      margin-left: 80px;
+      margin-top: 5px;
+      .icon {
+        padding-right: 0.2em;
+      }
+    }
   }
 
   .seeya {
