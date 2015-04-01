@@ -7,22 +7,35 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
     template: 'edit/collection',
     ui: {
       'open': '.js-open',
-      'publicAccessUrl': '.js-public-access-url',
       'edit': '.js-edit',
-      'close': '.js-close',
-      'removeConfirm': '.js-remove-confirm',
+      'name': '.js-name',
       'remove': '.js-remove',
-      'photoportContainer': '.photoport-container',
-      'publicAccess': '.js-public-access'
+      'publicAccess': '.js-public-access',
+      'removeConfirm': '.js-remove-confirm',
+      'photoportContainer': '.photoport-container'
     },
     events: {
       'click @ui.edit': 'handleEditCollection',
       'click @ui.remove': 'handleRemoveClick',
       'change @ui.publicAccess': 'handlePublicAccessChange',
-      'click @ui.close': 'handleClose'
+      'click @ui.close': 'handleClose',
+      'input @ui.name': 'handleNameChange'
     },
     modelEvents: {
       'change:allow_public_access': 'updatePublicAccessUrlVisibility'
+    },
+    initialize: function () {
+      this.handleNameChange = _.throttle(this.handleNameChange,
+        500,
+        {
+          leading: false,
+          trailing: true
+        });
+    },
+    handleNameChange: function () {
+      this.model.set({
+        name: this.ui.name.val().trim()
+      });
     },
     handleEditCollection: function (e) {
       e.preventDefault();
@@ -39,21 +52,22 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
         this.trigger('remove-collection', this.model);
       }
     },
-    handleClose: function () {
-      this.destroy();
-    },
     onRender: function () {
       this.updatePublicAccessUrlVisibility();
       this.ui.edit.attr({ href: this.model.get('edit') });
       this.ui.open.attr({ href: this.model.get('href') });
       this.ui.open.text(this.ui.open.prop('href'));
+      this.ui.name.val(this.model.get('name'));
+    },
+    onShow: function () {
+      this.ui.name.focus();
     },
     updatePublicAccessUrlVisibility: function () {
       if (this.model.get('allow_public_access')) {
         this.ui.publicAccess.attr({checked: 'checked'});
-        this.ui.publicAccessUrl.show();
+        this.ui.open.show();
       } else {
-        this.ui.publicAccessUrl.hide();
+        this.ui.open.hide();
       }
     }
   });

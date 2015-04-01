@@ -9,6 +9,7 @@ Photoport::Application.routes.draw do
   post 'identify' => 'identities#identify'
 
   resources :collections, only: [:index, :show, :edit, :create, :update, :destroy] do
+    get 'edit/photos' => 'collections#edit_photos'
     resources :photos, only: [:create, :show, :destroy]
   end
 

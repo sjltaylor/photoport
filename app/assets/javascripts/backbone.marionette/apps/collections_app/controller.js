@@ -1,5 +1,12 @@
 Collections.Controller = {
-  show: function (id) {
+  index: function () {
+    Collections.landing.done(function (app) {
+      app.page.show(Collections.Index.Controller.makeView({
+        library: app.library
+      }));
+    });
+  },
+  editPhotos: function (id) {
     Collections.landing.done(function (app) {
       var collection = app.library.collections().get(id);
       if (collection) {
@@ -11,11 +18,16 @@ Collections.Controller = {
       }
     });
   },
-  index: function () {
+  edit: function (id) {
     Collections.landing.done(function (app) {
-      app.page.show(Collections.Index.Controller.makeView({
-        library: app.library
-      }));
+      var collection = app.library.collections().get(id);
+      if (collection) {
+        var view = Collections.Edit.Controller.makeView({
+          library: app.library,
+          collection: collection
+        });
+        app.page.show(view);
+      }
     });
   },
   identify: function () {
