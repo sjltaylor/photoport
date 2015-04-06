@@ -8,12 +8,21 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
         uploadPanelConfig: opts.uploadPanelConfig
       });
 
-      var collectionView = new Show.CollectionView({
+      var view = new Show.CollectionView({
         model: collection,
         uploadPanel: uploadPanel
       });
 
-      return collectionView;
+      view.on('edit-photo', function (args) {
+        var panel = Collections.OptionsPanel.Controller.makeView({
+          collection: collection,
+          photo: args.photo
+        });
+        panel.render();
+        view.showPanel(panel);
+      });
+
+      return view;
     }
   };
 });

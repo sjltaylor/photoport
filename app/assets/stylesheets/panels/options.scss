@@ -1,34 +1,32 @@
-.photoport-cms-panels-options {
-  background-color: rgba(255, 255, 255, 0.85);
+.photoport.interlude {
+  .photoport-photo.current {
+    -webkit-filter: blur(10px) saturate(11%) brightness(0.85);
+    -webkit-transform: translateZ(0);
+    -webkit-perspective: 1000;
+    -webkit-backface-visibility: hidden;
+  }
+}
 
-  .options-panel {
+.photoport-cms-panels-options {
+  .container {
+    display: table;
     width: 100%;
     height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
+  }
 
-    button.close {
-      position: absolute;
-      top: 5px;
-      right: 10px;
-    }
+  .options-panel {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
 
-    .controls {
-      margin: 0 auto;
-      position: absolute;
-      bottom: 40px;
-      left: 150px;
-      text-align: center;
-      width: 300px;
+    .control.remove {
+      background-color: white;
+      display: inline-block;
+      padding: 20px 30px;
+      font-size: 1.25em;
 
-      .control {
-        margin: 50px 5px 10px;
-
-        p {
-          font-size: 10pt;
-          margin-bottom: 5px;
-        }
+      .icon {
+        margin: 0 0.1em 0 0.2em;
       }
     }
   }

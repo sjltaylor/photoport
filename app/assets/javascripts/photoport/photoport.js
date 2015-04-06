@@ -173,8 +173,6 @@ Photoport = (function () {
         contentDescriptor.image.addEventListener('load', onLoad);
       }
 
-      this.resizeContent(contentDescriptor);
-
       return this;
     },
     append: function (contentDescriptor) {
@@ -399,6 +397,7 @@ Photoport = (function () {
       this.fit(contentDescriptor);
       this.state = 'interlude';
       this.interludeContent = contentDescriptor;
+      this.dom.root.classList.add('interlude');
       return this;
     },
     resume: function () {
@@ -411,6 +410,7 @@ Photoport = (function () {
       dom.interlude.style.display = 'none';
       this.state = 'normal';
       this.interludeContent = null;
+      this.dom.root.classList.remove('interlude');
       return this;
     },
     count: function () {
@@ -508,6 +508,7 @@ Photoport = (function () {
       contentDescriptor.mousedownHandler = function (e) {
 
         var timeout = setTimeout(function () {
+
           contentDescriptor.el.removeEventListener('mouseup', mouseupHandler);
 
           photoport.el().dispatchEvent(new CustomEvent('photoport-hold', {
@@ -563,28 +564,6 @@ Photoport = (function () {
 
       this.dom.content.style[dimension] = (this.count() * this.portRect()[dimension]) + 'px';
       this.dom.content.style[this.navigation.coordinate] = -1 * this.position * this.portRect()[dimension] + 'px';
-
-      this.sequence.forEach(this.resizeContent.bind(this));
-    },
-    resizeContent: function (contentDescriptor) {
-      if (!contentDescriptor.el.classList.contains('photo')) return;
-
-      contentDescriptor.loadDeferred.done(function () {
-        var image = contentDescriptor.image;
-        var imageAspectRatio = image.width / image.height;
-        var portRect = this.portRect();
-        var portAspectRatio = portRect.width / portRect.height;
-
-        if (imageAspectRatio >= portAspectRatio) {
-          var imageHeight = portRect.height;
-          var imageWidth = imageAspectRatio * imageHeight;
-        } else {
-          var imageWidth = portRect.width;
-          var imageHeight = imageWidth / imageAspectRatio;
-        }
-
-        contentDescriptor.el.style.backgroundSize = imageWidth + "px " + imageHeight + "px";
-      }.bind(this));
     }
   };
 

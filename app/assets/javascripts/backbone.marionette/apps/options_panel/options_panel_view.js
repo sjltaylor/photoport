@@ -5,12 +5,17 @@ Collections.module('OptionsPanel', function (OptionsPanel, Collections, Backbone
     className: 'photoport-cms-panels-options',
     template: 'panels/options',
     events: {
-      'click button.close': 'destroy',
+      'click': 'onClick',
       'click .js-remove': 'onRemoveCurrent'
     },
     onRemoveCurrent: function () {
       this.trigger('remove-current');
       this.destroy();
+    },
+    onClick: function (e) {
+      if ($(e.target).is('.options-panel')) {
+        this.destroy();
+      }
     }
   });
 });

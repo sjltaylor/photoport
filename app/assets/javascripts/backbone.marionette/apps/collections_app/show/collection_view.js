@@ -1,3 +1,4 @@
+//= require photoport/photoport
 //= require templates/collection_view
 
 Collections.module('Show', function (Show, Collections, Backbone, Marionette, $, _) {
@@ -5,6 +6,9 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
     template: 'collection_view',
     className: 'collection-view',
     tagName: 'div',
+    events: {
+      'photoport-hold': 'onPhotoportHold'
+    },
     initialize: function () {
       _.extend(this, this.options);
       this.collection = this.model;
@@ -46,6 +50,22 @@ Collections.module('Show', function (Show, Collections, Backbone, Marionette, $,
       this.listenTo(this.collection.photos, 'remove', this.__remove__);
 
       this.$el.append(this.photoport.container);
+    },
+    onPhotoportHold: function (e) {
+      if (e.originalEvent.detail.content != this.uploadPanel.photoportContentDescriptor) {
+        this.trigger('edit-photo', e.originalEvent.detail.content);
+      }
+    },
+    showPanel: function (panel) {
+      this.photoport.interlude({
+        el: panel.el
+      });
+      panel.once('destroy', function () {
+        this.resume();
+      }, this);
+    },
+    resume: function () {
+      this.photoport.resume();
     },
     onResize: function (dimensions) {
       this.$el.width(dimensions.width).height(dimensions.height);
