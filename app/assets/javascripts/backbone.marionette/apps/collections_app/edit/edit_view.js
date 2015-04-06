@@ -9,17 +9,18 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
       'open': '.js-open',
       'edit': '.js-edit',
       'name': '.js-name',
+      'close': '.js-close',
       'remove': '.js-remove',
       'publicAccess': '.js-public-access',
       'removeConfirm': '.js-remove-confirm',
       'photoportContainer': '.photoport-container'
     },
     events: {
-      'click @ui.edit': 'handleEditCollection',
-      'click @ui.remove': 'handleRemoveClick',
-      'change @ui.publicAccess': 'handlePublicAccessChange',
       'click @ui.close': 'handleClose',
-      'input @ui.name': 'handleNameChange'
+      'input @ui.name': 'handleNameChange',
+      'click @ui.remove': 'handleRemoveClick',
+      'click @ui.edit': 'handleEditCollection',
+      'change @ui.publicAccess': 'handlePublicAccessChange'
     },
     modelEvents: {
       'change:allow_public_access': 'updatePublicAccessUrlVisibility'
@@ -31,6 +32,9 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
           leading: false,
           trailing: true
         });
+    },
+    handleClose: function () {
+      this.trigger('user-close');
     },
     handleNameChange: function () {
       this.model.set({

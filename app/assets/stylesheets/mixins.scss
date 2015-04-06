@@ -27,6 +27,7 @@ $text-main: black;
 $text-dim: #aaa;
 $faint-line: rgba(0,0,0,0.1);
 $link-blue: $peter-river;
+$error-message:#ffaa00;
 
 @mixin user-select-none() {
   -webkit-touch-callout: none;

@@ -4,34 +4,36 @@ Collections.module('Identify', function (Identify, Collections, Backbone, Marion
   Identify.View = Marionette.ItemView.extend({
     template: 'identify',
     className: 'identify-view',
-    events: {
-      'submit form': 'onIdentify'
-    },
     ui: {
       form: 'form',
-      emailField: 'form input[name="email"]',
-      passwordField: 'form input[name="password"]',
+      email: 'form input[name="email"]',
+      password: 'form input[name="password"]',
       errorFlash: '.error-flash'
     },
-    initialize: function () {
-      this.template = this.options.template || this.template;
-    },
-    onCancel: function () {
-      this.trigger('cancel');
+    events: {
+      'submit form': 'onIdentify',
+      "input @ui.email": "handleInput",
+      "input @ui.password": "handleInput"
     },
     onShow: function () {
-      this.ui.emailField.focus();
+      this.ui.email.focus();
+    },
+    handleInput: function () {
+      this.clearError();
     },
     onIdentify: function (e) {
       e.preventDefault();
       e.stopPropagation();
       this.trigger('identify', {
-        email_address: this.ui.emailField.val(),
-        password: this.ui.passwordField.val()
+        email_address: this.ui.email.val(),
+        password: this.ui.password.val()
       });
     },
+    clearError: function () {
+      this.ui.errorFlash.text(' ');
+    },
     showError: function (error, message) {
-      this.ui.errorFlash.show().text(message);
+      this.ui.errorFlash.text(message);
     }
   });
 });

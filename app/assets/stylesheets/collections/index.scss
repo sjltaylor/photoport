@@ -4,6 +4,7 @@
   height: 100%;
   width: 100%;
   text-align: center;
+  padding-top: 1em;
 
   ul {
     list-style-type: none;
@@ -31,11 +32,11 @@
       padding-right: 0.2em;
     }
   }
-}
 
-.seeya {
-  position: absolute;
-  top: 0;
-  right: 50px;
-  font-size:  0.85em;
+  .seeya {
+    position: absolute;
+    top: 0;
+    right: 50px;
+    font-size:  1em;
+  }
 }

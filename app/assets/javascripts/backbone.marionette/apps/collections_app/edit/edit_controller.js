@@ -12,6 +12,10 @@ Collections.module('Edit', function (Edit, Collections, Backbone, Marionette, $,
         Collections.router.navigate(collection.get('edit_photos'), { trigger: true });
       });
 
+      view.on('user-close', function () {
+        Collections.router.navigate(library.get('index'), { trigger: true });
+      })
+
       view.on('remove-collection', function (collection) {
         Collections.host.remove(collection).done(function () {
           library.collections().remove(collection);
