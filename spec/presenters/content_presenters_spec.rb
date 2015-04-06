@@ -18,13 +18,13 @@ describe ContentPresenters do
     let(:add_photo_url) { 'add/photo/url' }
     let(:show_collection_path) { 'show/collection/path' }
     let(:edit_collection_path) { 'edit/collection/path' }
-    let(:collection_edit_photos_path) { 'edit/collection/photos/path' }
+    let(:edit_collection_photos_path) { 'edit/collection/photos/path' }
 
     before(:each) { allow(presenters).to receive(:photo).and_return(:photo_presentation) }
     before(:each) { allow(url_helper).to receive(:collection_photos_url).with(collection, format: :json).and_return(add_photo_url) }
     before(:each) { allow(url_helper).to receive(:collection_path).with(collection).and_return(show_collection_path) }
     before(:each) { allow(url_helper).to receive(:edit_collection_path).with(collection).and_return(edit_collection_path) }
-    before(:each) { allow(url_helper).to receive(:collection_edit_photos_path).with(collection).and_return(collection_edit_photos_path) }
+    before(:each) { allow(url_helper).to receive(:edit_collection_photos_path).with(collection).and_return(edit_collection_photos_path) }
 
     it 'includes the id' do
       expect(collection_presentation[:id]).to be collection.id
@@ -42,7 +42,7 @@ describe ContentPresenters do
       expect(collection_presentation[:edit]).to be edit_collection_path
     end
     it 'includes an edit photos url for the collection' do
-      expect(collection_presentation[:edit_photos]).to be collection_edit_photos_path
+      expect(collection_presentation[:edit_photos]).to be edit_collection_photos_path
     end
     it 'includes the allow_public_access flag' do
       expect(collection_presentation[:allow_public_access]).to be true

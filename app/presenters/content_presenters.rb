@@ -12,7 +12,7 @@ module ContentPresenters
       add:                  url_helper.collection_photos_url(collection, format: :json),
       href:                 url_helper.collection_path(collection),
       edit:                 url_helper.edit_collection_path(collection),
-      edit_photos:          url_helper.collection_edit_photos_path(collection),
+      edit_photos:          url_helper.edit_collection_photos_path(collection),
       allow_public_access: collection.allow_public_access
     }
   end
