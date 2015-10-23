@@ -1,4 +1,4 @@
-# photoport
+# Photoport
 
 A web app for you to independantly host your photos.
 I'd like to be able to send you a photo, or a collection of photos without you having to sign up, connect via facebook or really see anything except the photos.
